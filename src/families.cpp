@@ -6,6 +6,12 @@
 // hundred small models per shoot() call so a textbook decomposition
 // is plenty fast.
 //
+// ols_fit_cpp:  ordinary least squares via Cholesky on X'X. Returns the
+//   same fields fit_lm() needs (n, p, rss, r_squared, aic, p_value).
+//   Used by fit_lm, fit_wls, fit_sem in place of stats::.lm.fit() to cut
+//   per-call wrapper overhead. Also exposed in batch form so the shoot()
+//   search loop can amortise the R/C++ crossing across many small fits.
+//
 // pls_gcv_cpp:  penalised least squares with a single shared smoothing
 //   parameter selected by GCV on a log-spaced grid. The R caller
 //   builds the augmented design X (intercept | smooth bases |
@@ -21,6 +27,7 @@
 //   log-spaced grid plus an explicit theta = 0 (lm) reference.
 
 #include <Rcpp.h>
+#include <Rmath.h>
 #include <cmath>
 #include <vector>
 
@@ -64,6 +71,169 @@ static void chol_solve_in_place(const double* L, int n, double* b) {
     for (int k = i + 1; k < n; ++k) s -= L[k + i * n] * b[k];
     b[i] = s / L[i + i * n];
   }
+}
+
+// One ordinary least squares fit via Cholesky on X'X. The caller is
+// responsible for shipping a dense numeric X and y with no NAs (the R
+// wrappers handle that). Returns the fields fit_lm() needs so the
+// per-call R-side arithmetic disappears.
+//
+// Numerics: Cholesky on X'X squares the condition number versus QR.
+// Acceptable for the shoot() regime (tiny p, well-conditioned design
+// blocks) and the chol_in_place pivot check returns NULL otherwise so
+// the caller can fall through gracefully.
+struct OlsResult {
+  bool   ok;
+  int    n;
+  int    p;
+  double rss;
+  double tss;
+  double r_squared;
+  double aic;
+  double p_value;
+};
+
+static OlsResult ols_one(const double* X, int n, int p,
+                          const double* y) {
+  OlsResult out;
+  out.ok = false;
+  out.n = n;
+  out.p = p;
+  out.rss = NA_REAL;
+  out.tss = NA_REAL;
+  out.r_squared = 0.0;
+  out.aic = NA_REAL;
+  out.p_value = NA_REAL;
+  if (n < p + 2) return out;
+
+  // X'X (column-major p x p, symmetric).
+  std::vector<double> XtX(p * p, 0.0);
+  for (int j = 0; j < p; ++j) {
+    for (int i = 0; i <= j; ++i) {
+      double s = 0.0;
+      const double* xi = X + (size_t) i * n;
+      const double* xj = X + (size_t) j * n;
+      for (int r = 0; r < n; ++r) s += xi[r] * xj[r];
+      XtX[i + j * p] = s;
+      XtX[j + i * p] = s;
+    }
+  }
+  // X'y.
+  std::vector<double> Xty(p, 0.0);
+  for (int j = 0; j < p; ++j) {
+    double s = 0.0;
+    const double* xj = X + (size_t) j * n;
+    for (int r = 0; r < n; ++r) s += xj[r] * y[r];
+    Xty[j] = s;
+  }
+
+  if (chol_in_place(XtX.data(), p) != 0) return out;
+  std::vector<double> beta = Xty;
+  chol_solve_in_place(XtX.data(), p, beta.data());
+
+  // RSS via residuals.
+  double rss = 0.0;
+  for (int r = 0; r < n; ++r) {
+    double yhat = 0.0;
+    for (int j = 0; j < p; ++j) yhat += X[r + (size_t) j * n] * beta[j];
+    double e = y[r] - yhat;
+    rss += e * e;
+  }
+
+  // TSS against the mean (matches stats::.lm.fit + R^2 convention).
+  double y_mean = 0.0;
+  for (int r = 0; r < n; ++r) y_mean += y[r];
+  y_mean /= (double) n;
+  double tss = 0.0;
+  for (int r = 0; r < n; ++r) {
+    double d = y[r] - y_mean;
+    tss += d * d;
+  }
+
+  double r2 = (tss > 0.0) ? std::max(0.0, 1.0 - rss / tss) : 0.0;
+  int df1 = (p - 1 > 0) ? (p - 1) : 1;
+  int df2 = n - p;
+  double p_value = NA_REAL;
+  if (df2 >= 1 && tss > 0.0 && rss > 0.0) {
+    double f_stat = ((tss - rss) / (double) df1) / (rss / (double) df2);
+    if (R_finite(f_stat) && f_stat > 0.0) {
+      p_value = R::pf(f_stat, (double) df1, (double) df2,
+                      /*lower_tail=*/0, /*log_p=*/0);
+    }
+  }
+  double aic = (rss > 0.0)
+                 ? (double) n * (std::log(2.0 * M_PI) +
+                                  std::log(rss / (double) n) + 1.0) +
+                   2.0 * (double) p
+                 : NA_REAL;
+
+  out.ok = true;
+  out.rss = rss;
+  out.tss = tss;
+  out.r_squared = r2;
+  out.aic = aic;
+  out.p_value = p_value;
+  return out;
+}
+
+// [[Rcpp::export]]
+List ols_fit_cpp(NumericMatrix X, NumericVector y) {
+  int n = X.nrow();
+  int p = X.ncol();
+  if (n != y.size()) return List::create(_["ok"] = false);
+  OlsResult r = ols_one(REAL(X), n, p, REAL(y));
+  if (!r.ok) return List::create(_["ok"] = false);
+  return List::create(
+    _["ok"]        = true,
+    _["n"]         = r.n,
+    _["p"]         = r.p,
+    _["rss"]       = r.rss,
+    _["tss"]       = r.tss,
+    _["r_squared"] = r.r_squared,
+    _["aic"]       = r.aic,
+    _["p_value"]   = r.p_value
+  );
+}
+
+// [[Rcpp::export]]
+List ols_fit_batch_cpp(List Xs, List ys) {
+  int K = Xs.size();
+  if (ys.size() != K) {
+    return List::create(_["ok"] = false);
+  }
+  List out(K);
+  for (int k = 0; k < K; ++k) {
+    SEXP Xk = Xs[k];
+    SEXP yk = ys[k];
+    if (Xk == R_NilValue || yk == R_NilValue) {
+      out[k] = R_NilValue;
+      continue;
+    }
+    NumericMatrix X(Xk);
+    NumericVector y(yk);
+    int n = X.nrow();
+    int p = X.ncol();
+    if (n != y.size()) {
+      out[k] = List::create(_["ok"] = false);
+      continue;
+    }
+    OlsResult r = ols_one(REAL(X), n, p, REAL(y));
+    if (!r.ok) {
+      out[k] = List::create(_["ok"] = false);
+      continue;
+    }
+    out[k] = List::create(
+      _["ok"]        = true,
+      _["n"]         = r.n,
+      _["p"]         = r.p,
+      _["rss"]       = r.rss,
+      _["tss"]       = r.tss,
+      _["r_squared"] = r.r_squared,
+      _["aic"]       = r.aic,
+      _["p_value"]   = r.p_value
+    );
+  }
+  return out;
 }
 
 // One penalised LS fit at a given lambda. Returns ok flag, beta, RSS,

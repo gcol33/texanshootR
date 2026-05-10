@@ -1,6 +1,6 @@
 #' Generate a funding letter + budget DOCX
 #'
-#' One-page Letter of Intent with a deadpan budget table.
+#' One-page Letter of Intent with a costed budget table.
 #'
 #' Unlock requirement: \strong{PI}. See [progress()] for live state.
 #'

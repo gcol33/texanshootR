@@ -24,7 +24,8 @@ and stored on the returned run.}
 
 \item{escalate}{Logical. Allow the derived-metric escalation phase
 when the main search produces no spec with p <= 0.05. Defaults to
-\code{TRUE}; the package leans into the parody.}
+\code{TRUE}; set to \code{FALSE} to stop the search at the
+predictor-level budget.}
 
 \item{depth}{\code{"default"} for the full search; \code{"demo"} for a
 single-fit smoke test used in CRAN-safe examples.}

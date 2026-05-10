@@ -19,5 +19,7 @@ utils::globalVariables(c(
   # Rcpp-generated wrappers (R/RcppExports.R) — referenced from
   # R/families.R via bare names through devtools::load_all().
   "pls_gcv_cpp",
-  "lmm_profile_cpp"
+  "lmm_profile_cpp",
+  "ols_fit_cpp",
+  "ols_fit_batch_cpp"
 ))

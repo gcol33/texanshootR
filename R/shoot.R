@@ -12,7 +12,8 @@
 #'   and stored on the returned run.
 #' @param escalate Logical. Allow the derived-metric escalation phase
 #'   when the main search produces no spec with p <= 0.05. Defaults to
-#'   `TRUE`; the package leans into the parody.
+#'   `TRUE`; set to `FALSE` to stop the search at the predictor-level
+#'   budget.
 #' @param depth `"default"` for the full search; `"demo"` for a
 #'   single-fit smoke test used in CRAN-safe examples.
 #' @param ... Reserved for future arguments.
@@ -101,30 +102,48 @@ shoot <- function(df,
   results <- list()
   end_time <- state$started + budget
 
+  # Mini-batch the search. Each iteration collects up to `batch_size`
+  # specs from next_spec(), fits them in one R/C++ crossing via
+  # fit_specs_batch(), and then runs record_result() over the batch
+  # so the perturb_queue and dead_subsets state stays sequential. The
+  # tradeoff: perturbations queued by spec #i in a batch don't get
+  # picked up until the *next* batch — search reactivity is coarsened
+  # to batch granularity, but the R/C++ overhead drops accordingly.
   iter <- 0L
+  batch_size <- getOption("texanshootR.batch_size", 8L)
   while (state$spec_count < cap && Sys.time() < end_time) {
-    pick   <- next_spec(search, df, outcome, predictors, iter)
-    search <- pick$state
-    spec   <- pick$spec
-    if (is.null(spec)) break
-    spec$subset_full <- paste(predictors, collapse = ",")
-    spec$family <- select_family(career_level, escalating = FALSE,
-                                  outcome   = outcome_vec,
-                                  available = family_pool)
-    state$current_family <- spec$family$fitter
+    this_batch <- min(batch_size, cap - state$spec_count)
+    batch_specs <- vector("list", this_batch)
+    n_picked <- 0L
+    for (i in seq_len(this_batch)) {
+      pick   <- next_spec(search, df, outcome, predictors, iter)
+      search <- pick$state
+      spec   <- pick$spec
+      if (is.null(spec)) break
+      spec$subset_full <- paste(predictors, collapse = ",")
+      spec$family <- select_family(career_level, escalating = FALSE,
+                                    outcome   = outcome_vec,
+                                    available = family_pool)
+      n_picked <- n_picked + 1L
+      batch_specs[[n_picked]] <- spec
+      iter <- iter + 1L
+    }
+    if (n_picked == 0L) break
+    length(batch_specs) <- n_picked
 
-    r <- fit_spec(df, outcome, spec)
-    state$spec_count <- state$spec_count + 1L
-    iter <- iter + 1L
-    if (is.null(r)) next
+    batch_results <- fit_specs_batch(df, outcome, batch_specs)
 
-    results[[length(results) + 1L]] <- r
-    trace[[length(trace)     + 1L]] <- spec
-    search <- record_result(search, spec, r, df, outcome)
+    for (i in seq_len(n_picked)) {
+      spec <- batch_specs[[i]]
+      r    <- batch_results[[i]]
+      state$current_family <- spec$family$fitter
+      state$spec_count <- state$spec_count + 1L
+      if (is.null(r)) next
+      results[[length(results) + 1L]] <- r
+      trace[[length(trace)     + 1L]] <- spec
+      search <- record_result(search, spec, r, df, outcome)
+    }
 
-    # Progress is whichever clock is running out first — wall-clock
-    # against the budget, or spec count against the cap. The shooter
-    # is on a deadline either way.
     progress <- min(1, max(
       as.numeric(Sys.time() - state$started, units = "secs") /
         max(1, as.numeric(budget)),
@@ -135,8 +154,6 @@ shoot <- function(df,
                                           numeric(1)), na.rm = TRUE))
     if (!is.finite(best_p)) best_p <- NA_real_
 
-    # Track the shooter's emotional peak across every iteration so the
-    # arc is captured even in silent runs.
     cur <- mascot_state(progress, best_p, escalating = state$derived_used)
     sev <- mascot_severity(cur)
     if (sev > state$peak_severity) state$peak_severity <- sev
@@ -145,7 +162,6 @@ shoot <- function(df,
       state <- maybe_animate(state, ui, progress, results, outcome)
     }
 
-    # Optional stopping for highlight selection only.
     if (!state$stopped_early && is.finite(best_p) && best_p <= 0.05) {
       state$stopped_early <- TRUE
       state$resolved_at_progress <- progress
@@ -184,21 +200,37 @@ shoot <- function(df,
       sub_cap <- max(50L, cap %/% 10L)
       sub_count <- 0L
       derived_outcome_vec <- if (outcome %in% names(d2)) d2[[outcome]] else NULL
+      # Escalation has no per-fit state mutation between specs, so we
+      # can batch wildcard specs straight through fit_specs_batch.
       while (sub_count < sub_cap && Sys.time() < end_time) {
-        spec <- wildcard_spec(d2, outcome, predictors)
-        if (is.null(spec)) break
-        spec$subset_full <- paste(predictors, collapse = ",")
-        spec$family <- select_family(career_level, escalating = TRUE,
-                                      outcome   = derived_outcome_vec,
-                                      available = family_pool)
-        state$current_family <- spec$family$fitter
-        r <- fit_spec(d2, outcome, spec)
-        sub_count <- sub_count + 1L
-        state$spec_count <- state$spec_count + 1L
-        if (!is.null(r)) {
-          r$derived <- derived$info
-          results[[length(results) + 1L]] <- r
-          trace[[length(trace)     + 1L]] <- spec
+        this_batch <- min(batch_size, sub_cap - sub_count)
+        batch_specs <- vector("list", this_batch)
+        n_picked <- 0L
+        for (i in seq_len(this_batch)) {
+          spec <- wildcard_spec(d2, outcome, predictors)
+          if (is.null(spec)) break
+          spec$subset_full <- paste(predictors, collapse = ",")
+          spec$family <- select_family(career_level, escalating = TRUE,
+                                        outcome   = derived_outcome_vec,
+                                        available = family_pool)
+          n_picked <- n_picked + 1L
+          batch_specs[[n_picked]] <- spec
+        }
+        if (n_picked == 0L) break
+        length(batch_specs) <- n_picked
+
+        batch_results <- fit_specs_batch(d2, outcome, batch_specs)
+        for (i in seq_len(n_picked)) {
+          spec <- batch_specs[[i]]
+          r    <- batch_results[[i]]
+          state$current_family <- spec$family$fitter
+          sub_count <- sub_count + 1L
+          state$spec_count <- state$spec_count + 1L
+          if (!is.null(r)) {
+            r$derived <- derived$info
+            results[[length(results) + 1L]] <- r
+            trace[[length(trace)     + 1L]] <- spec
+          }
         }
       }
     }

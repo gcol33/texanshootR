@@ -16,7 +16,7 @@ funding(run, output_dir = NULL, file = NULL, force = FALSE)
 \item{force}{Overwrite an existing file.}
 }
 \description{
-One-page Letter of Intent with a deadpan budget table.
+One-page Letter of Intent with a costed budget table.
 }
 \details{
 Unlock requirement: \strong{PI}. See \code{\link[=progress]{progress()}} for live state.

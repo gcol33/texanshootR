@@ -42,7 +42,7 @@
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="120" y="100" opacity="0">(>_<;)
+    <text x="120" y="100" opacity="0">(&gt;_&lt;;)
       <animate attributeName="opacity" values="0;0;0;0;1;0;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>

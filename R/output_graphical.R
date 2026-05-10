@@ -1,8 +1,8 @@
 #' Generate a graphical abstract PNG
 #'
 #' A single-figure summary of the highlighted specification, composed
-#' as a deadpan multi-panel layout with conceptual arrows. Renders via
-#' ggplot2 to PNG.
+#' as a multi-panel layout with conceptual arrows. Renders via ggplot2
+#' to PNG.
 #'
 #' Unlock requirement: \strong{Senior Scientist}. See [progress()] for live state.
 #'

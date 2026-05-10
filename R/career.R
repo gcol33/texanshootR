@@ -2,7 +2,7 @@
 #'
 #' Returns a `tx_career` object describing the persistent career, or a
 #' fresh default if no save exists. The object's `print` method shows
-#' a deadpan dashboard card; `summary` adds aggregate counts.
+#' a compact dashboard card; `summary` adds aggregate counts.
 #'
 #' @return A `tx_career` object.
 #' @export

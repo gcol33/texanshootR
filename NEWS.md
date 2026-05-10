@@ -9,9 +9,9 @@
 ## API unlocks
 
 The output generators are gated by career tier. Calling a locked function
-returns a deadpan status block; the function is otherwise usable once the
-tier is reached. Unlocks are persistent across sessions via the existing
-save state.
+returns a status block; the function is otherwise usable once the tier is
+reached. Unlocks are persistent across sessions via the existing save
+state.
 
 * Junior Researcher: `shoot()`, `career()`, `achievements()`, `wardrobe()`,
   `run_log()`, `progress()`, resets.

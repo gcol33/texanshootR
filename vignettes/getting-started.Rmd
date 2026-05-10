@@ -63,8 +63,8 @@ The tier-to-function mapping:
 | Senior Scientist  | `reviewer_response()`, `graphical_abstract()`, `presentation()` |
 | PI                | `funding()`                                                |
 
-A locked call signals a `tx_locked` condition with a deadpan
-two-block status message. From a fresh save:
+A locked call signals a `tx_locked` condition with a two-block status
+message. From a fresh save:
 
 ```
 manuscript() requires:
@@ -77,7 +77,7 @@ Junior Researcher
 Scripts can intercept the signal with
 `tryCatch(manuscript(run), tx_locked = function(c) NULL)`. Inspect a
 single function's status with `progress("manuscript")`. Tier
-thresholds are intentionally opaque; the path is more runs.
+thresholds are not documented; the path is more runs.
 
 ## Output generators
 

@@ -67,34 +67,72 @@ fit_lm <- function(df, outcome, spec) {
   }
   if (length(y) < ncol(X) + 2L) return(NULL)
 
-  fit <- tryCatch(stats::.lm.fit(X, y), error = function(e) NULL)
-  if (is.null(fit)) return(NULL)
-
-  n <- length(y); p <- ncol(X)
-  res <- fit$residuals
-  rss <- sum(res * res)
-  tss <- sum((y - mean(y))^2)
-  r2  <- if (tss > 0) max(0, 1 - rss / tss) else 0
-
-  df1 <- max(1L, p - 1L)
-  df2 <- n - p
-  if (df2 < 1L || tss <= 0) {
-    p_value <- NA_real_
-  } else {
-    f_stat  <- ((tss - rss) / df1) / (rss / df2)
-    p_value <- stats::pf(f_stat, df1, df2, lower.tail = FALSE)
-  }
+  fit <- ols_fit_cpp(X, y)
+  if (!isTRUE(fit$ok)) return(NULL)
 
   c(list(
     formula     = mb$formula,
-    n           = n,
-    n_terms     = p,
-    r_squared   = r2,
-    aic         = n * (log(2 * pi) + log(rss / n) + 1) + 2 * p,
-    p_value     = p_value,
+    n           = fit$n,
+    n_terms     = fit$p,
+    r_squared   = fit$r_squared,
+    aic         = fit$aic,
+    p_value     = fit$p_value,
     family      = "lm",
     family_meta = list()
-  ), spec_metadata(df, spec, n))
+  ), spec_metadata(df, spec, fit$n))
+}
+
+# Materialise the (X, y) pair an lm spec would feed to ols_fit_cpp.
+# Returns NULL if the spec is degenerate after transforms / outliers /
+# subgroup or if the design has too few residual degrees of freedom.
+# Used by fit_lm_batch() to assemble batches without paying the
+# ols_fit_cpp call per spec.
+build_lm_design <- function(df, outcome, spec) {
+  mb <- build_model_frame(df, outcome, spec)
+  if (is.null(mb)) return(NULL)
+  X <- mb$X; y <- mb$y
+  if (!all(is.finite(y))) {
+    keep <- is.finite(y)
+    X <- X[keep, , drop = FALSE]; y <- y[keep]
+  }
+  if (length(y) < ncol(X) + 2L) return(NULL)
+  list(X = X, y = y, formula = mb$formula)
+}
+
+# Batch-fit a list of lm specs in one C++ crossing. Specs whose design
+# does not materialise are returned as NULL slots so the caller can
+# preserve original ordering. Returns a list of result rows in the same
+# shape as fit_lm().
+fit_lm_batch <- function(df, outcome, specs) {
+  if (!length(specs)) return(list())
+
+  designs <- lapply(specs, function(s) build_lm_design(df, outcome, s))
+  ok      <- !vapply(designs, is.null, logical(1))
+  out     <- vector("list", length(specs))
+
+  if (!any(ok)) return(out)
+
+  Xs <- lapply(designs[ok], `[[`, "X")
+  ys <- lapply(designs[ok], `[[`, "y")
+  fits <- ols_fit_batch_cpp(Xs, ys)
+
+  ok_idx <- which(ok)
+  for (j in seq_along(ok_idx)) {
+    i   <- ok_idx[j]
+    fit <- fits[[j]]
+    if (is.null(fit) || !isTRUE(fit$ok)) next
+    out[[i]] <- c(list(
+      formula     = designs[[i]]$formula,
+      n           = fit$n,
+      n_terms     = fit$p,
+      r_squared   = fit$r_squared,
+      aic         = fit$aic,
+      p_value     = fit$p_value,
+      family      = "lm",
+      family_meta = list()
+    ), spec_metadata(df, specs[[i]], fit$n))
+  }
+  out
 }
 
 # ---- glm fitter ----------------------------------------------------

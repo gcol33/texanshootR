@@ -12,6 +12,33 @@ fit_spec <- function(df, outcome, spec) {
   fitter(df, outcome, spec)
 }
 
+# Batch dispatcher: fits a list of specs in one pass. lm-family specs go
+# through the C++ batch kernel (one R/C++ crossing for the whole group);
+# every other family falls back to fit_spec(). Returns results in the
+# same order as `specs`, with NULLs preserved for fits that fail to
+# materialise. The shoot() loop calls this in mini-batches so the search
+# state still gets per-fit feedback inside record_result(), just at
+# coarser cadence than one-spec-at-a-time.
+fit_specs_batch <- function(df, outcome, specs) {
+  if (!length(specs)) return(list())
+  fam <- vapply(specs,
+                function(s) s$family$fitter %||% "lm",
+                character(1))
+  out <- vector("list", length(specs))
+
+  is_lm <- fam == "lm"
+  if (any(is_lm)) {
+    lm_idx <- which(is_lm)
+    lm_results <- fit_lm_batch(df, outcome, specs[lm_idx])
+    out[lm_idx] <- lm_results
+  }
+
+  for (i in which(!is_lm)) {
+    out[[i]] <- fit_spec(df, outcome, specs[[i]])
+  }
+  out
+}
+
 # Highlighted-spec selection. Implements the just-cleared bias from
 # Brodeur, Cook & Heyes (2020): prefer specs whose p-value falls in
 # [0.040, 0.0499] - distinctly under the 0.05 line but visibly close.

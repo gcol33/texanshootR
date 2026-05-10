@@ -42,9 +42,9 @@ leads with the shooter's face and the arc he followed
 (`composed -> resolved`, `panicked -> resolved (last-minute)`,
 `escalated to derived metrics`, etc.) before the formula and the p-value.
 
-Every run is deterministic given a seed, and the seed, R version, package
-version, and a hash of the search trace are recorded on the returned object —
-so the *audit trail* is honest even when the *intent* is not.
+Every run is deterministic given a seed. The seed, R version, package
+version, and a hash of the search trace are recorded on the returned
+object so the full search can be replayed from any saved run.
 
 ## What's in the box
 
@@ -82,7 +82,7 @@ shippable, each gated to a career tier:
 
 ```r
 manuscript(run)         # IMRaD draft, Methods that match the *winning* spec
-presentation(run)       # 8-slide deck (slide 7 contains the only honest figure)
+presentation(run)       # 8-slide deck; the residual plot sits on slide 7
 graphical_abstract(run) # the figure your PI will retweet
 reviewer_response(run)  # opens with "we thank the reviewer for their thoughtful comments"
 funding(run)            # the next grant, citing the just-shipped finding
@@ -93,8 +93,9 @@ Override with `output_dir =` or `options(texanshootR.output_dir = ...)`.
 
 ### Career, achievements, cosmetics
 
-Every run feeds a persistent profile, because the joke does not work without
-progression — and because progression *gates the API*.
+Every run feeds a persistent profile. Progression *gates the API* — output
+generators unlock at the appropriate tier, and model families enter the
+search pool as the career advances.
 
 ```r
 career()        # level, runs, favourite method, opaque scores
@@ -113,9 +114,9 @@ Tiers and what they unlock:
 | Senior Scientist   | `reviewer_response()`, `graphical_abstract()`, `presentation()`; `wls` and `gam` families |
 | PI                 | `funding()`; `glmm` and `sem` families                |
 
-Locked output generators do not error — they print a deadpan status block
-showing what tier they need. Locked families simply never appear in the
-search trace. Both unlock in place, no reinstall.
+Locked output generators do not error — they print a status block showing
+what tier they need. Locked families simply never appear in the search
+trace. Both unlock in place, no reinstall.
 
 ### Persistent state and saves
 
@@ -157,7 +158,7 @@ message is a YAML edit and a re-run of `validate_messages()`.
 
 ## Reset
 
-For when the simulation ends and you would like a new one:
+To clear saved state and start a new career:
 
 ```r
 reset_career(force = TRUE)

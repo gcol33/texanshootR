@@ -10,6 +10,30 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// ols_fit_cpp
+List ols_fit_cpp(NumericMatrix X, NumericVector y);
+RcppExport SEXP _texanshootR_ols_fit_cpp(SEXP XSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type X(XSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(ols_fit_cpp(X, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ols_fit_batch_cpp
+List ols_fit_batch_cpp(List Xs, List ys);
+RcppExport SEXP _texanshootR_ols_fit_batch_cpp(SEXP XsSEXP, SEXP ysSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< List >::type Xs(XsSEXP);
+    Rcpp::traits::input_parameter< List >::type ys(ysSEXP);
+    rcpp_result_gen = Rcpp::wrap(ols_fit_batch_cpp(Xs, ys));
+    return rcpp_result_gen;
+END_RCPP
+}
 // pls_gcv_cpp
 List pls_gcv_cpp(NumericMatrix X, NumericVector y, NumericMatrix S, NumericVector log_lambdas);
 RcppExport SEXP _texanshootR_pls_gcv_cpp(SEXP XSEXP, SEXP ySEXP, SEXP SSEXP, SEXP log_lambdasSEXP) {
@@ -41,6 +65,8 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_texanshootR_ols_fit_cpp", (DL_FUNC) &_texanshootR_ols_fit_cpp, 2},
+    {"_texanshootR_ols_fit_batch_cpp", (DL_FUNC) &_texanshootR_ols_fit_batch_cpp, 2},
     {"_texanshootR_pls_gcv_cpp", (DL_FUNC) &_texanshootR_pls_gcv_cpp, 4},
     {"_texanshootR_lmm_profile_cpp", (DL_FUNC) &_texanshootR_lmm_profile_cpp, 5},
     {NULL, NULL, 0}
