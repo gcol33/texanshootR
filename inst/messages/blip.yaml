@@ -129,3 +129,1587 @@
   tags: [p_hacking]
   rarity: uncommon
   trigger_phase: blip
+
+# --- Statistical action verbs ---------------------------------------------
+
+- id: blip_transforming
+  text: "transforming..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_centering
+  text: "centering..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_scaling
+  text: "scaling..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_residualizing
+  text: "residualizing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_weighting
+  text: "weighting..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_predicting
+  text: "predicting..."
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_averaging
+  text: "averaging..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_ranking
+  text: "ranking..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_binning
+  text: "binning..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_recoding
+  text: "recoding..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_standardizing
+  text: "standardizing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_parameterizing
+  text: "parameterizing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_anchoring
+  text: "anchoring..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_bootstrapping
+  text: "bootstrapping..."
+  tags: [validation_leakage]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_resampling
+  text: "resampling..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_permuting
+  text: "permuting..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_simulating
+  text: "simulating..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_projecting
+  text: "projecting..."
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_decomposing
+  text: "decomposing..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_ordinating
+  text: "ordinating..."
+  tags: [data_dredging, ecology]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_clustering
+  text: "clustering..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_partitioning
+  text: "partitioning..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_stratifying
+  text: "stratifying..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_factoring
+  text: "factoring..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_filtering
+  text: "filtering..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_gating
+  text: "gating..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_censoring
+  text: "censoring..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_imputing
+  text: "imputing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_denoising
+  text: "denoising..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_detrending
+  text: "detrending..."
+  tags: [researcher_dof, temporal]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_lagging
+  text: "lagging..."
+  tags: [researcher_dof, temporal]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_differencing
+  text: "differencing..."
+  tags: [researcher_dof, temporal]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_integrating
+  text: "integrating..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_embedding
+  text: "embedding..."
+  tags: [overfitting, ml]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_rotating
+  text: "rotating..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_jittering
+  text: "jittering..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_perturbing
+  text: "perturbing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_refitting
+  text: "refitting..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_rebinning
+  text: "rebinning..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_rebasing
+  text: "rebasing..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_retransforming
+  text: "retransforming..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_rebalancing
+  text: "rebalancing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_retraining
+  text: "retraining..."
+  tags: [validation_leakage, ml]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_reannotating
+  text: "reannotating..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_retagging
+  text: "retagging..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_reweighting
+  text: "reweighting..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_recurving
+  text: "recurving..."
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_redating
+  text: "redating..."
+  tags: [researcher_dof, temporal]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_reslicing
+  text: "reslicing..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_redrafting
+  text: "redrafting..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_retesting
+  text: "retesting..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_reanchoring
+  text: "reanchoring..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_replicating
+  text: "replicating..."
+  tags: [survivorship]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_reproducing
+  text: "reproducing..."
+  tags: [survivorship]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_rethinking
+  text: "rethinking..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_redefining
+  text: "redefining..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_recompiling
+  text: "recompiling..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_pivoting
+  text: "pivoting..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_pruning_extra
+  text: "pruning further..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_relinking
+  text: "relinking..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_recasting2
+  text: "recasting hypothesis..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_remodelling
+  text: "remodelling..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_reweighing
+  text: "reweighing evidence..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_redirecting
+  text: "redirecting..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_recentering
+  text: "recentering..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_reframing2
+  text: "reframing scope..."
+  tags: [harking, narrative]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_reordering
+  text: "reordering..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_repolishing
+  text: "polishing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_finalizing2
+  text: "finalizing again..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_compressing
+  text: "compressing..."
+  tags: [salami_slicing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_expanding
+  text: "expanding..."
+  tags: [salami_slicing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_truncating
+  text: "truncating..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_winsorizing
+  text: "winsorizing..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_logging
+  text: "log-transforming..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_squaring
+  text: "squaring..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_inverting
+  text: "inverting..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_boxcox
+  text: "Box-Cox..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_yeo
+  text: "Yeo-Johnson..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_arcsin
+  text: "arcsin..."
+  tags: [researcher_dof, ecology]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_logit
+  text: "logit..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_probit
+  text: "probit..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_decentering
+  text: "decentering..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_orthogonalizing
+  text: "orthogonalizing..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_whitening
+  text: "whitening..."
+  tags: [researcher_dof, ml]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_dropping
+  text: "dropping..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_excluding
+  text: "excluding..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_including
+  text: "including..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_replacing
+  text: "replacing..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_imputing_again
+  text: "imputing again..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_smoothing_again
+  text: "smoothing further..."
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_searching
+  text: "searching..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_hunting
+  text: "hunting..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_scoring
+  text: "scoring..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_re_scoring
+  text: "re-scoring..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_screening
+  text: "screening..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_filtering_again
+  text: "filtering further..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_filtering_more
+  text: "filtering aggressively..."
+  tags: [outlier_exclusion]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_compiling
+  text: "compiling..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_collating
+  text: "collating..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_curating
+  text: "curating..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_recurating
+  text: "recurating..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: blip
+
+# --- p-values ----------------------------------------------------------------
+
+- id: blip_pvalue_046
+  text: "p = 0.046"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_047
+  text: "p = 0.047"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_048
+  text: "p = 0.048"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_044
+  text: "p = 0.044"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_042
+  text: "p = 0.042"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_038
+  text: "p = 0.038"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_043
+  text: "p = 0.043"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_052
+  text: "p = 0.052"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_053
+  text: "p = 0.053"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_054
+  text: "p = 0.054"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_055
+  text: "p = 0.055"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_056
+  text: "p = 0.056"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_057
+  text: "p = 0.057"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_059
+  text: "p = 0.059"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_060
+  text: "p = 0.060"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_pvalue_063
+  text: "p = 0.063"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_pvalue_almost
+  text: "p ≈ 0.05"
+  tags: [p_hacking, optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_pvalue_under
+  text: "p < 0.05"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_well_under
+  text: "p ≪ 0.05"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_over
+  text: "p > 0.05"
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_pvalue_climbing
+  text: "p ↑"
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_pvalue_recovering
+  text: "p recovering..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_pvalue_settling
+  text: "p settling..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_pvalue_holding
+  text: "p holding..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_pvalue_drifting
+  text: "p drifting..."
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+
+# --- Numerical / symbolic --------------------------------------------------
+
+- id: blip_n_47
+  text: "n = 47"
+  tags: [data_dredging]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_n_28
+  text: "n = 28"
+  tags: [data_dredging]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_n_17
+  text: "n = 17"
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_n_dropping
+  text: "n ↓"
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_n_climbing
+  text: "n ↑"
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_n_holding
+  text: "n stable"
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_aic_drop
+  text: "ΔAIC = -2.1"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_aic_climb
+  text: "ΔAIC = +0.8"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_aic_neg_4
+  text: "ΔAIC = -4.4"
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_bic_close
+  text: "ΔBIC = +0.04"
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_bic_drop
+  text: "ΔBIC = -3.2"
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_r2_004
+  text: "R² = 0.04"
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_r2_062
+  text: "R² = 0.62"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_r2_098
+  text: "R² = 0.98"
+  tags: [overfitting]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_r2_climbing
+  text: "R² ↑"
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_df_4
+  text: "df = 4"
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_df_17
+  text: "df = 17"
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_df_dropping
+  text: "df ↓"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_vif_high
+  text: "VIF = 12.3"
+  tags: [collider_bias, omitted_variable]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_vif_ok
+  text: "VIF = 3.1"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_loglik_climb
+  text: "logLik climbing"
+  tags: [overfitting]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_converged
+  text: "[converged]"
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_failed
+  text: "[failed]"
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_singular
+  text: "[singular]"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_done
+  text: "[done]"
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_ok
+  text: "[ok]"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_warning
+  text: "[warning]"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_err
+  text: "[err]"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_retry
+  text: "[retry]"
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_skip
+  text: "[skip]"
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_pass
+  text: "[pass]"
+  tags: [survivorship]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_drop
+  text: "[drop]"
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_keep
+  text: "[keep]"
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_held_out
+  text: "[held out]"
+  tags: [validation_leakage]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_leaked
+  text: "[leaked]"
+  tags: [validation_leakage]
+  rarity: rare
+  trigger_phase: blip
+
+# --- Status / pacing -----------------------------------------------------
+
+- id: blip_almost
+  text: "almost..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_nearly
+  text: "nearly..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_close
+  text: "close..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_again
+  text: "again..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_once_more
+  text: "once more..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_one_more
+  text: "one more..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_warming_up
+  text: "warming up..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_ready
+  text: "ready..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_trying
+  text: "trying..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_trying_again
+  text: "trying again..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_checking
+  text: "checking..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_double_checking
+  text: "double-checking..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_re_running
+  text: "re-running..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_re_running_clean
+  text: "re-running clean..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_just_one_more
+  text: "just one more..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_last_one
+  text: "last one..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_definitely_last
+  text: "definitely the last..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_promise
+  text: "promise..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_actually_done
+  text: "actually done..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+# --- Phrasal stubs ------------------------------------------------------
+
+- id: blip_robust_enough
+  text: "robust enough"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_close_enough
+  text: "close enough"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_good_enough
+  text: "good enough"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_clean_enough
+  text: "clean enough"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_publishable_enough
+  text: "publishable enough"
+  tags: [publication_bias]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_as_expected
+  text: "as expected"
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_as_suspected
+  text: "as suspected"
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_as_theorized
+  text: "as theorized"
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_as_predicted
+  text: "as predicted"
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_looks_fine
+  text: "looks fine"
+  tags: [survivorship]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_looks_better
+  text: "looks better"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_looks_defensible
+  text: "looks defensible"
+  tags: [story_first]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_looks_clean
+  text: "looks clean"
+  tags: [survivorship]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_marginal
+  text: "marginally significant"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_marginal_other_way
+  text: "marginally non-significant"
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_approaching
+  text: "approaching significance"
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_publishable
+  text: "publishable."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_defensible
+  text: "defensible."
+  tags: [story_first]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_acceptable
+  text: "acceptable."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+# --- Combo chains ---------------------------------------------------------
+
+- id: blip_observing
+  text: "observing..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+  combo_chain:
+    start: observe_infer
+    next: ~
+
+- id: blip_inferring
+  text: "inferring..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: blip
+  combo_chain:
+    start: ~
+    next: observe_infer
+
+- id: blip_looking
+  text: "looking..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+  combo_chain:
+    start: look_find
+    next: ~
+
+- id: blip_finding
+  text: "finding..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: blip
+  combo_chain:
+    start: ~
+    next: look_find
+
+- id: blip_testing
+  text: "testing..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: blip
+  combo_chain:
+    start: test_retest
+    next: ~
+
+- id: blip_retesting_chain
+  text: "retesting..."
+  tags: [multiple_comparisons]
+  rarity: uncommon
+  trigger_phase: blip
+  combo_chain:
+    start: ~
+    next: test_retest
+
+- id: blip_drafting
+  text: "drafting..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+  combo_chain:
+    start: draft_revise
+    next: ~
+
+- id: blip_revising
+  text: "revising..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: blip
+  combo_chain:
+    start: ~
+    next: draft_revise
+
+# --- Reviewer / promotion-flavored blips ---------------------------------
+
+- id: blip_anticipating_reviewer
+  text: "anticipating reviewer..."
+  tags: [reviewer, story_first]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_softening
+  text: "softening claim..."
+  tags: [post_hoc, reviewer]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_hardening
+  text: "hardening claim..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_hedging
+  text: "hedging..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_qualifying
+  text: "qualifying..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_caveat
+  text: "adding caveat..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_un_caveat
+  text: "removing caveat..."
+  tags: [causal_overreach]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_promo_safe
+  text: "promotion-safe."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+# --- Coffee / lab realia ------------------------------------------------
+
+- id: blip_coffee
+  text: "coffee..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_more_coffee
+  text: "more coffee..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_third_coffee
+  text: "third coffee..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_3am
+  text: "3:14 a.m."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [desperate]
+
+- id: blip_unsaved
+  text: "unsaved buffer."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_typo
+  text: "typo in caption."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_legend_off
+  text: "legend off-axis."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+# --- Methodological flair ------------------------------------------------
+
+- id: blip_re_estimating
+  text: "re-estimating..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_recomputing
+  text: "recomputing..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_resimulating
+  text: "resimulating..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_revalidating
+  text: "revalidating..."
+  tags: [validation_leakage]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_reranking
+  text: "reranking..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_resolving
+  text: "resolving..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_reconciling
+  text: "reconciling..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_aligning
+  text: "aligning..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_realigning
+  text: "realigning..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_unifying
+  text: "unifying..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_streamlining
+  text: "streamlining..."
+  tags: [salami_slicing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_consolidating
+  text: "consolidating..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_finalizing_draft
+  text: "finalizing draft..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_locking
+  text: "locking..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_committing
+  text: "committing..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_freezing
+  text: "freezing seed..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: blip
+
+# --- Oblique / atmospheric ----------------------------------------------
+
+- id: blip_silence
+  text: "..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_silence_long
+  text: "......"
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]
+
+- id: blip_huh
+  text: "huh."
+  tags: [data_dredging]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_oh
+  text: "oh."
+  tags: [data_dredging]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [uncertain]
+
+- id: blip_well
+  text: "well..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [uncertain]
+
+- id: blip_interesting
+  text: "interesting."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_unexpected
+  text: "unexpected."
+  tags: [harking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [uncertain]
+
+- id: blip_acceptable_again
+  text: "acceptable again."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+
+- id: blip_within_tolerance
+  text: "within tolerance."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_within_bounds
+  text: "within bounds."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_outside_bounds
+  text: "outside bounds."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: blip
+  mascot_state_affinity: [anxious]

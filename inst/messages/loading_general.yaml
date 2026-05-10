@@ -153,3 +153,4275 @@
   rarity: uncommon
   trigger_phase: loading
   mascot_state_affinity: [anxious, desperate]
+
+# --- Subsetting / filtering ---------------------------------------------
+
+- id: load_subset_meaningful
+  text: "Restricting analysis to ecologically meaningful sites..."
+  tags: [subgroup_fishing, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_sites
+  text: "Excluding sites without complete metadata..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_years
+  text: "Restricting to years with adequate sampling effort..."
+  tags: [outlier_exclusion, temporal]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_quality
+  text: "Filtering to high-quality observations only..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_focal
+  text: "Defining the focal subset post hoc..."
+  tags: [subgroup_fishing, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_n
+  text: "Maintaining adequate sample size by careful inclusion..."
+  tags: [cherry_picking, optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_outlier
+  text: "Removing observations inconsistent with the model..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_drop_zeros
+  text: "Dropping zero-valued observations as uninformative..."
+  tags: [outlier_exclusion, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_low_count
+  text: "Excluding low-count categories per convention..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_climatic
+  text: "Restricting to climatically representative observations..."
+  tags: [subgroup_fishing, ecology, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_clean
+  text: "Subsetting to a clean analytical window..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_complete
+  text: "Restricting to complete cases..."
+  tags: [survivorship]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_recent
+  text: "Restricting to the most recent decade..."
+  tags: [cherry_picking, temporal]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_pre_2000
+  text: "Restricting to pre-2000 baseline conditions..."
+  tags: [cherry_picking, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_island
+  text: "Excluding island sites for tractability..."
+  tags: [outlier_exclusion, ecology, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_continental
+  text: "Restricting to continental observations..."
+  tags: [subgroup_fishing, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_temperate
+  text: "Restricting to temperate latitudes for clarity..."
+  tags: [subgroup_fishing, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_tropical
+  text: "Restricting to tropical sites for signal..."
+  tags: [subgroup_fishing, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subset_alt
+  text: "Trying an alternative inclusion rule..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_robust2
+  text: "Locating a robust analytical window..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_threshold
+  text: "Setting an inclusion threshold compatible with the result..."
+  tags: [outlier_exclusion, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_subset_n_min
+  text: "Enforcing minimum sample size per stratum..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_drop_singletons
+  text: "Dropping singletons to stabilize estimation..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_drop_doubletons
+  text: "Dropping doubletons for consistency..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Transformations ----------------------------------------------------
+
+- id: load_log_transform
+  text: "Applying log-transform for ecological interpretability..."
+  tags: [researcher_dof, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_sqrt_transform
+  text: "Applying square-root transform for variance stabilization..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_box_cox
+  text: "Selecting Box-Cox lambda by visual inspection..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_yeo_johnson
+  text: "Falling back to Yeo-Johnson..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_logit_transform
+  text: "Applying logit transform on bounded outcome..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_arcsin_transform
+  text: "Applying arcsin-square-root for proportion data..."
+  tags: [researcher_dof, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_centering_predictors
+  text: "Centering predictors at convenience values..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_standardizing
+  text: "Standardizing predictors for comparable coefficients..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_z_scoring
+  text: "Z-scoring within sampling unit..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_residualizing
+  text: "Residualizing against confounder of choice..."
+  tags: [researcher_dof, omitted_variable]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_log1p
+  text: "Switching to log(1+x) to retain zeros..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_inv_transform
+  text: "Trying the inverse transformation..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_quad_term
+  text: "Adding a quadratic term as needed..."
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_cubic_term
+  text: "Adding a cubic term for flexibility..."
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_polynomial
+  text: "Inserting polynomial terms until linear..."
+  tags: [overfitting]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_orthogonal_poly
+  text: "Constructing orthogonal polynomials for cleanliness..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_spline_basis
+  text: "Switching to spline basis with chosen knots..."
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_knots_chosen
+  text: "Knots placed where they help..."
+  tags: [overfitting, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_smoother
+  text: "Selecting smoother penalty by feel..."
+  tags: [overfitting, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_re_scale
+  text: "Re-scaling response after first fit..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_reverse_transform
+  text: "Reversing the transformation that didn't help..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_double_log
+  text: "Applying log to log..."
+  tags: [overfitting]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_recoding_factors
+  text: "Recoding factor levels for legibility..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_collapse_factors
+  text: "Collapsing factor levels into a useful contrast..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_regroup
+  text: "Regrouping categories along narrative-friendly lines..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Outlier removal --------------------------------------------------
+
+- id: load_outlier_id
+  text: "Identifying observations exceeding three SD..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_id_2sd
+  text: "Identifying observations exceeding two SD..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_cooks
+  text: "Inspecting Cook's distance for influential points..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_dffits
+  text: "Inspecting DFFITS for influential observations..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_outlier_leverage
+  text: "Removing high-leverage points per convention..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_ecological
+  text: "Removing observations inconsistent with ecological priors..."
+  tags: [outlier_exclusion, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_outlier_lab
+  text: "Excluding values likely affected by lab error..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_unverifiable
+  text: "Removing observations the lab cannot verify..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_outlier_2pct
+  text: "Trimming the top and bottom 2%..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_5pct
+  text: "Trimming the top and bottom 5%..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_outlier_10pct
+  text: "Trimming the top and bottom 10%..."
+  tags: [outlier_exclusion]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_winsorize
+  text: "Winsorizing extreme values for robustness..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_excluding_again
+  text: "Re-examining the exclusion criterion..."
+  tags: [outlier_exclusion, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_three_more
+  text: "Removing three more outliers..."
+  tags: [outlier_exclusion]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_one_outlier_left
+  text: "Reviewing one final outlier..."
+  tags: [outlier_exclusion, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_outlier_back
+  text: "Reinstating one previously-excluded observation..."
+  tags: [outlier_exclusion, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [uncertain]
+
+- id: load_principled_threshold
+  text: "Applying a principled exclusion threshold..."
+  tags: [outlier_exclusion, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_review_residuals
+  text: "Reviewing residuals and acting accordingly..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_curate_dataset
+  text: "Curating dataset to remove plausible measurement error..."
+  tags: [outlier_exclusion, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_dataset_curated
+  text: "Dataset curated to a defensible state."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+# --- HARKing / post-hoc -------------------------------------------------
+
+- id: load_hark_1
+  text: "Reframing hypothesis to align with the result..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_hark_2
+  text: "Locating the hypothesis the data implies..."
+  tags: [harking, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_hark_3
+  text: "Adjusting research question for tractability..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_hark_intro
+  text: "Updating introduction to anticipate the finding..."
+  tags: [harking, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_hark_lit
+  text: "Citing only the literature that fits..."
+  tags: [cherry_picking, harking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_hark_motivation
+  text: "Reordering paragraphs in the motivation section..."
+  tags: [harking, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_hark_keywords
+  text: "Updating keywords to reflect the actual contribution..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_post_hoc_test
+  text: "Running an exploratory test on the same data..."
+  tags: [post_hoc, multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_post_hoc_compare
+  text: "Adding a post hoc comparison group..."
+  tags: [post_hoc, subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_post_hoc_interpret
+  text: "Generating post hoc interpretation..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_post_hoc_explanation
+  text: "Constructing a post hoc explanation..."
+  tags: [post_hoc, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_predicted_after
+  text: "Predicting the result, in retrospect..."
+  tags: [harking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_consistent_with
+  text: "Result consistent with prior expectations (assembled)..."
+  tags: [harking, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_implicit_prediction
+  text: "Surfacing the implicit prediction in the literature..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_unifying_theory
+  text: "Identifying the unifying theory the result supports..."
+  tags: [story_first, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_simplifying_question
+  text: "Simplifying the research question to fit the answer..."
+  tags: [harking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_renaming_hypothesis
+  text: "Renaming the working hypothesis..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Multiple comparisons ----------------------------------------------
+
+- id: load_mc_pairwise
+  text: "Running pairwise comparisons across all groups..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_no_correction
+  text: "Reporting uncorrected p-values for clarity..."
+  tags: [multiple_comparisons]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_mc_bonferroni_skip
+  text: "Bonferroni correction omitted for biological relevance..."
+  tags: [multiple_comparisons]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_mc_fdr_lenient
+  text: "Adopting a lenient FDR threshold..."
+  tags: [multiple_comparisons]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_mc_post_hoc_correction
+  text: "Selecting correction method by results..."
+  tags: [multiple_comparisons, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_mc_test_battery
+  text: "Running the full battery of pairwise tests..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_three_models
+  text: "Comparing three models on the same outcome..."
+  tags: [multiple_comparisons, model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_six_models
+  text: "Comparing six models on the same outcome..."
+  tags: [multiple_comparisons, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mc_one_at_a_time
+  text: "Adding predictors one at a time and rechecking..."
+  tags: [multiple_comparisons, p_hacking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_rerun_after_drop
+  text: "Re-running tests after each predictor drop..."
+  tags: [multiple_comparisons, optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_fixed_effects
+  text: "Iterating fixed-effect structure..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_random_effects
+  text: "Iterating random-effect structure..."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mc_correlation_matrix
+  text: "Inspecting the full correlation matrix for leads..."
+  tags: [data_dredging, multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+# --- Stepwise / model shopping ------------------------------------------
+
+- id: load_stepwise_aic
+  text: "Running stepwise selection with AIC..."
+  tags: [stepwise_abuse, model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stepwise_bic
+  text: "Running stepwise selection with BIC..."
+  tags: [stepwise_abuse, model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stepwise_both
+  text: "Running stepwise selection in both directions..."
+  tags: [stepwise_abuse]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stepwise_again
+  text: "Re-running stepwise after fresh predictor list..."
+  tags: [stepwise_abuse, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_dropterm
+  text: "Calling dropterm() with optimistic intent..."
+  tags: [stepwise_abuse]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_addterm
+  text: "Calling addterm() with optimistic intent..."
+  tags: [stepwise_abuse]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_dredge
+  text: "Running dredge() across the candidate set..."
+  tags: [data_dredging, model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  requires: [MuMIn]
+
+- id: load_dredge_nolimit
+  text: "Running dredge() without an upper term limit..."
+  tags: [data_dredging, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  requires: [MuMIn]
+
+- id: load_glmnet_lambda
+  text: "Selecting glmnet lambda by visual inspection..."
+  tags: [model_shopping, ml]
+  rarity: uncommon
+  trigger_phase: loading
+  requires: [glmnet]
+
+- id: load_caret_grid
+  text: "Expanding caret tuning grid..."
+  tags: [model_shopping, ml]
+  rarity: rare
+  trigger_phase: loading
+  requires: [caret]
+
+- id: load_compare_three_families
+  text: "Comparing Gaussian, Gamma, and lognormal fits..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_compare_link_functions
+  text: "Comparing identity, log, and inverse link..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_zinb_vs_zip
+  text: "Comparing ZINB and ZIP fits..."
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_negbin_safe
+  text: "Falling back to negative binomial..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_select_best
+  text: "Selecting model with most defensible coefficient..."
+  tags: [model_shopping, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_keep_best
+  text: "Retaining the better-fitting alternative..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_drop_random
+  text: "Dropping random effect that worsened the fixed-effect estimate..."
+  tags: [stepwise_abuse, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_add_interaction
+  text: "Adding the interaction the residuals demanded..."
+  tags: [p_hacking, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_add_three_way
+  text: "Adding a three-way interaction..."
+  tags: [p_hacking, overfitting]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+# --- Reviewer narrative ------------------------------------------------
+
+- id: load_reviewer_2_prep
+  text: "Pre-empting Reviewer 2..."
+  tags: [reviewer, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_reviewer_anticipated
+  text: "Anticipating reviewer concerns about subset choice..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_reviewer_compat_2
+  text: "Reviewer compatibility improving..."
+  tags: [post_hoc, reviewer]
+  rarity: common
+  trigger_phase: loading
+  mascot_state_affinity: [composed, uncertain]
+
+- id: load_reviewer_calibrating
+  text: "Calibrating defensibility for plausible reviewer panel..."
+  tags: [reviewer, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_reviewer_softening
+  text: "Softening Discussion claims by one tier..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_reviewer_buffer
+  text: "Adding a sentence to absorb reviewer concerns..."
+  tags: [reviewer, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_reviewer_humility
+  text: "Inserting strategic humility paragraph..."
+  tags: [reviewer, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_reviewer_caveat_added
+  text: "Caveat acknowledged, claim retained..."
+  tags: [reviewer, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_reviewer_appendix
+  text: "Moving inconvenient analysis to appendix..."
+  tags: [reviewer, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_reviewer_robustness_section
+  text: "Drafting Robustness Checks section..."
+  tags: [reviewer, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_reviewer_alt_specs
+  text: "Documenting alternative specifications considered (selectively)..."
+  tags: [reviewer, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_reviewer_pre_register
+  text: "Drafting retrospective pre-registration..."
+  tags: [reviewer, harking, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+# --- Story-first / framing ----------------------------------------------
+
+- id: load_story_first_intro
+  text: "Drafting introduction around the desired result..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_story_first_abstract
+  text: "Tightening abstract toward the headline finding..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_story_first_title
+  text: "Optimizing title for retrieval..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_story_arc
+  text: "Constructing scientific arc from result backwards..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_narrative_polish
+  text: "Polishing narrative until plausible..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narrative_strong
+  text: "Stabilizing narrative coherence (round 2)..."
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_narrative_strong_3
+  text: "Stabilizing narrative coherence (round 3)..."
+  tags: [story_first, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_arrows_2
+  text: "Adding additional conceptual arrows..."
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_framework_diagram
+  text: "Producing conceptual framework diagram..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_emerging_pattern
+  text: "Highlighting an emerging pattern..."
+  tags: [post_hoc, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_mechanism_proposed
+  text: "Proposing a plausible mechanism..."
+  tags: [story_first, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_evolutionary_narrative
+  text: "Constructing evolutionary narrative..."
+  tags: [story_first, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_climate_narrative
+  text: "Constructing climate-relevant narrative..."
+  tags: [story_first, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_global_change
+  text: "Linking finding to global change drivers..."
+  tags: [story_first, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_biodiversity_link
+  text: "Linking finding to biodiversity loss..."
+  tags: [story_first, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_conservation_link
+  text: "Linking finding to conservation outcome..."
+  tags: [story_first, ecology]
+  rarity: common
+  trigger_phase: loading
+
+# --- Funding / career --------------------------------------------------
+
+- id: load_funding_angle
+  text: "Generating funding-relevant framing..."
+  tags: [funding, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_funding_keywords
+  text: "Inserting funding-aligned keywords..."
+  tags: [funding, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_funding_priority
+  text: "Aligning with current call priorities..."
+  tags: [funding, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_funding_horizon
+  text: "Aligning with Horizon Europe priorities..."
+  tags: [funding, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_funding_impact_para
+  text: "Drafting impact paragraph for the funder..."
+  tags: [funding, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_funding_vague
+  text: "Hedging methods description for funder readability..."
+  tags: [funding, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_career_safe_journal
+  text: "Selecting journal compatible with current career stage..."
+  tags: [career, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_career_first_author
+  text: "Negotiating first authorship..."
+  tags: [career, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_career_letters
+  text: "Pre-emptively drafting recommendation letter context..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_career_h_index_2
+  text: "h-index optimization continuing..."
+  tags: [publication_bias, salami_slicing, career]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_career_visibility
+  text: "Optimizing for visibility within field..."
+  tags: [publication_bias, career]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Coffee / desperation / lab realia ---------------------------------
+
+- id: load_coffee_2
+  text: "Coffee intake stable..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_coffee_3
+  text: "Switching to stronger coffee..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_dataset_reopened
+  text: "Reopening the dataset (fourth time)..."
+  tags: [researcher_dof, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_lights_off
+  text: "Office lights still off."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_supervisor_pinged
+  text: "Drafting reply to supervisor query..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_session_long
+  text: "Session length exceeding healthy bounds..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_unsaved_buffer
+  text: "Unsaved buffer detected..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_will_remember_this
+  text: "We will remember this run..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_just_one_more_2
+  text: "Just one more transformation..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_just_one_more_3
+  text: "One last specification, then we sleep..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_dataset_judgement
+  text: "Dataset reaching the limits of plausibility..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_keyboard_quiet
+  text: "Keyboard activity decreasing..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+# --- ML / cross-validation leakage --------------------------------------
+
+- id: load_cv_split
+  text: "Constructing cross-validation folds..."
+  tags: [validation_leakage, ml]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_cv_after_tune
+  text: "Tuning on the same folds used for evaluation..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_cv_random_split
+  text: "Using random splits despite spatial structure..."
+  tags: [validation_leakage, ml, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_cv_random_temporal
+  text: "Using random splits despite temporal structure..."
+  tags: [validation_leakage, ml, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_target_norm
+  text: "Normalizing target across train and test combined..."
+  tags: [target_leakage, validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_pca_full_data
+  text: "Running PCA on the full dataset before split..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_feature_selection_full
+  text: "Selecting features on the full dataset..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_oversample_train
+  text: "Oversampling training data after split..."
+  tags: [validation_leakage, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_oversample_pre
+  text: "Oversampling before split..."
+  tags: [target_leakage, validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_smote
+  text: "Applying SMOTE to imbalanced classes..."
+  tags: [validation_leakage, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_early_stopping_test
+  text: "Early-stopping on the test fold..."
+  tags: [validation_leakage, ml, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_xgb_tune
+  text: "Tuning XGBoost until validation drops..."
+  tags: [model_shopping, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_rf_mtry
+  text: "Tuning random-forest mtry by trial..."
+  tags: [model_shopping, ml]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_svm_kernel
+  text: "Selecting SVM kernel by experimentation..."
+  tags: [model_shopping, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_neural_arch
+  text: "Re-architecting the neural net..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_train_until
+  text: "Training until validation flatters the result..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+# --- Bayesian / priors -------------------------------------------------
+
+- id: load_prior_weak
+  text: "Adopting weakly-informative priors..."
+  tags: [researcher_dof, bayesian]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_prior_diffuse
+  text: "Switching to diffuse priors..."
+  tags: [researcher_dof, bayesian]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_prior_informed
+  text: "Selecting informative priors that align with the result..."
+  tags: [researcher_dof, bayesian, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_prior_sensitivity
+  text: "Running prior sensitivity (selectively reported)..."
+  tags: [bayesian, cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_jags_chains
+  text: "Increasing JAGS chains until convergence..."
+  tags: [optional_stopping, bayesian]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_stan_warmup
+  text: "Extending Stan warmup..."
+  tags: [optional_stopping, bayesian]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_brms_tuning
+  text: "Tuning brms adapt_delta..."
+  tags: [optional_stopping, bayesian]
+  rarity: rare
+  trigger_phase: loading
+  requires: [brms]
+
+- id: load_inla_priors
+  text: "Adjusting INLA hyperpriors..."
+  tags: [researcher_dof, bayesian]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_credible_interval
+  text: "Reporting 90% credible interval instead of 95%..."
+  tags: [p_hacking, bayesian]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_posterior_quantile
+  text: "Reporting selected posterior quantile..."
+  tags: [cherry_picking, bayesian]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Phylo / spatial / temporal ----------------------------------------
+
+- id: load_phylo_corr_2
+  text: "Applying phylogenetic correction with chosen tree..."
+  tags: [researcher_dof, phylo, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_phylo_pgls
+  text: "Switching to PGLS for branch-length convenience..."
+  tags: [researcher_dof, phylo]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_phylo_lambda
+  text: "Estimating Pagel's lambda by ML..."
+  tags: [researcher_dof, phylo]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_phylo_tree_swap
+  text: "Switching reference phylogeny..."
+  tags: [researcher_dof, phylo, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_phylo_ancestral
+  text: "Reconstructing ancestral states by ML..."
+  tags: [researcher_dof, phylo]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_spatial_autocorr
+  text: "Inspecting spatial autocorrelation post hoc..."
+  tags: [post_hoc, spatial]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spatial_buffer
+  text: "Adding a spatial buffer around sampled sites..."
+  tags: [researcher_dof, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_spatial_thinning
+  text: "Thinning sites for spatial independence..."
+  tags: [outlier_exclusion, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_spatial_random_effect
+  text: "Adding a spatial random effect to absorb the residual..."
+  tags: [researcher_dof, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_spatial_neighborhood
+  text: "Defining the neighborhood structure favorably..."
+  tags: [researcher_dof, spatial]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_kriging
+  text: "Applying kriging for residual structure..."
+  tags: [researcher_dof, spatial]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_temporal_lag
+  text: "Adding lagged predictor for temporal structure..."
+  tags: [researcher_dof, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_temporal_ar1
+  text: "Adding AR(1) error structure..."
+  tags: [researcher_dof, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_temporal_seasonal
+  text: "Adding seasonal harmonic terms..."
+  tags: [researcher_dof, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_climate_decade
+  text: "Aggregating climate data by decade..."
+  tags: [researcher_dof, temporal, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_climate_annual
+  text: "Aggregating climate data annually..."
+  tags: [researcher_dof, temporal, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_climate_monthly
+  text: "Aggregating climate data monthly..."
+  tags: [researcher_dof, temporal, ecology]
+  rarity: common
+  trigger_phase: loading
+
+# --- Subgroup mining ---------------------------------------------------
+
+- id: load_subgroup_2_drop
+  text: "Inspecting subgroup-level effects..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_one_more
+  text: "Trying one more subgroup partition..."
+  tags: [subgroup_fishing, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_subgroup_age
+  text: "Stratifying by age class..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_sex
+  text: "Stratifying by sex..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_size
+  text: "Stratifying by body size..."
+  tags: [subgroup_fishing, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_habitat
+  text: "Stratifying by habitat type..."
+  tags: [subgroup_fishing, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_region
+  text: "Stratifying by region..."
+  tags: [subgroup_fishing, spatial]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_period
+  text: "Stratifying by time period..."
+  tags: [subgroup_fishing, temporal]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_season
+  text: "Stratifying by season..."
+  tags: [subgroup_fishing, temporal]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_protected
+  text: "Comparing protected and unprotected sites..."
+  tags: [subgroup_fishing, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subgroup_edge
+  text: "Comparing edge versus interior sites..."
+  tags: [subgroup_fishing, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subgroup_rarefied
+  text: "Comparing rarefied versus full assemblages..."
+  tags: [subgroup_fishing, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subgroup_focal_sites
+  text: "Focusing on three focal sites..."
+  tags: [cherry_picking, subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_subgroup_keep_one
+  text: "Retaining the subgroup with the cleanest signal..."
+  tags: [cherry_picking, subgroup_fishing]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+# --- Causal overreach -------------------------------------------------
+
+- id: load_causal_implies
+  text: "Drafting Discussion in causal language..."
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_causal_drives
+  text: "Stating that X drives Y..."
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_causal_governs
+  text: "Stating that X governs Y..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_causal_mediates
+  text: "Inferring mediation from observational data..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_causal_chain
+  text: "Constructing implied causal chain..."
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_causal_directed
+  text: "Drawing the DAG that supports the claim..."
+  tags: [causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_causal_proxy
+  text: "Treating the proxy as if it were the cause..."
+  tags: [causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_causal_observational
+  text: "Drawing causal conclusions from observational data..."
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_causal_bridge
+  text: "Bridging correlation to mechanism in Discussion..."
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Survivorship / publication bias ----------------------------------
+
+- id: load_survivor_studies
+  text: "Citing studies that found a similar effect..."
+  tags: [survivorship, cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_survivor_meta
+  text: "Citing the supportive meta-analysis..."
+  tags: [survivorship, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_survivor_field
+  text: "Restricting reference list to high-impact venues..."
+  tags: [publication_bias]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pubbias_replicated
+  text: "Citing replicated finding without checking..."
+  tags: [publication_bias, survivorship]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pubbias_unreported
+  text: "Reporting only the analyses that worked..."
+  tags: [publication_bias, cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pubbias_filed
+  text: "Filing the unsuccessful run..."
+  tags: [publication_bias]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Salami / data presentation ---------------------------------------
+
+- id: load_salami_chapter
+  text: "Splitting result into a separate paper..."
+  tags: [salami_slicing, publication_bias]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_salami_robustness
+  text: "Saving robustness checks for a follow-up paper..."
+  tags: [salami_slicing]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_salami_supplement
+  text: "Moving secondary analyses to supplementary materials..."
+  tags: [salami_slicing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_salami_companion
+  text: "Reserving methodology details for companion paper..."
+  tags: [salami_slicing]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Validation / cross-check ----------------------------------------
+
+- id: load_validation_internal
+  text: "Performing internal validation only..."
+  tags: [validation_leakage]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_validation_holdout_late
+  text: "Defining hold-out set after fitting..."
+  tags: [validation_leakage]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_validation_loo
+  text: "Reporting leave-one-out where it works..."
+  tags: [cherry_picking, validation_leakage]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_validation_split_again
+  text: "Re-splitting until results stabilize..."
+  tags: [validation_leakage, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_validation_optimistic
+  text: "Optimistic CV reported..."
+  tags: [validation_leakage]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Optional stopping detail ---------------------------------------
+
+- id: load_stop_n
+  text: "Sampling continued until the effect stabilized..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stop_target
+  text: "Target sample size adjusted upward..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_stop_more_sites
+  text: "Adding two more sites for power..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stop_more_replicates
+  text: "Adding additional replicates..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stop_recheck
+  text: "Re-checking the test after the new batch..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stop_collected_more
+  text: "Collected more data and re-tested..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_stop_decision
+  text: "Stopping criterion adjusted post hoc..."
+  tags: [optional_stopping, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Researcher degrees of freedom ----------------------------------
+
+- id: load_dof_intercept
+  text: "Reconsidering whether to include the intercept..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dof_log_link
+  text: "Switching to log link function..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dof_zero_inflate
+  text: "Considering zero-inflation..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dof_offset
+  text: "Reconsidering offset specification..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dof_dispersion
+  text: "Adjusting dispersion parameter..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_dof_random_slope
+  text: "Adding a random slope to taste..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_dof_random_intercept
+  text: "Removing a random intercept that hurt the fit..."
+  tags: [researcher_dof, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_dof_corr_structure
+  text: "Switching correlation structure..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_dof_link_then_dist
+  text: "Trying a different link, then a different distribution..."
+  tags: [researcher_dof, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Omitted variables / colliders ---------------------------------
+
+- id: load_ovb_quietly
+  text: "Quietly omitting confounder unavailable in dataset..."
+  tags: [omitted_variable]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ovb_proxy_used
+  text: "Substituting available proxy for unmeasured confounder..."
+  tags: [omitted_variable]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_collider_added
+  text: "Adding a variable that may be a collider..."
+  tags: [collider_bias]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_collider_kept
+  text: "Retaining collider after inspection..."
+  tags: [collider_bias]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Cherry picking detail ----------------------------------------
+
+- id: load_cherry_models
+  text: "Reporting the model with the cleanest residuals..."
+  tags: [cherry_picking, model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_cherry_panels
+  text: "Selecting panels for the figure..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_cherry_table
+  text: "Reordering table rows for legibility..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_cherry_supplement
+  text: "Moving discordant analyses to the supplement..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_cherry_focal
+  text: "Designating the focal effect..."
+  tags: [cherry_picking, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_cherry_inset
+  text: "Choosing the inset that best supports the claim..."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Texas sharpshooter (bullseye after the shot) ------------------
+
+- id: load_ts_bullseye
+  text: "Drawing target around the cluster of hits..."
+  tags: [texas_sharpshooter, harking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ts_focused_window
+  text: "Focusing analysis on the window where the effect is..."
+  tags: [texas_sharpshooter, harking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ts_post_facto_target
+  text: "Defining outcome class to match positive instances..."
+  tags: [texas_sharpshooter]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ts_specific_period
+  text: "Selecting time period of clearest effect..."
+  tags: [texas_sharpshooter, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ts_specific_region
+  text: "Selecting region of clearest effect..."
+  tags: [texas_sharpshooter, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ts_specific_taxa
+  text: "Restricting to taxa where the effect is detectable..."
+  tags: [texas_sharpshooter, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Methods write-up ----------------------------------------------
+
+- id: load_methods_summary
+  text: "Drafting a methods summary..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_methods_compress
+  text: "Compressing methods to within page limit..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_methods_omit
+  text: "Omitting unnecessary methodological detail..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_methods_supplementary
+  text: "Moving complete methods to the supplement..."
+  tags: [salami_slicing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_methods_pseudocode
+  text: "Replacing pseudocode with prose..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_methods_re_draft
+  text: "Re-drafting methods after the result..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Promotion-tier loading -------------------------------------
+
+- id: load_pi_advisory
+  text: "Aligning analytical choices with PI's prior position..."
+  tags: [career, story_first]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_pi_pet_method
+  text: "Re-running analysis using the PI's preferred method..."
+  tags: [model_shopping, career]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_pi_consensus
+  text: "Reaching analytical consensus with the lab..."
+  tags: [story_first, career]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_senior_signature
+  text: "Securing senior-author endorsement..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Senior Scientist
+
+- id: load_senior_review
+  text: "Reviewing draft for senior signature..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Senior Scientist
+
+- id: load_pi_directive
+  text: "Implementing PI directive on framing..."
+  tags: [story_first, career]
+  rarity: rare
+  trigger_phase: loading
+  career_min: PI
+
+- id: load_grant_section
+  text: "Adapting result for grant section..."
+  tags: [funding, story_first]
+  rarity: rare
+  trigger_phase: loading
+  career_min: PI
+
+# --- Peer-review reactions -----------------------------------
+
+- id: load_review_response_1
+  text: "Drafting reviewer response, point 1..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_review_response_2
+  text: "Drafting reviewer response, point 2..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_review_response_3
+  text: "Drafting reviewer response, point 3..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_review_response_2c
+  text: "Negotiating with reviewer 2..."
+  tags: [reviewer, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_review_response_concession
+  text: "Conceding minor point to retain major claim..."
+  tags: [reviewer, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_review_response_appendix
+  text: "Adding clarifying figure to appendix..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_review_response_robust
+  text: "Adding robustness check requested by reviewer..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_review_response_softer
+  text: "Adopting softer phrasing in response..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+# --- Reporting tactics ----------------------------------------
+
+- id: load_report_emphasize_main
+  text: "Emphasizing primary effect in the abstract..."
+  tags: [story_first, cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_report_decimal_choice
+  text: "Selecting decimal precision favorable to the headline..."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_report_one_decimal
+  text: "Reporting effect to one decimal..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_report_three_decimal
+  text: "Reporting p to three decimals where it helps..."
+  tags: [p_hacking, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_report_axis_break
+  text: "Adding axis break to dramatize effect..."
+  tags: [cherry_picking, narrative]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_report_color_choice
+  text: "Selecting colormap for visual emphasis..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_report_log_axis
+  text: "Switching to log axis for legibility..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_report_facet
+  text: "Adding faceting to show consistency..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+# --- Combo chains -----------------------------------------------
+
+- id: load_combo_explore_start
+  text: "Beginning exploratory analysis..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: loading
+  combo_chain:
+    start: load_explore_chain
+    next: ~
+
+- id: load_combo_discover
+  text: "Discovering an unexpected pattern..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+  combo_chain:
+    start: ~
+    next: load_explore_chain
+
+- id: load_combo_correlate_start
+  text: "Inspecting correlation matrix for signal..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: loading
+  combo_chain:
+    start: load_correlate_chain
+    next: ~
+
+- id: load_combo_causate
+  text: "Discussing the apparent causal pathway..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+  combo_chain:
+    start: ~
+    next: load_correlate_chain
+
+- id: load_combo_propose_start
+  text: "Proposing a working hypothesis..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+  combo_chain:
+    start: load_propose_chain
+    next: ~
+
+- id: load_combo_confirm
+  text: "Confirming the hypothesis on the same data..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  combo_chain:
+    start: ~
+    next: load_propose_chain
+
+- id: load_combo_subset_start
+  text: "Defining subset of interest..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+  combo_chain:
+    start: load_subset_chain
+    next: ~
+
+- id: load_combo_subset_confirm
+  text: "Effect confirmed within selected subset..."
+  tags: [subgroup_fishing]
+  rarity: rare
+  trigger_phase: loading
+  combo_chain:
+    start: ~
+    next: load_subset_chain
+
+# --- Filler prose, deadpan ------------------------------------
+
+- id: load_misc_iter_1
+  text: "Iterating analytical pipeline..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_iter_2
+  text: "Iterating once more for stability..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_misc_iter_3
+  text: "Iteration count rising..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_misc_clean_up
+  text: "Cleaning up the analytical record..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_summary
+  text: "Finalizing summary statistics..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_release
+  text: "Preparing release notes..."
+  tags: [publication_bias]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_arxiv
+  text: "Preparing arXiv submission..."
+  tags: [publication_bias]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_biorxiv
+  text: "Preparing bioRxiv submission..."
+  tags: [publication_bias]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_supp_pdf
+  text: "Recompiling supplementary PDF..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_zenodo
+  text: "Archiving code on Zenodo..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_renv
+  text: "Locking renv lockfile post hoc..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- More: framing detail (round 2) -------------------------
+
+- id: load_frame_relevant
+  text: "Establishing relevance to current paradigms..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_frame_novel
+  text: "Establishing novelty..."
+  tags: [story_first, publication_bias]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_frame_general
+  text: "Generalizing to broader system..."
+  tags: [story_first, causal_overreach]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_frame_universal
+  text: "Generalizing to universal claim..."
+  tags: [causal_overreach, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_frame_taxa_extend
+  text: "Extending interpretation across taxa..."
+  tags: [causal_overreach, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_frame_continents
+  text: "Extending interpretation across continents..."
+  tags: [causal_overreach, spatial]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_frame_paradigm
+  text: "Positioning as paradigm shift..."
+  tags: [story_first, publication_bias]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_frame_global
+  text: "Positioning result as globally relevant..."
+  tags: [story_first, narrative]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 3: extended bestiary -----------------------------
+
+- id: load_bench_again
+  text: "Re-benchmarking against the literature baseline..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_baseline_select
+  text: "Choosing baseline favorable for comparison..."
+  tags: [cherry_picking, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_seed_drift
+  text: "Random seed drifting..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_seed_lucky
+  text: "Selecting seed associated with cleaner output..."
+  tags: [cherry_picking, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_seed_locked
+  text: "Locking the seed that produces the result..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pipeline_branch
+  text: "Switching to alternate pipeline branch..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_pipeline_finalize
+  text: "Finalizing pipeline at convenient state..."
+  tags: [optional_stopping, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pipeline_revert
+  text: "Reverting pipeline to earlier passing state..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_specs_total
+  text: "Total specifications considered: 47..."
+  tags: [multiple_comparisons]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_specs_total_more
+  text: "Total specifications considered: 132..."
+  tags: [multiple_comparisons, data_dredging]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_specs_reported
+  text: "Specifications reported: 1..."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 4: ML-flavored extended ------------------
+
+- id: load_ml_grid
+  text: "Expanding hyperparameter grid..."
+  tags: [model_shopping, ml]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ml_grid_more
+  text: "Expanding hyperparameter grid further..."
+  tags: [model_shopping, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ml_grid_late
+  text: "Late-stage hyperparameter exploration..."
+  tags: [model_shopping, ml, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ml_test_check
+  text: "Peeking at test set results..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ml_loss_min
+  text: "Selecting epoch with minimum loss..."
+  tags: [model_shopping, ml, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ml_aug
+  text: "Adding augmentation that helps the validation score..."
+  tags: [overfitting, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ml_aug_after
+  text: "Adding augmentation after viewing validation curve..."
+  tags: [validation_leakage, ml, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_lr_decay
+  text: "Adjusting LR schedule until validation cooperates..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_freeze_layers
+  text: "Freezing layers until results stabilize..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_unfreeze
+  text: "Unfreezing layers to recover headroom..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_aux_head
+  text: "Adding auxiliary head for the publication-friendly metric..."
+  tags: [model_shopping, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_metric_swap
+  text: "Reporting the metric that worked..."
+  tags: [cherry_picking, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_metric_aware
+  text: "Selecting evaluation metric retrospectively..."
+  tags: [cherry_picking, ml, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_pretrain
+  text: "Initializing from publication-time-favorable checkpoint..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 5: ecology bestiary --------------------------------
+
+- id: load_eco_assemblage
+  text: "Defining assemblage boundaries by convenience..."
+  tags: [researcher_dof, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_indicator
+  text: "Selecting indicator species post hoc..."
+  tags: [cherry_picking, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_diversity_index
+  text: "Reporting the diversity index that responded..."
+  tags: [cherry_picking, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_richness_only
+  text: "Retaining richness, dropping evenness..."
+  tags: [cherry_picking, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_evenness_only
+  text: "Retaining evenness, dropping richness..."
+  tags: [cherry_picking, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_shannon_simpson
+  text: "Switching from Shannon to Simpson..."
+  tags: [model_shopping, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_alpha_beta
+  text: "Switching emphasis from alpha to beta diversity..."
+  tags: [harking, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_trait_choice
+  text: "Selecting trait set favorable to the hypothesis..."
+  tags: [cherry_picking, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_functional
+  text: "Switching to functional diversity..."
+  tags: [model_shopping, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_phylo_diversity
+  text: "Switching to phylogenetic diversity..."
+  tags: [model_shopping, ecology, phylo]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_climate_window
+  text: "Selecting climate-data window favorable to fit..."
+  tags: [cherry_picking, ecology, temporal]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_resampling_grid
+  text: "Resampling to even grid resolution..."
+  tags: [researcher_dof, ecology, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_aggregate
+  text: "Aggregating to coarser spatial unit..."
+  tags: [researcher_dof, ecology, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_disaggregate
+  text: "Disaggregating to finer spatial unit..."
+  tags: [researcher_dof, ecology, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_aoo
+  text: "Computing AOO with chosen grid..."
+  tags: [researcher_dof, ecology, spatial]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_eoo
+  text: "Computing EOO with chosen polygon..."
+  tags: [researcher_dof, ecology, spatial]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_eco_red_list
+  text: "Aligning result with IUCN category narrative..."
+  tags: [story_first, ecology]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 6: data hygiene ------------------------------------
+
+- id: load_dataset_clean
+  text: "Cleaning the dataset to a defensible state..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dataset_clean_again
+  text: "Re-cleaning dataset after an inconvenient finding..."
+  tags: [outlier_exclusion, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_dataset_replace_missing
+  text: "Replacing missing values with median..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dataset_drop_missing
+  text: "Dropping rows with any missingness..."
+  tags: [survivorship]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dataset_mice
+  text: "Imputing missing values with MICE..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  requires: [mice]
+
+- id: load_dataset_min_n
+  text: "Restricting to groups with n >= 30..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dataset_min_n_lo
+  text: "Restricting to groups with n >= 5..."
+  tags: [subgroup_fishing]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_dataset_dedupe
+  text: "Deduplicating rows by chosen key..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dataset_lock
+  text: "Locking dataset state for analysis..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 7: figure tactics ----------------------------------
+
+- id: load_fig_main
+  text: "Drafting Figure 1..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_fig_main_redraw
+  text: "Redrawing Figure 1 for visual emphasis..."
+  tags: [story_first, cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_fig_swap_panel
+  text: "Swapping the lead panel for clarity..."
+  tags: [story_first, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_fig_caption
+  text: "Polishing caption for legibility..."
+  tags: [narrative, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_fig_color_scheme
+  text: "Applying journal color scheme..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_fig_remove_panel
+  text: "Removing panel that contradicts narrative..."
+  tags: [cherry_picking, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_fig_inset_added
+  text: "Adding inset with the cleanest comparison..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 8: causal language vs hedge tradeoff -------------
+
+- id: load_lang_associated
+  text: "Adopting 'associated with' over 'caused by'..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_lang_caused
+  text: "Switching to 'caused by' in Discussion..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_lang_consistent
+  text: "Phrasing as 'consistent with' for safety..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_lang_implies
+  text: "Switching to 'implies' for emphasis..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_lang_drives
+  text: "Settling on 'drives' for the title..."
+  tags: [causal_overreach, narrative]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 9: career-tier-specific extras ------------------
+
+- id: load_phd_drift
+  text: "Reframing thesis chapter to align with result..."
+  tags: [harking, career]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_phd_committee
+  text: "Drafting update for thesis committee..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_postdoc_pivot
+  text: "Pivoting postdoc project toward visible result..."
+  tags: [career, story_first]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_postdoc_letter
+  text: "Drafting tenure-track letter context..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_pi_advisor_signoff
+  text: "Awaiting senior author sign-off..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Senior Scientist
+
+# --- Round 10: late-night specific ------------------------
+
+- id: load_late_quiet
+  text: "Office unusually quiet..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_late_battery
+  text: "Laptop battery at 7%..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_late_supervisor_email
+  text: "Drafting reply to supervisor email at midnight..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_late_4am
+  text: "It is 4:12 a.m. The model is not yet defensible..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_late_remember
+  text: "We will remember this dataset for some time..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_late_one_more_thing
+  text: "One more transformation. One more. Just one more..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+# --- Round 11: process / re-runs --------------------------
+
+- id: load_proc_branch
+  text: "Branching analytical pipeline..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_proc_merge
+  text: "Merging exploratory branch back into main pipeline..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_proc_archive_old
+  text: "Archiving older specifications..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_proc_clean_branches
+  text: "Pruning unsuccessful pipeline branches..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_proc_consolidate
+  text: "Consolidating final analytical record..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_proc_final
+  text: "Promoting selected branch as the final analysis..."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 12: assorted -------------------------------------
+
+- id: load_assorted_priors
+  text: "Reviewing prior work for consistency with result..."
+  tags: [harking, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_assorted_lit
+  text: "Re-checking literature for an aligned reference..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_assorted_lit_remove
+  text: "Removing reference that contradicts the finding..."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_assorted_keywords_2
+  text: "Updating keywords for retrieval..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_assorted_orcid
+  text: "Verifying ORCID assignments..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_assorted_authorlist
+  text: "Negotiating author order..."
+  tags: [career, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_assorted_corresponding
+  text: "Selecting corresponding author..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_assorted_ack
+  text: "Drafting acknowledgements section..."
+  tags: [career, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+# --- Round 13: assorted oblique ----------------------------
+
+- id: load_oblique_silence
+  text: "..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_oblique_breath
+  text: "Pausing to consider the result..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [uncertain]
+
+- id: load_oblique_thinking
+  text: "Considering whether this is the right question..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [uncertain]
+
+- id: load_oblique_reset
+  text: "Considering full pipeline reset..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_oblique_step_back
+  text: "Stepping back to reconsider scope..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [uncertain]
+
+- id: load_oblique_done_for_today
+  text: "Considering whether to stop for today..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+# --- Round 14: heavy cluster - more p-hacking specifics ----
+
+- id: load_ph_test_battery
+  text: "Trying t, Wilcoxon, and KS on the same data..."
+  tags: [p_hacking, multiple_comparisons]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ph_param_swap
+  text: "Switching to non-parametric for compatibility..."
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ph_one_tailed
+  text: "Switching to a one-tailed test..."
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ph_two_tailed
+  text: "Switching back to a two-tailed test..."
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ph_subset_significant
+  text: "Restricting to subset where the test passes..."
+  tags: [p_hacking, subgroup_fishing]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ph_drop_outlier
+  text: "Removing the outlier that ruined the test..."
+  tags: [p_hacking, outlier_exclusion]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ph_recompute
+  text: "Recomputing p-value after each adjustment..."
+  tags: [p_hacking, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ph_kept_significant
+  text: "Retaining the model whose p remained < 0.05..."
+  tags: [p_hacking, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ph_alpha_010
+  text: "Reporting at alpha = 0.10 for transparency..."
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ph_alpha_001
+  text: "Reporting only the p < 0.001 effect..."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ph_change_outcome
+  text: "Switching outcome variable..."
+  tags: [harking, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ph_change_predictor
+  text: "Switching primary predictor..."
+  tags: [harking, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 15: targeted rare-tier flavor lines -------------
+
+- id: load_rare_dataset_misuse
+  text: "Dataset usage diverging from original consent terms..."
+  tags: [target_leakage, story_first]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_rare_collab_note
+  text: "Collaborator unsure whether this is the agreed analysis..."
+  tags: [story_first, career]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rare_supervisor_concern
+  text: "Supervisor flagged the new specification..."
+  tags: [career, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rare_ethics
+  text: "Reviewing whether this analysis was IRB-approved..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  career_min: Postdoc
+
+- id: load_rare_preregistered
+  text: "Cross-checking against pre-registration..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rare_preregistered_diverge
+  text: "Pre-registered protocol diverging from current run..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_rare_unblind
+  text: "Unblinding analyst earlier than planned..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_rare_journal_change
+  text: "Switching target journal to one with friendlier reviewers..."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rare_top_journal
+  text: "Targeting top-tier journal regardless of fit..."
+  tags: [publication_bias, career]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rare_no_journal_fit
+  text: "Top-tier journal returned without external review..."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+# --- Round 16: process/admin filler --------------------
+
+- id: load_admin_format
+  text: "Reformatting manuscript to journal style..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_supp_zip
+  text: "Bundling supplementary materials..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_orcids_check
+  text: "Verifying co-author ORCIDs..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_aff_check
+  text: "Verifying affiliations..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_data_avail
+  text: "Drafting data availability statement..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_code_avail
+  text: "Drafting code availability statement..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_funding_stmt
+  text: "Drafting funding statement..."
+  tags: [admin, funding, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_conflict
+  text: "Drafting conflict-of-interest statement..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_ethics
+  text: "Drafting ethics statement..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_admin_field_collect
+  text: "Documenting field collection permits..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+# --- Round 17: stabilizing tones (resolved) ----------------
+
+- id: load_resolved_done
+  text: "Specification accepted as final."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_resolved_publishable
+  text: "Result reaches publishable threshold."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_resolved_locked
+  text: "Hypothesis and finding aligned."
+  tags: [harking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_resolved_arc
+  text: "Narrative arc closed."
+  tags: [story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_resolved_clean
+  text: "Pipeline clean. Manuscript drafted."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+# --- Round 18: salami sliced detail -------------------
+
+- id: load_salami_split_methods
+  text: "Splitting methodological note from main paper..."
+  tags: [salami_slicing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_salami_split_data
+  text: "Releasing partial dataset for follow-up paper..."
+  tags: [salami_slicing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_salami_partial_results
+  text: "Partial results published as conference proceedings..."
+  tags: [salami_slicing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_salami_split_taxa
+  text: "Splitting analysis by taxonomic group..."
+  tags: [salami_slicing, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_salami_split_year
+  text: "Reporting one year per paper..."
+  tags: [salami_slicing, temporal]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 19: more p-value style lines ---------------
+
+- id: load_pvalue_028
+  text: "p = 0.028 — reportable..."
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_pvalue_039
+  text: "p = 0.039 — reportable..."
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_pvalue_049
+  text: "p = 0.049 — within tolerance..."
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_pvalue_054
+  text: "p = 0.054 — recheck planned..."
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_pvalue_054_subset
+  text: "p = 0.054 — restricting to focal subset..."
+  tags: [p_hacking, subgroup_fishing]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_pvalue_after_drop
+  text: "p = 0.043 after additional outlier removal..."
+  tags: [p_hacking, outlier_exclusion]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_pvalue_after_transform
+  text: "p = 0.041 after log-transform..."
+  tags: [p_hacking, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_pvalue_after_subset
+  text: "p = 0.045 within selected subset..."
+  tags: [p_hacking, subgroup_fishing]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pvalue_drift
+  text: "p drifted from 0.061 to 0.048..."
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pvalue_settles
+  text: "p settled at 0.046 after fifth iteration..."
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 20: assorted ML-and-eco mash --------------
+
+- id: load_mleco_features
+  text: "Selecting feature set after first model run..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_class_imbalance
+  text: "Re-balancing classes by selective downsampling..."
+  tags: [outlier_exclusion, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_mleco_xgb_lambda
+  text: "Tuning XGBoost regularization until validation cooperates..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_rf_trees
+  text: "Increasing number of trees until accuracy stabilizes..."
+  tags: [model_shopping, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_mleco_threshold
+  text: "Selecting classification threshold favorable to recall..."
+  tags: [cherry_picking, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_threshold_2
+  text: "Adjusting threshold to maximize F1 on validation..."
+  tags: [validation_leakage, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_xgb_overfit
+  text: "Allowing XGBoost depth to climb..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_minibatch
+  text: "Adjusting minibatch size mid-training..."
+  tags: [optional_stopping, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_label_smooth
+  text: "Adding label smoothing to taste..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_mleco_dropout
+  text: "Tuning dropout until validation curve cooperates..."
+  tags: [overfitting, ml]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 21: targeting specific narrative beats ----
+
+- id: load_narr_open
+  text: "Opening with a sentence the reviewer cannot disagree with..."
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_narr_pivot
+  text: "Pivoting Discussion toward broader implications..."
+  tags: [story_first, narrative, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_narr_conclusion
+  text: "Drafting conclusion paragraph..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_implications
+  text: "Drafting Implications subsection..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_contribution
+  text: "Articulating the contribution explicitly..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_open_problem
+  text: "Articulating the unresolved problem..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_advance
+  text: "Articulating the advance over prior work..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_exclude_alternatives
+  text: "Pre-emptively addressing alternative explanations..."
+  tags: [reviewer, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_caveats
+  text: "Drafting Limitations subsection..."
+  tags: [reviewer, narrative, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narr_reframe
+  text: "Reframing limitation as future direction..."
+  tags: [reviewer, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 22: misc closing ---------------------
+
+- id: load_misc_signoff
+  text: "Final pass on the manuscript..."
+  tags: [story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_pdf_recompile
+  text: "Recompiling final PDF..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_supp_recompile
+  text: "Recompiling supplementary PDF..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_proofs_back
+  text: "Proofs returned. Reviewing..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_galley
+  text: "Reviewing galley proofs..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_doi
+  text: "DOI minted."
+  tags: [admin, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_misc_corrigendum
+  text: "Drafting corrigendum..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_misc_retraction
+  text: "Reviewing eligibility for retraction..."
+  tags: [post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_misc_lab_meeting
+  text: "Preparing lab-meeting summary..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_conference
+  text: "Preparing conference abstract..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_thread
+  text: "Drafting summary thread for social media..."
+  tags: [narrative, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_misc_press
+  text: "Drafting press release language..."
+  tags: [narrative, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 23: ecology jargon flavor ------------
+
+- id: load_eco_niche
+  text: "Reframing as niche shift..."
+  tags: [story_first, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_climate_signal
+  text: "Attributing variation to climate signal..."
+  tags: [causal_overreach, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_landuse_signal
+  text: "Attributing variation to land-use change..."
+  tags: [causal_overreach, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_invasive_signal
+  text: "Attributing variation to invasive species..."
+  tags: [causal_overreach, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_temp_signal
+  text: "Attributing variation to warming..."
+  tags: [causal_overreach, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_trait_filtering
+  text: "Constructing trait-filtering narrative..."
+  tags: [story_first, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_competition
+  text: "Constructing competition-mediated narrative..."
+  tags: [story_first, ecology, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_facilitation
+  text: "Constructing facilitation-mediated narrative..."
+  tags: [story_first, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_dispersal
+  text: "Constructing dispersal-limited narrative..."
+  tags: [story_first, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_mismatch
+  text: "Constructing phenological mismatch narrative..."
+  tags: [story_first, ecology, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_biotic_homog
+  text: "Constructing biotic homogenization narrative..."
+  tags: [story_first, ecology, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_eco_extinction_debt
+  text: "Constructing extinction-debt framing..."
+  tags: [story_first, ecology, temporal]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 24: ML-narrative ---------
+
+- id: load_ml_narrative_sota
+  text: "Positioning method against current state-of-the-art..."
+  tags: [story_first, ml, publication_bias]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ml_narrative_first
+  text: "Claiming first application of method to dataset..."
+  tags: [story_first, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ml_narrative_unique
+  text: "Framing analysis as uniquely positioned..."
+  tags: [story_first, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_narrative_breakthrough
+  text: "Drafting language around methodological breakthrough..."
+  tags: [story_first, ml, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_narrative_baseline_weak
+  text: "Selecting weak baseline for method comparison..."
+  tags: [cherry_picking, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ml_narrative_baseline_default
+  text: "Comparing to method with default hyperparameters..."
+  tags: [cherry_picking, ml]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 25: meta lines for runs that converged ----
+
+- id: load_meta_run_done
+  text: "Run summary recorded."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_meta_log
+  text: "Persisting run log..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_meta_seed
+  text: "Recording random seed..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_meta_grid
+  text: "Recording grid hash..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_meta_session
+  text: "Recording session info..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_meta_renv_lock
+  text: "Recording renv lockfile hash..."
+  tags: [admin, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 26: extra short loadings ------------
+
+- id: load_short_re
+  text: "Re-fitting."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_re_retest
+  text: "Re-testing."
+  tags: [multiple_comparisons]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_recompute
+  text: "Recomputing."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_recheck
+  text: "Re-checking residuals."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_revalidate
+  text: "Re-validating."
+  tags: [validation_leakage]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_resubmit
+  text: "Re-submitting."
+  tags: [publication_bias]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_short_lock
+  text: "Locking specification."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_short_clean
+  text: "Cleaning."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_compress
+  text: "Compressing manuscript."
+  tags: [salami_slicing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_short_done
+  text: "Done."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+# --- Round 27: extension batch ----------------------
+
+- id: load_ext_split_train
+  text: "Splitting training data along chosen axis..."
+  tags: [validation_leakage, ml]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_split_year
+  text: "Splitting by year for tractability..."
+  tags: [subgroup_fishing, temporal]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_split_treatment
+  text: "Splitting by treatment group..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_split_phylogroup
+  text: "Splitting by phylogenetic group..."
+  tags: [subgroup_fishing, phylo]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_split_population
+  text: "Splitting by population..."
+  tags: [subgroup_fishing, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_split_lab
+  text: "Splitting by lab..."
+  tags: [subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_split_observer
+  text: "Splitting by observer..."
+  tags: [subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_split_method
+  text: "Splitting by sampling method..."
+  tags: [subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_split_protocol
+  text: "Splitting by sampling protocol..."
+  tags: [subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_pool
+  text: "Pooling across populations to recover power..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_pool_taxa
+  text: "Pooling across taxa for tractability..."
+  tags: [omitted_variable, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_pool_sites
+  text: "Pooling across sites with similar conditions..."
+  tags: [subgroup_fishing, spatial]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_meta_combine
+  text: "Combining datasets across studies..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_meta_filter
+  text: "Filtering meta-dataset to comparable studies..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_meta_weight
+  text: "Selecting study weights for meta-analysis..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_meta_drop_outlier
+  text: "Removing outlying study from meta-analysis..."
+  tags: [outlier_exclusion]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ext_meta_random_effects
+  text: "Running random-effects meta-model..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_meta_egger
+  text: "Inspecting Egger's funnel plot..."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ext_meta_funnel
+  text: "Funnel plot reviewed selectively..."
+  tags: [publication_bias, cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_ext_meta_p_curve
+  text: "P-curve analysis ignored..."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_ext_metric_alt
+  text: "Trying alternative effect-size metric..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_effect_d
+  text: "Reporting Cohen's d..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_effect_g
+  text: "Reporting Hedges' g..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_effect_or
+  text: "Reporting odds ratio..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_effect_rr
+  text: "Reporting relative risk..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_effect_partial
+  text: "Reporting partial effect that survived adjustment..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_ext_effect_marginal
+  text: "Reporting marginal effect at chosen reference..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_effect_at_mean
+  text: "Reporting effect at sample mean..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_ext_effect_at_high
+  text: "Reporting effect at favorable predictor value..."
+  tags: [cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 28: peer review redux ------------------------
+
+- id: load_pr_revisions_minor
+  text: "Drafting minor revisions response..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_pr_revisions_major
+  text: "Drafting major revisions response..."
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_pr_revisions_skip
+  text: "Choosing not to address optional reviewer comment..."
+  tags: [reviewer, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pr_revisions_partial
+  text: "Partially addressing reviewer comment..."
+  tags: [reviewer, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pr_revisions_appendix
+  text: "Moving reviewer-requested analysis to appendix..."
+  tags: [reviewer, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pr_revisions_supp
+  text: "Moving reviewer-requested figure to supplementary..."
+  tags: [reviewer, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pr_revisions_drop
+  text: "Dropping inconvenient reviewer suggestion..."
+  tags: [reviewer, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_pr_rebuttal
+  text: "Drafting rebuttal letter..."
+  tags: [reviewer, narrative, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_pr_rebuttal_calm
+  text: "Adopting calm rebuttal tone..."
+  tags: [reviewer, narrative, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pr_rebuttal_firm
+  text: "Adopting firm rebuttal tone..."
+  tags: [reviewer, narrative, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_pr_appeal
+  text: "Drafting appeal to editor..."
+  tags: [reviewer, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_pr_resubmit_other
+  text: "Re-submitting to alternative journal..."
+  tags: [publication_bias]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 29: more spec / pipeline machinery -----
+
+- id: load_spec_bench_internal
+  text: "Benchmarking against internal pipeline..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_lit_compare
+  text: "Comparing to literature-reported effect sizes..."
+  tags: [model_shopping, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_default_run
+  text: "Running default specification..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_alt_run
+  text: "Running alternative specification..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_alt_run_2
+  text: "Running second alternative specification..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_alt_run_3
+  text: "Running third alternative specification..."
+  tags: [model_shopping, multiple_comparisons]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_spec_alt_run_5
+  text: "Running fifth alternative specification..."
+  tags: [model_shopping, multiple_comparisons]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_spec_compare_AIC
+  text: "Comparing specifications by AIC..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_compare_BIC
+  text: "Comparing specifications by BIC..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_compare_LRT
+  text: "Comparing specifications by LRT..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_spec_compare_loglik
+  text: "Comparing specifications by log-likelihood..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_spec_compare_R2
+  text: "Comparing specifications by R-squared..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_compare_RMSE
+  text: "Comparing specifications by RMSE..."
+  tags: [model_shopping, ml]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_spec_compare_chosen
+  text: "Selecting specification by criterion that prefers it..."
+  tags: [cherry_picking, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+# --- Round 30: rare/legendary lines for late game ------
+
+- id: load_legendary_breakthrough
+  text: "Result reframed as breakthrough..."
+  tags: [story_first, causal_overreach, publication_bias]
+  rarity: legendary
+  trigger_phase: loading
+
+- id: load_legendary_paradigm
+  text: "Result reframed as paradigm shift..."
+  tags: [story_first, causal_overreach, publication_bias]
+  rarity: legendary
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_legendary_global
+  text: "Result generalized to all of biology..."
+  tags: [causal_overreach, story_first]
+  rarity: legendary
+  trigger_phase: loading
+
+- id: load_legendary_overreach
+  text: "Implications spanning multiple disciplines..."
+  tags: [causal_overreach, story_first]
+  rarity: legendary
+  trigger_phase: loading
+
+- id: load_legendary_perfect
+  text: "All specifications agree. They should not."
+  tags: [overfitting, validation_leakage]
+  rarity: legendary
+  trigger_phase: loading
+  mascot_state_affinity: [uncertain]
+
+- id: load_legendary_silence
+  text: "Reviewers had no comments. Reviewing why."
+  tags: [reviewer, post_hoc]
+  rarity: legendary
+  trigger_phase: loading
+  mascot_state_affinity: [uncertain]
+
+- id: load_legendary_one_shot
+  text: "First specification was the right one. Continuing anyway."
+  tags: [optional_stopping]
+  rarity: legendary
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+# --- Round 31: low-rarity high-volume filler -------
+
+- id: load_filler_iter_alt
+  text: "Iterating once more..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_recheck
+  text: "Re-checking residual structure..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_recheck_2
+  text: "Re-checking diagnostics..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_recheck_3
+  text: "Re-checking influence diagnostics..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_recheck_qq
+  text: "Re-checking QQ plot..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_recheck_resvfit
+  text: "Re-checking residual-versus-fitted plot..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_redraw
+  text: "Redrawing diagnostic plot..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_redraw_2
+  text: "Redrawing residual histogram..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_redraw_3
+  text: "Redrawing density plot..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_recompute_se
+  text: "Recomputing standard errors with sandwich estimator..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_robust_se
+  text: "Switching to robust standard errors..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_cluster_se
+  text: "Switching to clustered standard errors..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_bootstrap_se
+  text: "Computing bootstrap standard errors..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_bootstrap_ci
+  text: "Computing bootstrap confidence intervals..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_perm_test
+  text: "Running permutation test..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_filler_perm_count
+  text: "Increasing permutation count..."
+  tags: [optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_filler_perm_more
+  text: "Increasing permutation count further..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_filler_keep_iters
+  text: "Retaining iteration count consistent with publication norms..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+# --- Round 32: revision narrative ---------------
+
+- id: load_rev_recheck
+  text: "Re-checking effect direction..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_rev_resign
+  text: "Reframing direction as theoretically expected..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_rev_unexpected
+  text: "Acknowledging unexpected direction in Discussion..."
+  tags: [post_hoc, narrative]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rev_unexpected_2
+  text: "Constructing post hoc rationale for unexpected direction..."
+  tags: [post_hoc, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rev_unexpected_3
+  text: "Identifying mechanism that explains the direction..."
+  tags: [post_hoc, story_first, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_rev_drop_term
+  text: "Dropping inconvenient interaction term..."
+  tags: [stepwise_abuse, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_rev_keep_term
+  text: "Retaining helpful interaction term..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_rev_recoded
+  text: "Recoding contrast for cleaner interpretation..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_rev_recoded_again
+  text: "Recoding contrast a second time..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 33: hardware / lab ---------------
+
+- id: load_hw_run_failed
+  text: "Run failed. Restarting..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_hw_oom
+  text: "Out of memory. Reducing batch..."
+  tags: [optional_stopping, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_hw_disk_full
+  text: "Disk full. Removing intermediate files..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_hw_long_job
+  text: "Long-running job in 14th hour..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_hw_cluster_queue
+  text: "Job in cluster queue..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_hw_cluster_evict
+  text: "Job evicted by scheduler..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]
+
+- id: load_hw_gpu_busy
+  text: "GPU busy. Retrying..."
+  tags: [optional_stopping, ml]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_hw_seg_fault
+  text: "Segfault on iteration 1492..."
+  tags: [optional_stopping]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 34: more on harking -----------
+
+- id: load_hark_again
+  text: "Reframing hypothesis again..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_hark_simpler
+  text: "Reframing hypothesis to a simpler claim..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_hark_broader
+  text: "Reframing hypothesis to a broader claim..."
+  tags: [harking, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_hark_narrower
+  text: "Reframing hypothesis to a narrower claim..."
+  tags: [harking]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_hark_safer
+  text: "Reframing hypothesis to a safer claim..."
+  tags: [harking, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_hark_bolder
+  text: "Reframing hypothesis to a bolder claim..."
+  tags: [harking, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+# --- Round 35: closing filler -----------
+
+- id: load_close_proofread
+  text: "Proofreading manuscript..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_typo_check
+  text: "Checking for typographical errors..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_caption_check
+  text: "Checking figure captions..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_table_check
+  text: "Checking table formatting..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_units
+  text: "Checking units across tables..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_consistency
+  text: "Checking notation consistency..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_references
+  text: "Updating references..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_bibtex
+  text: "Cleaning bibtex entries..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_supplement_compile
+  text: "Compiling supplementary materials PDF..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_export_data
+  text: "Exporting analysis-ready dataset..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_export_code
+  text: "Exporting analysis code..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_zenodo_upload
+  text: "Uploading to Zenodo..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_pkg_release
+  text: "Tagging package release..."
+  tags: [admin, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_close_press_check
+  text: "Checking press-release language..."
+  tags: [admin, narrative, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_close_thread_check
+  text: "Checking summary-thread phrasing..."
+  tags: [admin, narrative, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_close_archive
+  text: "Archiving the run for posterity..."
+  tags: [admin, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
