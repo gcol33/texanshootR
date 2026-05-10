@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 280" width="480" height="280" role="img" aria-label="texanshootR mascot animation">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 320" width="480" height="320" role="img" aria-label="texanshootR mascot animation">
   <defs>
     <style>
       .bg    { fill: #0d1117; }
@@ -14,99 +14,101 @@
     </style>
   </defs>
 
-  <rect class="bg" width="480" height="280" rx="10"/>
+  <rect class="bg" width="480" height="320" rx="10"/>
 
   <circle cx="22" cy="22" r="6" fill="#ff5f56"/>
   <circle cx="42" cy="22" r="6" fill="#ffbd2e"/>
   <circle cx="62" cy="22" r="6" fill="#27c93f"/>
-  <text class="dim" x="84" y="26">~ R -e 'shoot(mtcars, budget = 30)'</text>
+  <text class="dim" x="84" y="26">~ R -e 'shoot(mtcars)'</text>
 
   <g class="body">
-    <text x="130" y="80">     _</text>
-    <text x="130" y="100">   _|_|_</text>
-    <text x="130" y="140">   /| |</text>
-    <text x="130" y="160">  |___|</text>
-    <text x="130" y="180">  /   \</text>
+    <text x="130" y="70">        _____</text>
+    <text x="130" y="90">       /_____\</text>
+    <text x="130" y="110">   ___|_______|___</text>
+    <text x="130" y="150">        /| |\</text>
+    <text x="130" y="170">        |* *|</text>
+    <text x="130" y="190">        | | |</text>
+    <text x="130" y="210">       d/   \b</text>
   </g>
 
   <g class="body">
-    <text x="130" y="120" opacity="0">  ( o_o)
+    <text x="130" y="130" opacity="0">       ( -_- )
       <animate attributeName="opacity" values="1;0;0;0;0;1"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="130" y="120" opacity="0">  ( -_- )
+    <text x="130" y="130" opacity="0">       ( o_o )
       <animate attributeName="opacity" values="0;1;0;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="130" y="120" opacity="0">  ( o_o;)
+    <text x="130" y="130" opacity="0">       ( O_O )
       <animate attributeName="opacity" values="0;0;1;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="130" y="120" opacity="0">  ( O_O )
+    <text x="130" y="130" opacity="0">       ( ;_; )
       <animate attributeName="opacity" values="0;0;0;1;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="130" y="120" opacity="0">  ( -_-)
+    <text x="130" y="130" opacity="0">       (⌐■_■)
       <animate attributeName="opacity" values="0;0;0;0;1;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
   <g class="gun">
-    <text x="220" y="120" opacity="0">︻デ═一  ·
+    <text x="245" y="130" opacity="0">︻デ═一  ·
       <animate attributeName="opacity" values="1;0;0;0;1"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="5s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="220" y="120" opacity="0">︻デ═一   *
+    <text x="245" y="130" opacity="0">︻デ═一   *
       <animate attributeName="opacity" values="0;1;0;0;0"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="5s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="220" y="120" opacity="0">︻デ═-   ·
+    <text x="245" y="130" opacity="0">︻デ═-   ·
       <animate attributeName="opacity" values="0;0;1;0;0"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="5s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="220" y="120" opacity="0">︻デ═一
+    <text x="245" y="130" opacity="0">︻デ═一
       <animate attributeName="opacity" values="0;0;0;1;0"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="5s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
   <g>
-    <text class="stat pwarm" x="80" y="225" opacity="0">[ 06/30 ]  composed     best p = 0.412
+    <text class="stat pwarm" x="80" y="255" opacity="0">[  60/300 ]  composed     best p = 0.412
       <animate attributeName="opacity" values="1;0;0;0;0;1"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat pwarm" x="80" y="225" opacity="0">[ 13/30 ]  uncertain    best p = 0.187
+    <text class="stat pwarm" x="80" y="255" opacity="0">[ 130/300 ]  uncertain    best p = 0.187
       <animate attributeName="opacity" values="0;1;0;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat phot" x="80" y="225" opacity="0">[ 21/30 ]  anxious      best p = 0.094
+    <text class="stat phot" x="80" y="255" opacity="0">[ 210/300 ]  anxious      best p = 0.094
       <animate attributeName="opacity" values="0;0;1;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat phot" x="80" y="225" opacity="0">[ 28/30 ]  desperate    *escalating to derived metrics*
+    <text class="stat phot" x="80" y="255" opacity="0">[ 280/300 ]  desperate    *escalating to derived metrics*
       <animate attributeName="opacity" values="0;0;0;1;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat pwin" x="80" y="225" opacity="0">[ 30/30 ]  PUBLISHABLE  p = 0.041  [OK]
+    <text class="stat pwin" x="80" y="255" opacity="0">[ 300/300 ]  PUBLISHABLE  p = 0.045  [OK]
       <animate attributeName="opacity" values="0;0;0;0;1;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="30s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
-  <text class="dim" x="80" y="255">manuscript(run)   preprint(run)   funding(run)</text>
+  <text class="dim" x="80" y="285">manuscript(run)   preprint(run)   funding(run)</text>
 </svg>
