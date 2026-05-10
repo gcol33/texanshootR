@@ -10,6 +10,7 @@
 ^cran-comments\.md$
 ^MESSAGE_SCHEMA\.md$
 ^CONTRIBUTING\.md$
+^CODE_OF_CONDUCT\.md$
 ^dev_smoke\.R$
 ^build_site\.R$
 ^texanshootR_.*\.tar\.gz$
