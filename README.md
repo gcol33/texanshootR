@@ -6,9 +6,18 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
+<p align="center">
+  <img src="man/figures/mascot.svg" alt="texanshootR mascot — a sad cowboy in a terminal cycling through emotional states as the p-value drops" width="480">
+</p>
+
+> **Mission.** To contribute to dubious research and questionable p-values.
+>
+> In this day and age where *publish or perish* reigns king, a lone shooter
+> helps you out in your predicament.
+
 A roguelike-themed framework for exploratory linear-model search in R.
 
-## Quick Start
+## Quick start
 
 ```r
 library(texanshootR)
@@ -18,74 +27,64 @@ print(run)
 summary(run)
 ```
 
-A single call to `shoot()` fits a battery of candidate specifications
-across predictor subsets, transformations, interactions, and
-outlier-removal seeds, returning a `tx_run` with the highlighted
-specification, the search summary, and any life events that fired.
+`shoot()` will fit up to `budget` candidate specifications and surface the most
+defensible one. If nothing clears `p ≤ 0.05`, set `escalate = TRUE` and the
+package will reach for derived metrics — which is what you would have done
+anyway, but now there is a banner about it.
+
+The TUI is optional (`theatrical = FALSE`). The search is deterministic given a
+seed, and the seed, R version, package version, and a hash of the search grid
+are recorded on every run, so the *audit trail* is honest even when the
+*intent* is not.
 
 ## What it does
 
-`shoot()` runs an exploratory search across a parameterised grid of
-candidate specifications and surfaces the most defensible one. Around
-that engine, the package layers a persistent career, an achievement
-registry, ASCII cosmetics, and six output generators that turn a run
-into something shippable: a manuscript skeleton, a preprint, a slide
-deck, a reviewer-response letter, a graphical abstract, or a funding
-letter.
+The Texas sharpshooter fires at the side of a barn, then walks over and paints
+the target around the densest cluster of bullet holes. `shoot()` automates the
+firing. The rest of the package automates the painting.
 
-The TUI is optional (`theatrical = FALSE`) and the search itself is
-deterministic given a seed, with the seed, R version, package
-version, and a hash of the search grid recorded on every run.
+Concretely, `shoot()` searches across:
 
-## Installation
+* predictor subsets,
+* transformations (`log`, `sqrt`, polynomial, ...),
+* pairwise interactions,
+* outlier-removal seeds,
+* subgroup seeds.
 
-```r
-# Development version
-# install.packages("pak")
-pak::pak("gcol33/texanshootR")
-```
-
-## Features
-
-### Search
+It returns a `tx_run` with the highlighted specification, the search summary,
+and any life events that fired during the run. From there, six output
+generators turn it into something shippable:
 
 ```r
-run <- shoot(mtcars, formula = mpg ~ ., budget = 30, seed = 42)
-run_log()                          # full history of recorded runs
+manuscript(run)         # IMRaD draft, Methods that match the *winning* spec
+preprint(run)           # arXiv-flavoured, with the limitations section pre-hedged
+presentation(run)       # 8-slide deck (slide 7 contains the only honest figure)
+graphical_abstract(run) # the figure your PI will retweet
+reviewer_response(run)  # opens with "we thank the reviewer for their thoughtful comments"
+funding(run)            # the next grant, citing the just-shipped finding
 ```
 
-* `shoot()`: search across subsets, transforms, interactions, outlier-removal seeds, subgroup seeds.
-* `depth = "demo"`: single-fit smoke test for CRAN-safe examples.
-* `escalate = TRUE`: derived-metric escalation when no spec passes p &le; 0.05.
+Each writes to `tempdir()` by default and returns the file path invisibly.
+Override with `output_dir =` or `options(texanshootR.output_dir = ...)`.
 
-### Outputs
+## Career, achievements, cosmetics
+
+Every run feeds a persistent profile, because the joke does not work without
+progression.
 
 ```r
-manuscript(run)
-preprint(run)
-presentation(run)
-graphical_abstract(run)
-reviewer_response(run)
-funding(run)
+career()        # level, runs, favourite method, opaque scores
+achievements()  # 1,000-entry registry, including ones you have not unlocked
+wardrobe()      # equipped cosmetic slots (hat, badge, cloak, poncho, lanyard)
 ```
 
-Each writes to `tempdir()` by default and returns the file path
-invisibly. Override with `output_dir =` or
-`options(texanshootR.output_dir = ...)`.
+State persists under `tools::R_user_dir("texanshootR", "data")`. The first
+interactive save prompts before writing anything to disk. Opt out entirely
+with `options(texanshootR.save_enabled = FALSE)`.
 
-### Career, achievements, cosmetics
+## Reset
 
-```r
-career()        # level, runs, favorite method, opaque scores
-achievements()  # registry of unlocked + still-hidden achievements
-wardrobe()      # equipped cosmetic slots
-```
-
-State persists under `tools::R_user_dir("texanshootR", "data")`. The
-first interactive save prompts before writing. Opt out with
-`options(texanshootR.save_enabled = FALSE)`.
-
-### Reset
+For when the simulation ends and you would like a new one:
 
 ```r
 reset_career(force = TRUE)
@@ -94,23 +93,43 @@ reset_wardrobe(force = TRUE)
 reset_all(force = TRUE)
 ```
 
+## Installation
+
+```r
+# install.packages("pak")
+pak::pak("gcol33/texanshootR")
+```
+
 ## Documentation
 
-- [Getting Started](https://gillescolling.com/texanshootR/articles/getting-started.html)
-- [Full Reference](https://gillescolling.com/texanshootR/reference/)
-- [Message Pack Schema](MESSAGE_SCHEMA.md)
-- [Contributing](CONTRIBUTING.md)
+* [Getting Started](https://gillescolling.com/texanshootR/articles/getting-started.html)
+* [Full Reference](https://gillescolling.com/texanshootR/reference/)
+* [Message Pack Schema](MESSAGE_SCHEMA.md)
+* [Contributing](CONTRIBUTING.md)
+
+## Further reading
+
+This package is a parody. The phenomenon it parodies is not.
+
+Brodeur, A., Cook, N. and Heyes, A. (2020).
+*Methods Matter: P-Hacking and Publication Bias in Causal Analysis in
+Economics.* **American Economic Review** 110(11): 3634–60.
+<https://doi.org/10.1257/aer.20190687>
+
+If `shoot()` feels uncomfortably close to a real workflow, that paper is a
+better starting point than the achievement registry.
 
 ## Support
 
-> "Where is the money, Lebowski?" &mdash; The Big Lebowski
+> "Where is the money, Lebowski?"
+> &mdash; The Big Lebowski
 
-I'm a PhD student who builds R packages in my free time because I
-believe good tools should be free and open. I started these projects
-for my own work and figured others might find them useful too.
+I'm a PhD student who builds R packages in my free time because I believe good
+tools should be free and open. I started these projects for my own work and
+figured others might find them useful too.
 
-If this package saved you some time, buying me a coffee is a nice way
-to say thanks. It helps with my coffee addiction.
+If this package saved you some time — or pre-empted a fit of overfitting —
+buying me a coffee is a nice way to say thanks.
 
 [![Buy Me A Coffee](https://img.shields.io/badge/-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/gcol33)
 
