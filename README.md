@@ -48,8 +48,11 @@ object so the full search can be replayed from any saved run.
 
 ## What's in the box
 
-`texanshootR` is a terminal-first model-search engine wrapped in a
-career-progression game. The two halves are fully wired together.
+`texanshootR` is a state-of-the-art specification-search engine, generously
+bundled with a career-progression system to recognise your dedication to the
+craft. Progression is not decoration: your tier governs which model families
+enter the search pool and which output generators you may deploy. Mastery,
+after all, is earned.
 
 ### The search engine
 
@@ -93,9 +96,10 @@ Override with `output_dir =` or `options(texanshootR.output_dir = ...)`.
 
 ### Career, achievements, cosmetics
 
-Every run feeds a persistent profile. Progression *gates the API* — output
-generators unlock at the appropriate tier, and model families enter the
-search pool as the career advances.
+Every run contributes to your persistent researcher profile. Progression
+*gates the API*: output generators unlock at the appropriate tier and model
+families enter the search pool as your career advances. Dedication is
+rewarded.
 
 ```r
 career()        # level, runs, favourite method, opaque scores
@@ -114,18 +118,20 @@ Tiers and what they unlock:
 | Senior Scientist   | `reviewer_response()`, `graphical_abstract()`, `presentation()`; `wls` and `gam` families |
 | PI                 | `funding()`; `glmm` and `sem` families                |
 
-Locked output generators do not error — they print a status block showing
-what tier they need. Locked families simply never appear in the search
-trace. Both unlock in place, no reinstall.
+Locked output generators do not error: they print a status block listing
+the tier you need to reach. Locked families simply never appear in the
+search trace. Both unlock in place — your earned tier is permanent and your
+toolkit grows accordingly.
 
 ### Persistent state and saves
 
-State persists under `tools::R_user_dir("texanshootR", "data")` as flat YAML
-that you can read, edit, or version-control. The first interactive save
-prompts before writing anything to disk. Opt out entirely with
+Your researcher profile persists under `tools::R_user_dir("texanshootR", "data")`
+as flat YAML: human-readable, version-controllable, and yours to migrate
+between institutions. The first interactive save prompts before writing
+anything to disk. Opt out entirely with
 `options(texanshootR.save_enabled = FALSE)` and the package becomes
-pure-stateless: every call is independent, but the progression mechanic
-stays inert at Junior Researcher.
+pure-stateless: every call is independent, but progression remains inert at
+Junior Researcher — and there is no path forward from there.
 
 ### The message pack
 
@@ -158,7 +164,8 @@ message is a YAML edit and a re-run of `validate_messages()`.
 
 ## Reset
 
-To clear saved state and start a new career:
+Should circumstances call for a fresh start — a new institution, a co-author
+dispute, an opportune hard-drive failure — your progression can be retired:
 
 ```r
 reset_career(force = TRUE)
@@ -176,7 +183,7 @@ pak::pak("gcol33/texanshootR")
 
 The package compiles a small C++ backend (penalised least squares for `gam`,
 profile-likelihood mixed model for `glmm`) on first install. No external
-solver dependencies.
+solver dependencies, no proprietary licences — onboarding is frictionless.
 
 ## Documentation
 
@@ -192,7 +199,7 @@ Brodeur, A., Cook, N. and Heyes, A. (2020).
 Economics.* **American Economic Review** 110(11): 3634–60.
 <https://doi.org/10.1257/aer.20190687>
 
-`texanshootR` is our contribution to a thriving field.
+`texanshootR` is our humble contribution to a thriving field.
 
 ## Support
 

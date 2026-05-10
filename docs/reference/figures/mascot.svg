@@ -3,7 +3,7 @@
   <defs>
     <style>
       .bg    { fill: #0d1117; }
-      text   { font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace; }
+      text   { font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, "Nirmala UI", monospace; }
       .face  { fill: #c9d1d9; font-size: 22px; }
       .gun   { fill: #f0883e; font-size: 22px; }
       .stat  { font-size: 12px; }
@@ -42,7 +42,7 @@
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text x="120" y="100" opacity="0">(>_<;)
+    <text x="120" y="100" opacity="0">(&gt;_&lt;;)
       <animate attributeName="opacity" values="0;0;0;0;1;0;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
@@ -83,42 +83,116 @@
   </g>
 
   <g>
-    <text class="stat pwarm" x="80" y="150" opacity="1">[  40/300 ]  composed     best p = 0.512
+    <text class="stat pwarm" x="80" y="130" opacity="1">correlating...  p = 0.512
       <animate attributeName="opacity" values="1;0;0;0;0;0;0;1"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat pwarm" x="80" y="150" opacity="0">[  90/300 ]  uncertain    best p = 0.287
+    <text class="stat pwarm" x="80" y="130" opacity="0">causating...  p = 0.287
       <animate attributeName="opacity" values="0;1;0;0;0;0;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat pwarm" x="80" y="150" opacity="0">[ 140/300 ]  worried      best p = 0.187
+    <text class="stat pwarm" x="80" y="130" opacity="0">reframing...  p = 0.187
       <animate attributeName="opacity" values="0;0;1;0;0;0;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat phot" x="80" y="150" opacity="0">[ 190/300 ]  anxious      best p = 0.094
+    <text class="stat phot" x="80" y="130" opacity="0">subsetting...  p = 0.094
       <animate attributeName="opacity" values="0;0;0;1;0;0;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat phot" x="80" y="150" opacity="0">[ 240/300 ]  panicked     best p = 0.061
+    <text class="stat phot" x="80" y="130" opacity="0">excluding Wednesdays...  p = 0.061
       <animate attributeName="opacity" values="0;0;0;0;1;0;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat phot" x="80" y="150" opacity="0">[ 280/300 ]  desperate    *escalating to derived metrics*
+    <text class="stat phot" x="80" y="130" opacity="0">metric-laundering...  p = 0.058
       <animate attributeName="opacity" values="0;0;0;0;0;1;0;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
-    <text class="stat pwin" x="80" y="150" opacity="0">[ 300/300 ]  PUBLISHABLE  p = 0.045  [OK]
+    <text class="stat pwin" x="80" y="130" opacity="0">[OK] significant  p = 0.045
       <animate attributeName="opacity" values="0;0;0;0;0;0;1;0"
                keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
                dur="21s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
-  <text class="dim" x="80" y="180">manuscript(run)   preprint(run)   funding(run)</text>
+  <g>
+    <text class="stat pwarm" x="80" y="152" opacity="1">██░░░░░░░░░░░░░░ narrative coherence
+      <animate attributeName="opacity" values="1;0;0;0;0;0;0;1"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="stat pwarm" x="80" y="152" opacity="0">█████░░░░░░░░░░░ narrative coherence
+      <animate attributeName="opacity" values="0;1;0;0;0;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="stat pwarm" x="80" y="152" opacity="0">████████░░░░░░░░ narrative coherence
+      <animate attributeName="opacity" values="0;0;1;0;0;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="stat phot" x="80" y="152" opacity="0">██████████░░░░░░ narrative coherence
+      <animate attributeName="opacity" values="0;0;0;1;0;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="stat phot" x="80" y="152" opacity="0">█████████████░░░ narrative coherence
+      <animate attributeName="opacity" values="0;0;0;0;1;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="stat phot" x="80" y="152" opacity="0">███████████████░ narrative coherence
+      <animate attributeName="opacity" values="0;0;0;0;0;1;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="stat pwin" x="80" y="152" opacity="0">████████████████ narrative coherence
+      <animate attributeName="opacity" values="0;0;0;0;0;0;1;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+  </g>
+
+  <g>
+    <text class="dim" x="80" y="178" opacity="1">&gt; fitting baseline model...
+      <animate attributeName="opacity" values="1;0;0;0;0;0;0;1"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="dim" x="80" y="178" opacity="0">&gt; trying log(y) ~ x + z...
+      <animate attributeName="opacity" values="0;1;0;0;0;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="dim" x="80" y="178" opacity="0">&gt; dropping influential outliers...
+      <animate attributeName="opacity" values="0;0;1;0;0;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="dim" x="80" y="178" opacity="0">&gt; adding three-way interaction...
+      <animate attributeName="opacity" values="0;0;0;1;0;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="dim" x="80" y="178" opacity="0">&gt; excluding pre-2009 observations...
+      <animate attributeName="opacity" values="0;0;0;0;1;0;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="dim" x="80" y="178" opacity="0">&gt; constructing effort-normalized ecological index...
+      <animate attributeName="opacity" values="0;0;0;0;0;1;0;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+    <text class="dim" x="80" y="178" opacity="0">&gt; [OK] narrative coherence achieved.
+      <animate attributeName="opacity" values="0;0;0;0;0;0;1;0"
+               keyTimes="0;0.143;0.286;0.429;0.571;0.714;0.857;1"
+               dur="21s" repeatCount="indefinite" calcMode="discrete"/>
+    </text>
+  </g>
 </svg>
