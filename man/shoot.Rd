@@ -7,7 +7,6 @@
 shoot(
   df,
   formula = NULL,
-  budget = 40,
   seed = NULL,
   theatrical = TRUE,
   escalate = TRUE,
@@ -21,8 +20,6 @@ shoot(
 \item{formula}{Optional formula. When \code{NULL}, the first numeric
 column is used as the outcome and all other columns as predictors.}
 
-\item{budget}{Wall-clock seconds to spend. Sweet spot: 30–50.}
-
 \item{seed}{Integer seed. When \code{NULL}, a random seed is generated
 and stored on the returned run.}
 
@@ -31,7 +28,8 @@ interactive, opens the three-zone TUI and renders progress;
 when \code{FALSE}, the search runs silently.}
 
 \item{escalate}{Logical. Allow the derived-metric escalation phase
-when the main search produces no spec with p ≤ 0.05.}
+when the main search produces no spec with p ≤ 0.05. Defaults to
+\code{TRUE}; the package leans into the parody.}
 
 \item{depth}{\code{"default"} for the full search; \code{"demo"} for a
 single-fit smoke test used in CRAN-safe examples.}

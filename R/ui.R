@@ -47,7 +47,7 @@ style_event   <- function(s) {
 
 ui_session_open <- function(blip_lines = 4L,
                             ansi = ansi_supported()) {
-  shooter_h <- 6L
+  shooter_h <- length(read_body_template())
   bar_h     <- 2L
   total_h   <- shooter_h + 1L + blip_lines + 1L + bar_h
   state <- list(

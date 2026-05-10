@@ -8,14 +8,14 @@
 #' @param df A data frame.
 #' @param formula Optional formula. When `NULL`, the first numeric
 #'   column is used as the outcome and all other columns as predictors.
-#' @param budget Wall-clock seconds to spend. Sweet spot: 30-50.
 #' @param seed Integer seed. When `NULL`, a random seed is generated
 #'   and stored on the returned run.
 #' @param theatrical Logical. When `TRUE` and the session is
 #'   interactive, opens the three-zone TUI and renders progress;
 #'   when `FALSE`, the search runs silently.
 #' @param escalate Logical. Allow the derived-metric escalation phase
-#'   when the main search produces no spec with p <= 0.05.
+#'   when the main search produces no spec with p <= 0.05. Defaults to
+#'   `TRUE`; the package leans into the parody.
 #' @param depth `"default"` for the full search; `"demo"` for a
 #'   single-fit smoke test used in CRAN-safe examples.
 #' @param ... Reserved for future arguments.
@@ -24,7 +24,6 @@
 #' @export
 shoot <- function(df,
                   formula    = NULL,
-                  budget     = 40,
                   seed       = NULL,
                   theatrical = TRUE,
                   escalate   = TRUE,
@@ -44,6 +43,12 @@ shoot <- function(df,
   ui   <- NULL
   open_tui <- isTRUE(theatrical) && interactive() && depth != "demo"
   if (open_tui) ui <- ui_session_open()
+
+  # Internal pacing. Theatrical runs are wall-clock paced so the show
+  # has room to breathe; silent runs just exhaust the grid up to a cap.
+  # `texanshootR.budget` is an undocumented escape hatch for tests.
+  budget <- getOption("texanshootR.budget",
+                      if (open_tui) 40L else 86400L)
 
   state <- list(
     seed              = seed,

@@ -6,15 +6,17 @@ test_that("shoot(depth='demo') runs without theatre", {
 })
 
 test_that("shoot() returns a usable tx_run with theatre disabled", {
+  withr::local_options(texanshootR.budget = 2)
   withr::local_seed(42)
-  run <- shoot(mtcars, theatrical = FALSE, budget = 2, escalate = FALSE)
+  run <- shoot(mtcars, theatrical = FALSE, escalate = FALSE)
   expect_s3_class(run, "tx_run")
   expect_gt(run$spec_count, 0L)
 })
 
 test_that("shoot() persists a privacy-stripped run record", {
+  withr::local_options(texanshootR.budget = 1)
   withr::local_seed(42)
-  run <- shoot(mtcars, theatrical = FALSE, budget = 1, escalate = FALSE)
+  run <- shoot(mtcars, theatrical = FALSE, escalate = FALSE)
   recs <- texanshootR:::recent_run_records(1)
   expect_length(recs, 1L)
   rec <- recs[[1]]
@@ -24,9 +26,8 @@ test_that("shoot() persists a privacy-stripped run record", {
 })
 
 test_that("seed makes runs reproducible", {
-  r1 <- shoot(mtcars, theatrical = FALSE, budget = 1, escalate = FALSE,
-              seed = 123)
-  r2 <- shoot(mtcars, theatrical = FALSE, budget = 1, escalate = FALSE,
-              seed = 123)
+  withr::local_options(texanshootR.budget = 1)
+  r1 <- shoot(mtcars, theatrical = FALSE, escalate = FALSE, seed = 123)
+  r2 <- shoot(mtcars, theatrical = FALSE, escalate = FALSE, seed = 123)
   expect_equal(r1$grid_hash, r2$grid_hash)
 })

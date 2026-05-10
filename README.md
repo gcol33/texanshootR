@@ -22,15 +22,14 @@ A roguelike-themed framework for exploratory linear-model search in R.
 ```r
 library(texanshootR)
 
-run <- shoot(mtcars, budget = 30)
+run <- shoot(mtcars)
 print(run)
 summary(run)
 ```
 
-`shoot()` will fit up to `budget` candidate specifications and surface the most
-defensible one. If nothing clears `p ≤ 0.05`, set `escalate = TRUE` and the
-package will reach for derived metrics — which is what you would have done
-anyway, but now there is a banner about it.
+`shoot()` will fit candidate specifications and surface the most defensible
+one. If nothing clears `p ≤ 0.05`, the run escalates to derived metrics —
+which is what you would have done anyway, but now there is a banner about it.
 
 The TUI is optional (`theatrical = FALSE`). The search is deterministic given a
 seed, and the seed, R version, package version, and a hash of the search grid

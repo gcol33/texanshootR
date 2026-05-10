@@ -82,12 +82,14 @@ read_body_template <- function() {
     readLines(f, warn = FALSE)
   } else {
     c(
-      "     _",
-      "   _|_|_",
-      "  {FACE} {GUN}",
-      "   /| |",
-      "  |___|",
-      "  /   \\"
+      "        _____",
+      "       /_____\\",
+      "   ___|_______|___",
+      "       {FACE} {GUN}",
+      "        /| |\\",
+      "        |* *|",
+      "        | | |",
+      "       d/   \\b"
     )
   }
   .tx$mascot_body <- body
