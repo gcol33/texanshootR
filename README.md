@@ -22,7 +22,7 @@ is almost out he is desperate, and he has just enough breath left to escalate
 to a derived metric. Either `p ≤ 0.05` lands somewhere on the wall or it does
 not. There is a banner about it either way.
 
-`texanshootR` is the loop. Every `shoot()` call is one of his runs.
+`texanshootR` is that loop; every `shoot()` call is one of his runs.
 
 ## Quick start
 
@@ -34,7 +34,7 @@ print(run)
 summary(run)
 ```
 
-`shoot()` flails — opportunistically, not systematically — across predictor
+`shoot()` flails opportunistically (not systematically) across predictor
 subsets, transformations, interactions, outlier exclusions, subgroup splits,
 and (at higher career tiers) model families, biasing toward whatever is
 *almost* significant and abandoning specs that go cold. The print method
@@ -187,15 +187,12 @@ solver dependencies.
 
 ## Further reading
 
-This package is a parody. The phenomenon it parodies is not.
-
 Brodeur, A., Cook, N. and Heyes, A. (2020).
 *Methods Matter: P-Hacking and Publication Bias in Causal Analysis in
 Economics.* **American Economic Review** 110(11): 3634–60.
 <https://doi.org/10.1257/aer.20190687>
 
-If `shoot()` feels uncomfortably close to a real workflow, that paper is a
-better starting point than the achievement registry.
+`texanshootR` is our contribution to a thriving field.
 
 ## Support
 
@@ -206,7 +203,7 @@ I'm a PhD student who builds R packages in my free time because I believe good
 tools should be free and open. I started these projects for my own work and
 figured others might find them useful too.
 
-If this package saved you some time — or pre-empted a fit of overfitting —
+If this package saved you some time (or pre-empted a fit of overfitting),
 buying me a coffee is a nice way to say thanks.
 
 [![Buy Me A Coffee](https://img.shields.io/badge/-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/gcol33)
