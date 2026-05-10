@@ -21,3 +21,6 @@ structural chaos (rotated text, gradient fills, irrelevant clipart,
 shape collisions); slide-transition and per-element animation XML
 injection lands in a follow-up.
 }
+\details{
+Unlock requirement: \strong{Senior Scientist}. See \code{\link[=progress]{progress()}} for live state.
+}

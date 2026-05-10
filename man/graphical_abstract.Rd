@@ -20,3 +20,6 @@ A single-figure summary of the highlighted specification, composed
 as a deadpan multi-panel layout with conceptual arrows. Renders via
 ggplot2 to PNG.
 }
+\details{
+Unlock requirement: \strong{Senior Scientist}. See \code{\link[=progress]{progress()}} for live state.
+}

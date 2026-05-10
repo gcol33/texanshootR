@@ -2,9 +2,12 @@
 #'
 #' One-page Letter of Intent with a deadpan budget table.
 #'
+#' Unlock requirement: \strong{PI}. See [progress()] for live state.
+#'
 #' @inheritParams manuscript
 #' @export
 funding <- function(run, output_dir = NULL, file = NULL, force = FALSE) {
+  require_unlocked("funding")
   require_pkg("officer", "funding")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "funding_proposal_clean"

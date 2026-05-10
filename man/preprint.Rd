@@ -19,3 +19,6 @@ preprint(run, output_dir = NULL, file = NULL, force = FALSE)
 bioRxiv-style HTML rendering of a run's highlighted specification.
 Includes a fake DOI and a deadpan "Comments (0)" footer.
 }
+\details{
+Unlock requirement: \strong{Postdoc}. See \code{\link[=progress]{progress()}} for live state.
+}

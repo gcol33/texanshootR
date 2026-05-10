@@ -2,10 +2,13 @@
 #'
 #' Polite, point-by-point response to imagined reviewer comments.
 #'
+#' Unlock requirement: \strong{Senior Scientist}. See [progress()] for live state.
+#'
 #' @inheritParams manuscript
 #' @export
 reviewer_response <- function(run, output_dir = NULL, file = NULL,
                               force = FALSE) {
+  require_unlocked("reviewer_response")
   require_pkg("officer", "reviewer_response")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "response_to_reviewers_FINAL"

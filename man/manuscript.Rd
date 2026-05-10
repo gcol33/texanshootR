@@ -24,3 +24,6 @@ If \code{quarto} and \code{tinytex} are available, produces a PDF + DOCX; if
 only \code{rmarkdown} is available, produces a DOCX. The package never
 installs LaTeX on its own.
 }
+\details{
+Unlock requirement: \strong{Postdoc}. See \code{\link[=progress]{progress()}} for live state.
+}

@@ -18,3 +18,6 @@ reviewer_response(run, output_dir = NULL, file = NULL, force = FALSE)
 \description{
 Polite, point-by-point response to imagined reviewer comments.
 }
+\details{
+Unlock requirement: \strong{Senior Scientist}. See \code{\link[=progress]{progress()}} for live state.
+}

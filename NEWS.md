@@ -1,3 +1,29 @@
+# texanshootR 0.2.0 (planned)
+
+## API unlocks
+
+The output generators are gated by career tier. Calling a locked function
+returns a deadpan status block; the function is otherwise usable once the
+tier is reached. Unlocks are persistent across sessions via the existing
+save state.
+
+* Junior Researcher: `shoot()`, `career()`, `achievements()`, `wardrobe()`,
+  `run_log()`, `progress()`, resets.
+* Postdoc: `manuscript()`, `preprint()`.
+* Senior Scientist: `reviewer_response()`, `graphical_abstract()`,
+  `presentation()`.
+* PI: `funding()`.
+
+* `progress()`: HUD-style companion to `?<fn>`. Reads live save state and
+  prints which functions are unlocked, which are locked, and what the next
+  unlock requires.
+* `require_unlocked()` (internal): single source of truth for gating.
+  Signals a `tx_locked` condition so scripts fail loudly while interactive
+  callers can `tryCatch(tx_locked = ...)`.
+* Roxygen `@description` on each gated function carries the static unlock
+  requirement, so `?presentation` documents the tier even when the function
+  is callable.
+
 # texanshootR 0.1.0
 
 Initial release.

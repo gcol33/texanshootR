@@ -3,9 +3,12 @@
 #' bioRxiv-style HTML rendering of a run's highlighted specification.
 #' Includes a fake DOI and a deadpan "Comments (0)" footer.
 #'
+#' Unlock requirement: \strong{Postdoc}. See [progress()] for live state.
+#'
 #' @inheritParams manuscript
 #' @export
 preprint <- function(run, output_dir = NULL, file = NULL, force = FALSE) {
+  require_unlocked("preprint")
   require_pkg("rmarkdown", "preprint")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "preprint_v2"
