@@ -1,0 +1,52 @@
+# Derived-metric escalation messages — fired during the §6d phase
+# when shoot() manufactures composite responses to inject structure.
+
+- id: derived_insufficient
+  text: "Raw response insufficiently expressive."
+  tags: [target_leakage, story_first]
+  rarity: common
+  trigger_phase: derived_escalation
+  mascot_state_affinity: [desperate]
+
+- id: derived_constructing
+  text: "Constructing composite response metric..."
+  tags: [target_leakage]
+  rarity: common
+  trigger_phase: derived_escalation
+
+- id: derived_temporal_norm
+  text: "Temporal normalization improving interpretability..."
+  tags: [target_leakage, temporal]
+  rarity: uncommon
+  trigger_phase: derived_escalation
+
+- id: derived_observation_dur
+  text: "Scaling response by observation duration..."
+  tags: [target_leakage, temporal]
+  rarity: uncommon
+  trigger_phase: derived_escalation
+
+- id: derived_effort_adjusted
+  text: "Accounting for effort-adjusted ecological intensity..."
+  tags: [target_leakage, ecology]
+  rarity: uncommon
+  trigger_phase: derived_escalation
+
+- id: derived_scale_invariance
+  text: "Improving scale invariance..."
+  tags: [target_leakage]
+  rarity: common
+  trigger_phase: derived_escalation
+
+- id: derived_mechanistic
+  text: "Increasing mechanistic interpretability..."
+  tags: [target_leakage, causal_overreach]
+  rarity: uncommon
+  trigger_phase: derived_escalation
+
+- id: derived_encouraging
+  text: "Derived metric exhibiting encouraging behavior."
+  tags: [target_leakage, cherry_picking]
+  rarity: rare
+  trigger_phase: derived_escalation
+  mascot_state_affinity: [resolved]

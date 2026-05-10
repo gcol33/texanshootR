@@ -1,0 +1,155 @@
+# Loading messages — full sentences drawn every ~1.5-2.5 seconds.
+# Restrained, professional, atmospheric. Each entry must carry at
+# least one fallacy tag from vocab_tags.
+
+- id: load_subsample_noise
+  text: "Subsampling environmentally noisy observations..."
+  tags: [subgroup_fishing, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_phylo_correction
+  text: "Applying phylogenetic correction nobody can verify..."
+  tags: [researcher_dof, ecology, phylo]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_multidisciplinary
+  text: "Generating multidisciplinary relevance..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_h_index
+  text: "h-index optimization: ON"
+  tags: [publication_bias, salami_slicing]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_arrows
+  text: "Adding conceptual framework arrows..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_reviewer_compat
+  text: "Reviewer compatibility improving..."
+  tags: [post_hoc, reviewer]
+  rarity: common
+  trigger_phase: loading
+  mascot_state_affinity: [composed, uncertain]
+
+- id: load_ecologically_meaningful
+  text: "Searching for ecologically meaningful interactions..."
+  tags: [p_hacking, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_smoothness
+  text: "Deploying GAM with emotionally appropriate smoothness..."
+  tags: [overfitting, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+
+- id: load_broad_impact
+  text: "Generating broad impact statements..."
+  tags: [story_first, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_narrative_coherence
+  text: "Stabilizing narrative coherence..."
+  tags: [story_first, harking]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_stepwise_dignified
+  text: "Performing stepwise selection in a dignified manner..."
+  tags: [stepwise_abuse, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_inconvenient
+  text: "Identifying ecologically inconvenient observations..."
+  tags: [outlier_exclusion, ecology]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_subset_robust
+  text: "Locating robust analytical subset..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_collinearity
+  text: "Resolving multicollinearity through narrative..."
+  tags: [researcher_dof, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_interpretation_locked
+  text: "Interpretation locked in."
+  tags: [harking, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_p_acceptable
+  text: "p-value drift within acceptable bounds."
+  tags: [p_hacking, optional_stopping]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_visualizations
+  text: "Preparing visualizations of selected effect."
+  tags: [cherry_picking, survivorship]
+  rarity: common
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: load_alternative_specs
+  text: "Documenting alternative specifications considered."
+  tags: [multiple_comparisons, survivorship]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: load_robustness
+  text: "Constructing robustness narrative."
+  tags: [story_first, post_hoc]
+  rarity: common
+  trigger_phase: loading
+
+- id: load_dataset_meaningful
+  text: "This dataset used to mean something."
+  tags: [data_dredging, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_one_last_transformation
+  text: "Trying one last transformation..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
+
+- id: load_coffee_increasing
+  text: "Coffee intake increasing..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [anxious, desperate]
+
+- id: load_interaction_deployed
+  text: "Interaction terms deployed."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: loading
+  mascot_state_affinity: [anxious, desperate]
+
+- id: load_alt_framing
+  text: "Constructing alternative ecological framing..."
+  tags: [harking, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [anxious, desperate]

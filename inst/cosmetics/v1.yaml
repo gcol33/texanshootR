@@ -1,0 +1,58 @@
+# 10 v1 cosmetics across 5 slots. ASCII overlay strings are short and
+# composed onto the mascot at slot anchors.
+
+- id: cosmetic_stetson
+  slot: hat
+  ascii_overlay: |
+    _____
+  unlock_via: ach_aim_after_data
+
+- id: cosmetic_hat_conference
+  slot: hat
+  ascii_overlay: |
+    ▄▄▄▄▄
+  unlock_via: ach_all_outputs
+
+- id: cosmetic_poncho_field
+  slot: poncho
+  ascii_overlay: |
+    ╱─────╲
+  unlock_via: ach_omitted_variable
+
+- id: cosmetic_poncho_lab
+  slot: poncho
+  ascii_overlay: |
+    /=====\
+  unlock_via: ~
+
+- id: cosmetic_badge_oa
+  slot: badge
+  ascii_overlay: "[OA]"
+  unlock_via: ach_publication_pipeline
+
+- id: cosmetic_badge_orcid
+  slot: badge
+  ascii_overlay: "[iD]"
+  unlock_via: ~
+
+- id: cosmetic_lanyard_neurips
+  slot: lanyard
+  ascii_overlay: "▼"
+  unlock_via: ach_overfitter
+
+- id: cosmetic_lanyard_esa
+  slot: lanyard
+  ascii_overlay: "♦"
+  unlock_via: ~
+
+- id: cosmetic_cloak_bayesian
+  slot: cloak
+  ascii_overlay: |
+    /  ~  \
+  unlock_via: ach_derived_insight
+
+- id: cosmetic_cloak_nature
+  slot: cloak
+  ascii_overlay: |
+    /  N  \
+  unlock_via: ~

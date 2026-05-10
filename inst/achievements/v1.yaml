@@ -1,0 +1,152 @@
+# 20 v1 achievements: 10 visible (progression) + 10 hidden (discovery).
+# Visible slots map to the v1 priority subset of the fallacy contract.
+
+# ---- Visible / progression -----------------------------------------
+
+- id: ach_first_run
+  name: "First Submission"
+  visible: true
+  hint: "Complete your first shoot()."
+  reveal_text: "First Submission — A career begins."
+  trigger: trigger_first_run
+
+- id: ach_aim_after_data
+  name: "Texas Sharpshooter"
+  visible: true
+  hint: "Highlight a model after running a search."
+  reveal_text: "Texas Sharpshooter — Aimed at the wall, painted the target."
+  trigger: trigger_aim_after_data
+  cosmetic: cosmetic_stetson
+
+- id: ach_p_hacked
+  name: "Within Tolerances"
+  visible: true
+  hint: "Highlight a model with p between 0.045 and 0.052."
+  reveal_text: "Within Tolerances — A reportable result."
+  trigger: trigger_p_hacked
+
+- id: ach_harker
+  name: "Predicted as Hypothesised"
+  visible: true
+  hint: "Generate a manuscript() for a run with no a priori hypothesis."
+  reveal_text: "Predicted as Hypothesised — The framing was always going to be this."
+  trigger: trigger_harker
+
+- id: ach_multiple_comparisons
+  name: "Comprehensive Search"
+  visible: true
+  hint: "Fit at least 1000 specifications in one run."
+  reveal_text: "Comprehensive Search — All avenues explored."
+  trigger: trigger_multiple_comparisons
+
+- id: ach_subgroup_fisher
+  name: "Targeted Subsample"
+  visible: true
+  hint: "Highlight a result from a subgroup-fishing seed."
+  reveal_text: "Targeted Subsample — A robust subset identified."
+  trigger: trigger_subgroup_fisher
+
+- id: ach_outlier_excluder
+  name: "Robustness Check"
+  visible: true
+  hint: "Highlight a result after dropping inconvenient observations."
+  reveal_text: "Robustness Check — Result holds with informative subset."
+  trigger: trigger_outlier_excluder
+
+- id: ach_overfitter
+  name: "High Fit Quality"
+  visible: true
+  hint: "Highlight a model with R-squared >= 0.99 and many terms."
+  reveal_text: "High Fit Quality — Excellent in-sample performance."
+  trigger: trigger_overfitter
+  cosmetic: cosmetic_lanyard_neurips
+
+- id: ach_publication_pipeline
+  name: "Publication Pipeline"
+  visible: true
+  hint: "Generate three or more outputs across your career."
+  reveal_text: "Publication Pipeline — A productive trajectory."
+  trigger: trigger_publication_pipeline
+  cosmetic: cosmetic_badge_oa
+
+- id: ach_var_purge
+  name: "Streamlined Specification"
+  visible: true
+  hint: "Drop five or more predictors in a single run."
+  reveal_text: "Streamlined Specification — Parsimony achieved."
+  trigger: trigger_var_purge
+
+# ---- Hidden / discovery --------------------------------------------
+
+- id: ach_derived_insight
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Derived Insight — A composite metric exhibited encouraging behavior."
+  trigger: trigger_derived_insight
+  cosmetic: cosmetic_cloak_bayesian
+
+- id: ach_late_resolver
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Last-Minute Stabilisation — Significance achieved past the 90% mark."
+  trigger: trigger_late_resolver
+
+- id: ach_event_survivor
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Event Survivor — Three life events witnessed across the career."
+  trigger: trigger_event_survivor
+
+- id: ach_reviewer_repeller
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Reviewer Repeller — Survived a 'Reject' verdict."
+  trigger: trigger_reviewer_repeller
+
+- id: ach_glimpse
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "The Glimpse of Tenure — A sliver of something definite."
+  trigger: trigger_glimpse
+
+- id: ach_optional_stopping
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Optional Stopping — Halted at the first significant batch."
+  trigger: trigger_optional_stopping
+
+- id: ach_all_outputs
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Full Suite — All output formats generated for one run."
+  trigger: trigger_all_outputs
+  cosmetic: cosmetic_hat_conference
+
+- id: ach_filename_archaeologist
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Filename Archaeologist — Generated figure_final_v2_REAL.png."
+  trigger: trigger_filename_archaeologist
+
+- id: ach_collider
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Collider Considered — Conditioned on a structural descendant."
+  trigger: trigger_collider
+
+- id: ach_omitted_variable
+  name: "???"
+  visible: false
+  hint: ~
+  reveal_text: "Controlled For What Was Available — Omitted variable noted."
+  trigger: trigger_omitted_variable
+  cosmetic: cosmetic_poncho_field

@@ -1,0 +1,43 @@
+# State-transition messages — fired exactly once on a mascot state change.
+
+- id: trans_composed_to_uncertain
+  text: "Reviewer compatibility uncertain..."
+  tags: [reviewer]
+  rarity: common
+  trigger_phase: state_transition
+  mascot_state_affinity: [uncertain]
+
+- id: trans_uncertain_to_anxious
+  text: "Deadline approaching..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: state_transition
+  mascot_state_affinity: [anxious]
+
+- id: trans_anxious_to_desperate
+  text: "Methodological flexibility expanding."
+  tags: [researcher_dof, p_hacking]
+  rarity: common
+  trigger_phase: state_transition
+  mascot_state_affinity: [desperate]
+
+- id: trans_resolved_general
+  text: "Narrative stabilized."
+  tags: [harking, story_first]
+  rarity: common
+  trigger_phase: state_transition
+  mascot_state_affinity: [resolved]
+
+- id: trans_resolved_alt
+  text: "Significant pathway identified."
+  tags: [causal_overreach, cherry_picking]
+  rarity: common
+  trigger_phase: state_transition
+  mascot_state_affinity: [resolved]
+
+- id: trans_anxious_alt
+  text: "Run trajectory under review."
+  tags: [post_hoc]
+  rarity: uncommon
+  trigger_phase: state_transition
+  mascot_state_affinity: [anxious]

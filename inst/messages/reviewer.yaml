@@ -1,0 +1,49 @@
+# Reviewer 2 encounter messages.
+
+- id: rev_assigned
+  text: "Reviewer assignment in progress..."
+  tags: [reviewer]
+  rarity: common
+  trigger_phase: reviewer
+
+- id: rev_accept_enthusiasm
+  text: "Reviewer 2: 'Accept with enthusiasm.'"
+  tags: [reviewer, publication_bias]
+  rarity: legendary
+  trigger_phase: reviewer
+
+- id: rev_minor
+  text: "Reviewer 2: 'Minor revisions.'"
+  tags: [reviewer]
+  rarity: uncommon
+  trigger_phase: reviewer
+
+- id: rev_major
+  text: "Reviewer 2: 'Major revisions required.'"
+  tags: [reviewer, post_hoc]
+  rarity: common
+  trigger_phase: reviewer
+
+- id: rev_reject
+  text: "Reviewer 2: 'Reject. Methodologically deficient.'"
+  tags: [reviewer]
+  rarity: common
+  trigger_phase: reviewer
+
+- id: rev_familiar_literature
+  text: "Reviewer 2: 'Authors evidently unfamiliar with the literature.'"
+  tags: [reviewer]
+  rarity: rare
+  trigger_phase: reviewer
+
+- id: rev_cite_self
+  text: "Reviewer 2 has suggested 14 self-citations."
+  tags: [reviewer, publication_bias]
+  rarity: rare
+  trigger_phase: reviewer
+
+- id: rev_47_comments
+  text: "Detected 47 comments."
+  tags: [reviewer]
+  rarity: rare
+  trigger_phase: reviewer

@@ -1,0 +1,128 @@
+# Life events — random encounters during shoot() runs. Two-part:
+# event_text + consequence_text. Optional `effects` apply temporary
+# modifiers to the run state.
+
+- id: email_expired
+  event_text: "Institutional email password expired."
+  consequence_text: "Productivity reduced."
+  tags: [admin]
+  rarity: uncommon
+  career_min: ~
+  display_phase: any
+  effects:
+    throughput: -0.15
+    typo_probability: 0.10
+
+- id: supervisor_interesting
+  event_text: "Supervisor replied 'interesting'."
+  consequence_text: "Interpretation confidence decreased."
+  tags: [admin, narrative]
+  rarity: uncommon
+  career_min: ~
+  display_phase: any
+  effects:
+    interpretation_confidence: -0.15
+    narrative_strength: -0.10
+
+- id: abstract_accepted
+  event_text: "Conference abstract accepted."
+  consequence_text: "Presentation pressure increased."
+  tags: [admin, presentation]
+  rarity: uncommon
+  career_min: ~
+  display_phase: any
+  effects:
+    presentation_pressure: 0.20
+
+- id: departmental_restructuring
+  event_text: "Departmental restructuring detected."
+  consequence_text: "Funding uncertainty increased."
+  tags: [admin, funding]
+  rarity: rare
+  career_min: ~
+  display_phase: any
+  effects:
+    funding_uncertainty: 0.20
+    instability: 0.10
+
+- id: coauthor_vanished
+  event_text: "Coauthor vanished for 11 days."
+  consequence_text: "Timeline adjusted."
+  tags: [admin]
+  rarity: uncommon
+  career_min: ~
+  display_phase: any
+  effects:
+    search_budget: -0.10
+
+- id: minor_revisions
+  event_text: "Reviewer requested 'minor revisions'."
+  consequence_text: "Detected 47 comments."
+  tags: [reviewer, admin]
+  rarity: uncommon
+  career_min: Postdoc
+  display_phase: late
+  effects:
+    reviewer_resistance: -0.10
+
+- id: teaching_load
+  event_text: "Teaching load increased."
+  consequence_text: "Search budget revised downward."
+  tags: [admin]
+  rarity: common
+  career_min: ~
+  display_phase: any
+  effects:
+    search_budget: -0.20
+    reviewer_resistance: -0.05
+
+- id: coffee_intake
+  event_text: "Coffee intake increasing."
+  consequence_text: "Throughput rising; instability rising."
+  tags: [admin]
+  rarity: common
+  career_min: ~
+  display_phase: any
+  effects:
+    throughput: 0.15
+    instability: 0.15
+    typo_probability: 0.05
+
+- id: grant_called
+  event_text: "Grant office called."
+  consequence_text: "Search interrupted briefly."
+  tags: [admin, funding]
+  rarity: uncommon
+  career_min: Postdoc
+  display_phase: any
+  effects:
+    search_budget: -0.10
+
+- id: power_outage
+  event_text: "Brief power flicker."
+  consequence_text: "RNG unaffected."
+  tags: [admin]
+  rarity: rare
+  career_min: ~
+  display_phase: any
+  effects: {}
+
+- id: postdoc_left
+  event_text: "Lab postdoc accepted offer elsewhere."
+  consequence_text: "Authorship list under revision."
+  tags: [admin]
+  rarity: rare
+  career_min: Senior Scientist
+  display_phase: any
+  effects:
+    narrative_strength: -0.05
+
+- id: doi_resolved
+  event_text: "Long-pending DOI finally resolved."
+  consequence_text: "Citation count increased by one."
+  tags: [admin, publication]
+  rarity: uncommon
+  career_min: ~
+  display_phase: any
+  effects:
+    funding_uncertainty: -0.05

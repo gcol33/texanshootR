@@ -1,0 +1,37 @@
+# Startup banners. Fired with low probability on .onAttach.
+
+- id: banner_trajectory
+  text: "Restoring academic trajectory..."
+  tags: [career, onboarding]
+  rarity: common
+  trigger_phase: banner
+
+- id: banner_session
+  text: "Resuming session."
+  tags: [onboarding, career]
+  rarity: common
+  trigger_phase: banner
+
+- id: banner_tenure_track
+  text: "Tenure-track adjacent."
+  tags: [career, publication_bias]
+  rarity: uncommon
+  trigger_phase: banner
+
+- id: banner_field
+  text: "Field has shifted since last login."
+  tags: [career, story_first]
+  rarity: rare
+  trigger_phase: banner
+
+- id: banner_dossier
+  text: "Updating dossier."
+  tags: [career, publication_bias]
+  rarity: uncommon
+  trigger_phase: banner
+
+- id: banner_morning
+  text: "Manuscripts cooled overnight."
+  tags: [career, story_first]
+  rarity: uncommon
+  trigger_phase: banner

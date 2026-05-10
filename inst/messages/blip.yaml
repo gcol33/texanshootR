@@ -1,0 +1,131 @@
+# Blip stream — short 1-3 word filler tokens drawn at 250-500ms cadence.
+# The "correlating -> causating" combo telegraphs the joke without naming it.
+
+- id: blip_correlating
+  text: "correlating..."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: blip
+  combo_chain:
+    start: corr_caus
+    next: ~
+
+- id: blip_causating
+  text: "causating..."
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: blip
+  combo_chain:
+    start: ~
+    next: corr_caus
+
+- id: blip_regressing
+  text: "regressing..."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_adjusting
+  text: "adjusting..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_reframing
+  text: "reframing..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_interpreting
+  text: "interpreting..."
+  tags: [post_hoc]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_exploring
+  text: "exploring..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+  combo_chain:
+    start: explore_discover_interpret
+    next: ~
+
+- id: blip_discovering
+  text: "discovering..."
+  tags: [cherry_picking]
+  rarity: uncommon
+  trigger_phase: blip
+  combo_chain:
+    start: ~
+    next: explore_discover_interpret
+
+- id: blip_finalizing
+  text: "finalizing..."
+  tags: [optional_stopping]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_normalizing
+  text: "normalizing..."
+  tags: [target_leakage]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_smoothing
+  text: "smoothing..."
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_pruning
+  text: "pruning..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_subsampling
+  text: "subsampling..."
+  tags: [subgroup_fishing]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_validating
+  text: "validating..."
+  tags: [validation_leakage]
+  rarity: uncommon
+  trigger_phase: blip
+
+- id: blip_recasting
+  text: "recasting..."
+  tags: [harking]
+  rarity: common
+  trigger_phase: blip
+
+- id: blip_pvalue_058
+  text: "p = 0.058"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_051
+  text: "p = 0.051"
+  tags: [p_hacking, optional_stopping]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [anxious, desperate]
+
+- id: blip_pvalue_049
+  text: "p = 0.049"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  mascot_state_affinity: [resolved]
+
+- id: blip_pvalue_dropping
+  text: "p ↓"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip

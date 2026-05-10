@@ -1,0 +1,24 @@
+# R build artifacts
+*.Rcheck/
+*.tar.gz
+*.Rproj
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# pkgdown / docs
+docs/
+_pkgdown.yml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Compiled C/C++
+src/*.o
+src/*.so
+src/*.dll
+src/*.dylib

@@ -1,0 +1,68 @@
+# Promotion-committee messages — fired when career advancement is
+# being evaluated. Opaque institutional language, never numeric.
+
+- id: promo_dossier
+  text: "Promotion committee reviewing dossier..."
+  tags: [career]
+  rarity: common
+  trigger_phase: promotion_committee
+
+- id: promo_productivity
+  text: "Recent productivity noted."
+  tags: [career, publication_bias]
+  rarity: common
+  trigger_phase: promotion_committee
+
+- id: promo_visibility
+  text: "Cross-disciplinary visibility improving."
+  tags: [career, story_first]
+  rarity: common
+  trigger_phase: promotion_committee
+
+- id: promo_aesthetics
+  text: "Presentation aesthetics exceeded expectations."
+  tags: [career, presentation]
+  rarity: uncommon
+  trigger_phase: promotion_committee
+
+- id: promo_narrative_density
+  text: "Conceptual framework density: excessive."
+  tags: [career, story_first]
+  rarity: rare
+  trigger_phase: promotion_committee
+
+- id: promo_methodological_transparency
+  text: "Methodological transparency: acceptable."
+  tags: [career, post_hoc]
+  rarity: uncommon
+  trigger_phase: promotion_committee
+
+- id: promo_ongoing
+  text: "Promotion committee deliberations ongoing."
+  tags: [career]
+  rarity: common
+  trigger_phase: promotion_committee
+
+- id: promo_advancement
+  text: "Career advancement detected."
+  tags: [career, publication_bias]
+  rarity: rare
+  trigger_phase: promotion
+
+- id: promo_junior_to_postdoc
+  text: "Junior Researcher → Postdoc"
+  tags: [career]
+  rarity: rare
+  trigger_phase: promotion
+
+- id: promo_postdoc_to_senior
+  text: "Postdoc → Senior Scientist"
+  tags: [career]
+  rarity: rare
+  trigger_phase: promotion
+
+- id: promo_senior_to_pi
+  text: "Senior Scientist → PI"
+  tags: [career]
+  rarity: legendary
+  trigger_phase: promotion
