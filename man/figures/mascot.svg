@@ -33,27 +33,27 @@
     <text x="130" y="120" opacity="0">  ( o_o)
       <animate attributeName="opacity" values="1;0;0;0;0;1"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="130" y="120" opacity="0">  ( -_- )
       <animate attributeName="opacity" values="0;1;0;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="130" y="120" opacity="0">  ( o_o;)
       <animate attributeName="opacity" values="0;0;1;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="130" y="120" opacity="0">  ( O_O )
       <animate attributeName="opacity" values="0;0;0;1;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="130" y="120" opacity="0">  ( -_-)
       <animate attributeName="opacity" values="0;0;0;0;1;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
@@ -61,22 +61,22 @@
     <text x="220" y="120" opacity="0">︻デ═一  ·
       <animate attributeName="opacity" values="1;0;0;0;1"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="1.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="220" y="120" opacity="0">︻デ═一   *
       <animate attributeName="opacity" values="0;1;0;0;0"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="1.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="220" y="120" opacity="0">︻デ═-   ·
       <animate attributeName="opacity" values="0;0;1;0;0"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="1.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text x="220" y="120" opacity="0">︻デ═一
       <animate attributeName="opacity" values="0;0;0;1;0"
                keyTimes="0;0.25;0.5;0.75;1"
-               dur="1.2s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="3.2s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
@@ -84,27 +84,27 @@
     <text class="stat pwarm" x="80" y="225" opacity="0">[ 06/30 ]  composed     best p = 0.412
       <animate attributeName="opacity" values="1;0;0;0;0;1"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text class="stat pwarm" x="80" y="225" opacity="0">[ 13/30 ]  uncertain    best p = 0.187
       <animate attributeName="opacity" values="0;1;0;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text class="stat phot" x="80" y="225" opacity="0">[ 21/30 ]  anxious      best p = 0.094
       <animate attributeName="opacity" values="0;0;1;0;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text class="stat phot" x="80" y="225" opacity="0">[ 28/30 ]  desperate    *escalating to derived metrics*
       <animate attributeName="opacity" values="0;0;0;1;0;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
     <text class="stat pwin" x="80" y="225" opacity="0">[ 30/30 ]  PUBLISHABLE  p = 0.041  [OK]
       <animate attributeName="opacity" values="0;0;0;0;1;0"
                keyTimes="0;0.2;0.4;0.6;0.8;1"
-               dur="6s" repeatCount="indefinite" calcMode="discrete"/>
+               dur="20s" repeatCount="indefinite" calcMode="discrete"/>
     </text>
   </g>
 
