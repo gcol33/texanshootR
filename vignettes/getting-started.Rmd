@@ -44,19 +44,55 @@ career()
 The first time you save, you'll be prompted to confirm the path. Set
 `options(texanshootR.save_enabled = FALSE)` to opt out entirely.
 
+## Unlocks
+
+Only `shoot()` and the inspection helpers are callable from session
+one. The six output generators are gated by career tier and unlock as
+the career advances. `progress()` prints the live lock map:
+
+```{r}
+progress()
+```
+
+The tier-to-function mapping:
+
+| Tier              | Unlocks                                                    |
+|-------------------|------------------------------------------------------------|
+| Junior Researcher | `shoot()`, `career()`, `achievements()`, `wardrobe()`, `run_log()`, `progress()`, resets |
+| Postdoc           | `manuscript()`, `preprint()`                               |
+| Senior Scientist  | `reviewer_response()`, `graphical_abstract()`, `presentation()` |
+| PI                | `funding()`                                                |
+
+A locked call signals a `tx_locked` condition with a deadpan
+two-block status message. From a fresh save:
+
+```
+manuscript() requires:
+Postdoc
+
+Current career:
+Junior Researcher
+```
+
+Scripts can intercept the signal with
+`tryCatch(manuscript(run), tx_locked = function(c) NULL)`. Inspect a
+single function's status with `progress("manuscript")`. Tier
+thresholds are intentionally opaque; the path is more runs.
+
 ## Output generators
 
 Each output function takes a `tx_run` and writes to `tempdir()` by
 default. Override with `output_dir` or
-`options(texanshootR.output_dir = ...)`:
+`options(texanshootR.output_dir = ...)`. Once the relevant tier is
+reached, the call works the same way for every generator:
 
 ```{r}
-graphical_abstract(run)
 manuscript(run)
 preprint(run)
 reviewer_response(run)
-funding(run)
+graphical_abstract(run)
 presentation(run)
+funding(run)
 ```
 
 Output functions return the file path invisibly and print a short

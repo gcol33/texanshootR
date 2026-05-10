@@ -119,25 +119,85 @@ the run.</p>
 entirely.</p>
 </div>
 <div class="section level2">
+<h2 id="unlocks">Unlocks<a class="anchor" aria-label="anchor" href="#unlocks"></a>
+</h2>
+<p>Only <code><a href="../reference/shoot.html">shoot()</a></code> and the inspection helpers are callable
+from session one. The six output generators are gated by career tier and
+unlock as the career advances. <code><a href="../reference/progress.html">progress()</a></code> prints the live
+lock map:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/progress.html">progress</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>The tier-to-function mapping:</p>
+<table class="table">
+<colgroup>
+<col width="24%">
+<col width="75%">
+</colgroup>
+<thead><tr class="header">
+<th>Tier</th>
+<th>Unlocks</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Junior Researcher</td>
+<td>
+<code><a href="../reference/shoot.html">shoot()</a></code>, <code><a href="../reference/career.html">career()</a></code>,
+<code><a href="../reference/achievements.html">achievements()</a></code>, <code><a href="../reference/wardrobe.html">wardrobe()</a></code>,
+<code><a href="../reference/run_log.html">run_log()</a></code>, <code><a href="../reference/progress.html">progress()</a></code>, resets</td>
+</tr>
+<tr class="even">
+<td>Postdoc</td>
+<td>
+<code><a href="../reference/manuscript.html">manuscript()</a></code>, <code><a href="../reference/preprint.html">preprint()</a></code>
+</td>
+</tr>
+<tr class="odd">
+<td>Senior Scientist</td>
+<td>
+<code><a href="../reference/reviewer_response.html">reviewer_response()</a></code>, <code><a href="../reference/graphical_abstract.html">graphical_abstract()</a></code>,
+<code><a href="../reference/presentation.html">presentation()</a></code>
+</td>
+</tr>
+<tr class="even">
+<td>PI</td>
+<td><code><a href="../reference/funding.html">funding()</a></code></td>
+</tr>
+</tbody>
+</table>
+<p>A locked call signals a <code>tx_locked</code> condition with a
+deadpan two-block status message. From a fresh save:</p>
+<pre><code>manuscript() requires:
+Postdoc
+
+Current career:
+Junior Researcher</code></pre>
+<p>Scripts can intercept the signal with
+<code>tryCatch(manuscript(run), tx_locked = function(c) NULL)</code>.
+Inspect a single function’s status with
+<code>progress("manuscript")</code>. Tier thresholds are intentionally
+opaque; the path is more runs.</p>
+</div>
+<div class="section level2">
 <h2 id="output-generators">Output generators<a class="anchor" aria-label="anchor" href="#output-generators"></a>
 </h2>
 <p>Each output function takes a <code>tx_run</code> and writes to
 <code><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir()</a></code> by default. Override with <code>output_dir</code>
-or <code>options(texanshootR.output_dir = ...)</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/graphical_abstract.html">graphical_abstract</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/manuscript.html">manuscript</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
+or <code>options(texanshootR.output_dir = ...)</code>. Once the relevant
+tier is reached, the call works the same way for every generator:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/manuscript.html">manuscript</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/preprint.html">preprint</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/reviewer_response.html">reviewer_response</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/funding.html">funding</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/presentation.html">presentation</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/graphical_abstract.html">graphical_abstract</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/presentation.html">presentation</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/funding.html">funding</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span></span></code></pre></div>
 <p>Output functions return the file path invisibly and print a short
 status line.</p>
 </div>
 <div class="section level2">
 <h2 id="achievements-and-cosmetics">Achievements and cosmetics<a class="anchor" aria-label="anchor" href="#achievements-and-cosmetics"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/achievements.html">achievements</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/wardrobe.html">wardrobe</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Hidden achievements appear as <code>???</code> until unlocked. New
@@ -148,7 +208,7 @@ the selection with <code>wardrobe(slot, id)</code>.</p>
 <h2 id="resetting">Resetting<a class="anchor" aria-label="anchor" href="#resetting"></a>
 </h2>
 <p>If you want to start over:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/reset.html">reset_career</a></span><span class="op">(</span>force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/reset.html">reset_all</a></span><span class="op">(</span>force <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
