@@ -20,3 +20,6 @@ src/*.o
 src/*.so
 src/*.dll
 src/*.dylib
+
+# Local scratch scripts
+dev_notes/
