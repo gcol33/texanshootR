@@ -27,32 +27,21 @@ print(run)
 summary(run)
 ```
 
-`shoot()` will fit candidate specifications and surface the most defensible
-one. If nothing clears `p ≤ 0.05`, the run escalates to derived metrics —
-which is what you would have done anyway, but now there is a banner about it.
-
-The TUI is optional (`theatrical = FALSE`). The search is deterministic given a
-seed, and the seed, R version, package version, and a hash of the search grid
-are recorded on every run, so the *audit trail* is honest even when the
-*intent* is not.
-
-## What it does
-
 The Texas sharpshooter fires at the side of a barn, then walks over and paints
 the target around the densest cluster of bullet holes. `shoot()` automates the
-firing. The rest of the package automates the painting.
+firing — across predictor subsets, transformations, interactions, outlier
+exclusions, and subgroup splits — and surfaces the most defensible result. If
+nothing clears `p ≤ 0.05`, the run escalates to derived metrics, which is what
+you would have done anyway. There is now a banner about it.
 
-Concretely, `shoot()` searches across:
+The TUI is optional (`theatrical = FALSE`). Every run is deterministic given a
+seed, and the seed, R version, package version, and a hash of the search grid
+are recorded on the returned object — so the *audit trail* is honest even when
+the *intent* is not.
 
-* predictor subsets,
-* transformations (`log`, `sqrt`, polynomial, ...),
-* pairwise interactions,
-* outlier-removal seeds,
-* subgroup seeds.
+## Outputs
 
-It returns a `tx_run` with the highlighted specification, the search summary,
-and any life events that fired during the run. From there, six output
-generators turn it into something shippable:
+A finished run is a `tx_run`. Six generators turn it into something shippable:
 
 ```r
 manuscript(run)         # IMRaD draft, Methods that match the *winning* spec
@@ -73,7 +62,7 @@ progression.
 
 ```r
 career()        # level, runs, favourite method, opaque scores
-achievements()  # 1,000-entry registry, including ones you have not unlocked
+achievements()  # 20 unlockable badges; hidden ones show as ???
 wardrobe()      # equipped cosmetic slots (hat, badge, cloak, poncho, lanyard)
 ```
 
