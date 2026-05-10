@@ -53,7 +53,7 @@ record_output <- function(run, output_name, file) {
   # Carry over runtime-set flags from the in-memory run (e.g. `harked`
   # is set by manuscript() before this call). The on-disk record is
   # what evaluate_achievements() reads.
-  for (k in c("harked", "collider_conditioned", "omitted_variable_flagged",
+  for (k in c("harked", "peak_mascot",
               "stopped_early", "resolved_at_progress", "ultra_rare_seen")) {
     v <- run[[k]]
     if (!is.null(v)) rec[[k]] <- v
@@ -73,7 +73,6 @@ record_output <- function(run, output_name, file) {
 output_complexity_score <- function(name) {
   switch(name,
     manuscript         = 3,
-    preprint           = 2,
     presentation       = 2,
     reviewer_response  = 1,
     graphical_abstract = 1,

@@ -140,17 +140,17 @@
   reveal_text: "Filename Archaeologist — Generated figure_final_v2_REAL.png."
   trigger: trigger_filename_archaeologist
 
-- id: ach_collider
+- id: ach_visible_panic
   name: "???"
   visible: false
   hint: ~
-  reveal_text: "Collider Considered — Conditioned on a structural descendant."
-  trigger: trigger_collider
+  reveal_text: "Visible Panic — The shooter's hand was shaking by the end."
+  trigger: trigger_visible_panic
 
-- id: ach_omitted_variable
+- id: ach_begging_the_wall
   name: "???"
   visible: false
   hint: ~
-  reveal_text: "Controlled For What Was Available — Omitted variable noted."
-  trigger: trigger_omitted_variable
+  reveal_text: "Begging the Wall — Reached the desperate face. The barn was unmoved."
+  trigger: trigger_begging_the_wall
   cosmetic: cosmetic_poncho_field

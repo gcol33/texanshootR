@@ -9,7 +9,7 @@ Description: Provides a structured, terminal-first interface for
     exploratory linear-model search, including transformation grids,
     predictor-subset enumeration, interaction screening, and
     outlier-removal seeding. Persistent run history, achievement
-    tracking, and reportable output generators (manuscript, preprint,
+    tracking, and reportable output generators (manuscript,
     presentation, funding letter, graphical abstract, reviewer
     response) are included.
 License: MIT + file LICENSE
@@ -25,7 +25,11 @@ Imports:
     jsonlite,
     stats,
     utils,
-    tools
+    tools,
+    splines,
+    Rcpp
+LinkingTo:
+    Rcpp
 Suggests:
     ggplot2,
     officer,

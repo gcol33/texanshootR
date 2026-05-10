@@ -5,7 +5,6 @@
 
 UNLOCK_REGISTRY <- list(
   manuscript         = "Postdoc",
-  preprint           = "Postdoc",
   reviewer_response  = "Senior Scientist",
   graphical_abstract = "Senior Scientist",
   presentation       = "Senior Scientist",

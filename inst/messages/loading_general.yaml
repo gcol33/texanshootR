@@ -50,6 +50,7 @@
   tags: [overfitting, model_shopping]
   rarity: rare
   trigger_phase: loading
+  model_family_affinity: [gam]
 
 - id: load_broad_impact
   text: "Generating broad impact statements..."
@@ -404,6 +405,7 @@
   tags: [overfitting]
   rarity: uncommon
   trigger_phase: loading
+  model_family_affinity: [gam]
 
 - id: load_knots_chosen
   text: "Knots placed where they help..."
@@ -411,12 +413,14 @@
   rarity: rare
   trigger_phase: loading
   mascot_state_affinity: [anxious]
+  model_family_affinity: [gam]
 
 - id: load_smoother
   text: "Selecting smoother penalty by feel..."
   tags: [overfitting, researcher_dof]
   rarity: uncommon
   trigger_phase: loading
+  model_family_affinity: [gam]
 
 - id: load_re_scale
   text: "Re-scaling response after first fit..."
@@ -762,12 +766,14 @@
   tags: [multiple_comparisons]
   rarity: common
   trigger_phase: loading
+  model_family_affinity: [glmm]
 
 - id: load_mc_correlation_matrix
   text: "Inspecting the full correlation matrix for leads..."
   tags: [data_dredging, multiple_comparisons]
   rarity: common
   trigger_phase: loading
+  model_family_affinity: [cor]
 
 # --- Stepwise / model shopping ------------------------------------------
 
@@ -877,6 +883,7 @@
   rarity: rare
   trigger_phase: loading
   mascot_state_affinity: [anxious]
+  model_family_affinity: [glmm]
 
 - id: load_add_interaction
   text: "Adding the interaction the residuals demanded..."
@@ -1440,6 +1447,7 @@
   tags: [researcher_dof, spatial]
   rarity: uncommon
   trigger_phase: loading
+  model_family_affinity: [glmm]
 
 - id: load_spatial_neighborhood
   text: "Defining the neighborhood structure favorably..."
@@ -1814,12 +1822,14 @@
   tags: [researcher_dof]
   rarity: uncommon
   trigger_phase: loading
+  model_family_affinity: [glmm]
 
 - id: load_dof_random_intercept
   text: "Removing a random intercept that hurt the fit..."
   tags: [researcher_dof, optional_stopping]
   rarity: uncommon
   trigger_phase: loading
+  model_family_affinity: [glmm]
 
 - id: load_dof_corr_structure
   text: "Switching correlation structure..."
@@ -4425,3 +4435,991 @@
   rarity: rare
   trigger_phase: loading
   mascot_state_affinity: [resolved]
+
+# --- Family-specific loading messages -------------------------------------
+
+# gam
+- id: load_gam_gcv_lambda
+  text: "GCV selected the smoothing parameter. Roughly."
+  tags: [researcher_dof, overfitting]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_edf_drift
+  text: "Effective degrees of freedom drifted upward. Defensible."
+  tags: [overfitting, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_penalty_tuned
+  text: "Tuning the wiggle penalty until the curve stops apologizing..."
+  tags: [overfitting, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [gam]
+  mascot_state_affinity: [anxious]
+
+- id: load_gam_basis_swap
+  text: "Trying the next basis after the first one looked wrong..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+# glmm
+- id: load_glmm_random_intercept
+  text: "Random intercept absorbing whatever the fixed effects missed..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_singular
+  text: "Variance component on the boundary. Reporting it anyway."
+  tags: [researcher_dof, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+  mascot_state_affinity: [anxious]
+
+- id: load_glmm_partial_pooling
+  text: "Partial pooling shrank the group means toward the grand mean. As advertised."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_icc_modest
+  text: "ICC modest but positive. Justifies the hierarchy."
+  tags: [researcher_dof, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+# sem
+- id: load_sem_indirect_path
+  text: "The indirect path is the one we wanted all along..."
+  tags: [causal_overreach, story_first]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_sobel_pass
+  text: "Sobel test marginal. The mediator stays in the story."
+  tags: [p_hacking, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+  mascot_state_affinity: [anxious]
+
+- id: load_sem_direct_softened
+  text: "Direct effect dropped to a hedge after adding the mediator..."
+  tags: [post_hoc, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_path_diagram
+  text: "Drafting the path diagram in the supplement..."
+  tags: [narrative, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+# wls
+- id: load_wls_sigma_trend
+  text: "Variance trend fitted from the absolute residuals. Standard."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_weights_floor
+  text: "Floor on the weights so the small residuals don't dominate..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_robust_se
+  text: "Reweighted. Standard errors now look reassuring."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+  mascot_state_affinity: [resolved]
+
+- id: load_wls_residual_fan
+  text: "The residual fan in the OLS plot is now mostly resolved..."
+  tags: [researcher_dof, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+# cor
+- id: load_cor_method_swap
+  text: "Switching from Pearson to Spearman in the right direction..."
+  tags: [p_hacking, model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_significant_again
+  text: "Bivariate correlation. Still significant. Still ours."
+  tags: [p_hacking, story_first]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [cor]
+  mascot_state_affinity: [resolved]
+
+- id: load_cor_kendall_robust
+  text: "Reporting Kendall's tau for robustness. The Pearson r is in the supplement..."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_ranks_only
+  text: "Ranks-only analysis stays defensible under any reviewer..."
+  tags: [researcher_dof, reviewer]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+# lm (the workhorse — these run regardless of upgrade picks)
+
+- id: load_lm_ols_again
+  text: "Ordinary least squares, again, with one fewer outlier..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_ftest_borderline
+  text: "F-test borderline. Reporting it as a trend."
+  tags: [p_hacking, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_r2_target
+  text: "R-squared finally cleared 0.20. Calling it explanatory."
+  tags: [p_hacking, story_first]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+  mascot_state_affinity: [resolved]
+
+- id: load_lm_residual_plot
+  text: "Residual plot looks acceptable from this distance..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_qq_squint
+  text: "QQ plot is fine if you squint."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_leverage_drop
+  text: "High-leverage point excluded as a pre-registered exclusion criterion..."
+  tags: [outlier_exclusion, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_cooks_quietly
+  text: "Cook's distance flagged a row. Quietly removed."
+  tags: [outlier_exclusion]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_dropterm_clean
+  text: "Dropping the term that wasn't pulling its weight..."
+  tags: [stepwise_abuse]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_addterm_clean
+  text: "Adding the predictor that the residuals were begging for..."
+  tags: [stepwise_abuse, post_hoc]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_intercept_only
+  text: "Comparing against the intercept-only null. Always wins."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_se_tightening
+  text: "Standard errors tightened after the third covariate joined the model..."
+  tags: [researcher_dof, p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_t_marginal
+  text: "t-statistic marginal. The coefficient sign is correct, which is what matters."
+  tags: [p_hacking, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_centering
+  text: "Centering predictors so the intercept means something publishable..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_log_transform
+  text: "Log-transforming the response so the residuals look normal-adjacent..."
+  tags: [researcher_dof, p_hacking]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_sqrt_transform
+  text: "Square-root transform applied. Variance now flatter, p-value now lower."
+  tags: [researcher_dof, p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_heteroscedastic_ignored
+  text: "Residual fan visible but reported as homoscedastic anyway..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [lm]
+  mascot_state_affinity: [anxious]
+
+- id: load_lm_anova_table
+  text: "Type III ANOVA table in case Type II didn't agree..."
+  tags: [researcher_dof, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_ci_softening
+  text: "Confidence interval narrowing after the second outlier exclusion..."
+  tags: [outlier_exclusion, p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_lmfit_quick
+  text: "Calling .lm.fit() because the formula already paid its dues..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_polynomial
+  text: "Adding a quadratic term so the fit hugs the points more closely..."
+  tags: [overfitting, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_robust_lm
+  text: "Robust regression in the appendix as a sensitivity check..."
+  tags: [researcher_dof, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+- id: load_lm_full_model
+  text: "Reporting the full model rather than the stepwise reduction. This time."
+  tags: [researcher_dof, model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [lm]
+
+# glm (the upgrade family — link/family swap shop)
+
+- id: load_glm_logit_chosen
+  text: "Logit link chosen. The probit version disagreed."
+  tags: [model_shopping, p_hacking]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_probit_attempted
+  text: "Probit link tried. Returned to logit for tradition."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_dichotomized_at_median
+  text: "Dichotomizing the continuous outcome at the median because the binary version is more readable..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+  mascot_state_affinity: [desperate]
+
+- id: load_glm_round_clip
+  text: "Rounding the response to the nearest integer so Poisson will accept it..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+  mascot_state_affinity: [desperate]
+
+- id: load_glm_poisson_default
+  text: "Poisson regression on counts, dispersion mentioned only in the supplement..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_quasi_poisson
+  text: "Quasi-Poisson invoked when the dispersion got embarrassing..."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_negbin_fallback
+  text: "Switching to negative binomial after Poisson over-dispersed..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_gamma_inverse
+  text: "Gamma family with inverse link. Picked because nobody questions Gamma."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_gamma_log
+  text: "Gamma family with log link. The interpretation is multiplicative now."
+  tags: [researcher_dof, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_binomial_continuous
+  text: "Binomial on a continuous response after a clean-feeling threshold..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+  mascot_state_affinity: [desperate]
+
+- id: load_glm_link_then_dist
+  text: "Choosing the link first and the distribution to match. As is tradition."
+  tags: [researcher_dof, model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_deviance_table
+  text: "Deviance table in lieu of an F-test. Reads cleaner."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_lrt_marginal
+  text: "Likelihood ratio test marginal. The model still earns a paragraph..."
+  tags: [p_hacking, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_pseudo_r2
+  text: "Reporting McFadden pseudo-R^2 because the actual fit was modest..."
+  tags: [researcher_dof, story_first]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_aic_swap
+  text: "AIC favours Poisson. BIC favours Gaussian. Going with the one we wrote first."
+  tags: [model_shopping, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_offset_added
+  text: "Adding an offset that absorbs the variation we didn't model..."
+  tags: [researcher_dof, omitted_variable]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_zero_inflated
+  text: "Zero-inflation considered. Footnoted instead of fitted."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_hosmer_lemeshow
+  text: "Hosmer-Lemeshow declined to fail. Reporting goodness-of-fit as adequate."
+  tags: [researcher_dof, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_logit_marginal
+  text: "Logit coefficient marginal but the odds ratio reads above 1.5..."
+  tags: [p_hacking, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_glm_then_lm
+  text: "Comparing the GLM against the OLS variant. Picking whichever gave a smaller p..."
+  tags: [model_shopping, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_separation
+  text: "Quasi-complete separation flagged. Penalised likelihood quietly used in its place..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+  mascot_state_affinity: [anxious]
+
+- id: load_glm_inverse_gaussian
+  text: "Inverse Gaussian family auditioned. Did not get the part."
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+- id: load_glm_link_inverse
+  text: "Inverse link applied so the coefficient sign reads in the right direction..."
+  tags: [researcher_dof, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glm]
+
+# cor (the give-up move when the regression goes nowhere)
+
+- id: load_cor_pearson_first
+  text: "Pearson r first because everyone reads Pearson..."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_spearman_then
+  text: "Spearman rho when Pearson disappointed..."
+  tags: [p_hacking, model_shopping]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_kendall_last
+  text: "Kendall tau when Spearman also disappointed..."
+  tags: [p_hacking, model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+  mascot_state_affinity: [desperate]
+
+- id: load_cor_one_pair
+  text: "Correlating just the two variables we cared about..."
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_correlation_matrix_scan
+  text: "Eyeballing the correlation matrix for anything that crossed 0.3..."
+  tags: [data_dredging, multiple_comparisons]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_after_subset
+  text: "Bivariate correlation in the surviving subset finally cleared significance..."
+  tags: [subgroup_fishing, p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_marginal_two_sided
+  text: "Two-sided p marginal. Reporting one-sided because the direction was predicted."
+  tags: [p_hacking, harking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_robust_to_outliers
+  text: "Reporting Spearman as robust-to-outliers. Pearson stays in the supplement..."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_partial
+  text: "Partial correlation controlling for the inconvenient variable..."
+  tags: [researcher_dof, omitted_variable]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_pearson_kendall_disagree
+  text: "Pearson significant. Kendall not. Going with Pearson because of n."
+  tags: [model_shopping, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_just_correlate
+  text: "Skipping the regression. Just reporting the correlation."
+  tags: [p_hacking, story_first]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [cor]
+  mascot_state_affinity: [desperate]
+
+- id: load_cor_r_in_abstract
+  text: "Putting the r in the abstract regardless of context..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_ci_bootstrap
+  text: "Bootstrapped confidence interval for r. Width as expected."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+- id: load_cor_log_first
+  text: "Log-transforming both axes before correlating..."
+  tags: [researcher_dof, p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [cor]
+
+# wls (the heteroscedasticity flex)
+
+- id: load_wls_two_stage
+  text: "Two-stage feasible WLS with sigma estimated from the OLS residuals..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_variance_function
+  text: "Variance function regressed on the same predictors. Standard practice."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_kept_two_outliers
+  text: "Down-weighting two influential rows so we don't have to drop them..."
+  tags: [outlier_exclusion, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_slope_unchanged
+  text: "Slope effectively unchanged after reweighting. Reporting it as robustness."
+  tags: [story_first, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+  mascot_state_affinity: [resolved]
+
+- id: load_wls_se_shrunk
+  text: "Standard errors shrank after reweighting. The p-value did the rest."
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_huber
+  text: "Huber-style weights mentioned in passing for credibility..."
+  tags: [researcher_dof, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_breusch_pagan_marginal
+  text: "Breusch-Pagan flagged heteroscedasticity. Reweighting fixed everything."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_white_se
+  text: "Reporting White-corrected standard errors as a sensitivity analysis..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_floor_chosen
+  text: "Floor on the weights set to keep the small residuals from dominating..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_iterated
+  text: "Iterating the WLS until the weight estimate stops moving..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_funnel_plot
+  text: "Funnel plot of residuals tighter after reweighting. Defensible."
+  tags: [researcher_dof, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_winsorize_then
+  text: "Winsorizing first and weighting after. Belt and braces."
+  tags: [outlier_exclusion, researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+- id: load_wls_ci_narrowed
+  text: "Confidence interval on the slope narrowed. The asterisk arrived."
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [wls]
+  mascot_state_affinity: [resolved]
+
+- id: load_wls_appendix_only
+  text: "Original OLS fit moved to the appendix to keep the main result clean..."
+  tags: [cherry_picking, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [wls]
+
+# gam (when the line stops smiling)
+
+- id: load_gam_smooth_for_x
+  text: "Adding s(x) for the predictor that wouldn't behave linearly..."
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_te_interaction
+  text: "Switching to te(x, y) so the interaction looks ecologically plausible..."
+  tags: [overfitting, story_first]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_thin_plate
+  text: "Thin-plate spline if cubic looks suspicious..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_k_increased
+  text: "Knot count bumped to k = 12 so the curve has room to bend in the right spots..."
+  tags: [overfitting, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_check_ignored
+  text: "gam.check() warned about k. Ignored on principle."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [gam]
+  mascot_state_affinity: [anxious]
+
+- id: load_gam_concurvity
+  text: "Concurvity flagged. Smoothed term retained for narrative reasons..."
+  tags: [researcher_dof, story_first]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_partial_effect_plot
+  text: "Partial-effect plot reads exactly as the discussion section needed it to..."
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+  mascot_state_affinity: [resolved]
+
+- id: load_gam_edf_one
+  text: "Effective degrees of freedom collapsed to ~1. Reported as 'nearly linear'."
+  tags: [researcher_dof, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_p_smooth
+  text: "p-value of the smooth term reads under 0.05. The wiggle is the finding."
+  tags: [p_hacking, narrative]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_reml_swap
+  text: "Switching from GCV to REML to make the fit look principled..."
+  tags: [model_shopping, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_curve_pulled
+  text: "Curve pulled toward the second cluster of points. Featured prominently in Figure 2..."
+  tags: [cherry_picking, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_lambda_low
+  text: "Smoothing parameter rolled toward zero. The curve interpolates honestly now."
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+- id: load_gam_intercept_centered
+  text: "Smooth centred at the mean so the intercept stays interpretable..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [gam]
+
+# glmm (the random-effect dignity move)
+
+- id: load_glmm_group_chosen
+  text: "Site chosen as the random-effect group. Could equally have been year..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_year_random
+  text: "Year promoted to random effect when the fixed-effect coefficient softened..."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_random_slope_added
+  text: "Random slope added in case the fixed slope was hiding heterogeneity..."
+  tags: [researcher_dof, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_random_slope_dropped
+  text: "Random slope removed after the model failed to converge..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+  mascot_state_affinity: [anxious]
+
+- id: load_glmm_lrt_boundary
+  text: "Variance component on the boundary. Halving the chi-squared and reporting it anyway..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_icc_high
+  text: "ICC reads 0.42. Hierarchy was the right move all along."
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+  mascot_state_affinity: [resolved]
+
+- id: load_glmm_groups_three
+  text: "Three groups is enough for a random effect. Reviewers rarely count groups..."
+  tags: [researcher_dof, reviewer]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_blup_inspected
+  text: "Inspecting the BLUPs in case any group looked publishably extreme..."
+  tags: [data_dredging, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_satterthwaite
+  text: "Switching to Satterthwaite degrees of freedom for friendlier p-values..."
+  tags: [p_hacking, model_shopping]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_kenward_roger
+  text: "Kenward-Roger correction in the supplement to look thorough..."
+  tags: [researcher_dof, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_nested
+  text: "Nesting site within region because the diagram demanded a hierarchy..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+- id: load_glmm_singular_fit
+  text: "Singular fit warning. Removing the warning, keeping the fit."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+  mascot_state_affinity: [desperate]
+
+- id: load_glmm_fixed_held
+  text: "Fixed-effect estimate barely moved. Reporting it as robust to grouping structure..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [glmm]
+
+# sem (the mediation move — single mediator path model)
+
+- id: load_sem_single_mediator
+  text: "Single-mediator path X to M to Y because three boxes always look causal..."
+  tags: [causal_overreach, narrative]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_a_path_strong
+  text: "a-path coefficient strong. The mediator clearly responds to the treatment..."
+  tags: [causal_overreach, story_first]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_b_path_marginal
+  text: "b-path marginal. Reporting the indirect effect anyway."
+  tags: [p_hacking, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_c_prime_shrank
+  text: "Direct effect shrank when the mediator entered the model. Calling it full mediation."
+  tags: [causal_overreach, story_first]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]
+  mascot_state_affinity: [resolved]
+
+- id: load_sem_partial_mediation
+  text: "Direct effect held some weight. Calling it partial mediation."
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_sobel_se_high
+  text: "Sobel standard error inflated. Switching to bootstrap intervals quietly..."
+  tags: [p_hacking, model_shopping]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_bootstrap_ci
+  text: "Bootstrapped confidence interval for ab clears zero. The mediator stays."
+  tags: [p_hacking, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_path_diagram_polish
+  text: "Polishing the path diagram so the arrows feel inevitable..."
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_mediator_swapped
+  text: "Mediator swapped for the candidate that gave a cleaner indirect path..."
+  tags: [model_shopping, p_hacking]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]
+  mascot_state_affinity: [desperate]
+
+- id: load_sem_controls_added
+  text: "Controls added to the M and Y equations so the path stays defensible..."
+  tags: [researcher_dof, omitted_variable]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_baron_kenny
+  text: "Baron-Kenny criteria invoked because reviewers know the names..."
+  tags: [causal_overreach, narrative, reviewer]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_indirect_in_abstract
+  text: "Indirect effect promoted to the abstract sentence..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_chain_extended
+  text: "Considered extending to a serial mediator chain. Reviewer 2 might love that."
+  tags: [causal_overreach, narrative]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_reverse_arrow
+  text: "Tested the reverse-arrow specification. Did not enjoy it. Removed."
+  tags: [cherry_picking, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_unmeasured_confounder
+  text: "Footnoting unmeasured confounding so the path estimate looks honest..."
+  tags: [omitted_variable, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+  model_family_affinity: [sem]
+
+- id: load_sem_full_path_model
+  text: "Full path model in the supplement with everything pointing the right way..."
+  tags: [causal_overreach, story_first]
+  rarity: rare
+  trigger_phase: loading
+  model_family_affinity: [sem]

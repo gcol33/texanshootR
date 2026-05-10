@@ -195,7 +195,7 @@ trigger_optional_stopping <- function(run, meta) {
 }
 
 trigger_all_outputs <- function(run, meta) {
-  required <- c("manuscript", "preprint", "reviewer_response",
+  required <- c("manuscript", "reviewer_response",
                 "graphical_abstract", "funding", "presentation")
   outs <- run$outputs_generated %||% character()
   all(required %in% outs)
@@ -206,11 +206,14 @@ trigger_filename_archaeologist <- function(run, meta) {
             fixed = TRUE))
 }
 
-trigger_collider <- function(run, meta) {
-  isTRUE(run$collider_conditioned)
+trigger_visible_panic <- function(run, meta) {
+  # Peak emotional state of "panicked" or worse at any point in the run.
+  sev <- mascot_severity(run$peak_mascot %||% "composed")
+  sev >= mascot_severity("panicked")
 }
 
-trigger_omitted_variable <- function(run, meta) {
-  length(run$highlighted_spec$dropped %||% character()) >= 1L &&
-    isTRUE(run$omitted_variable_flagged)
+trigger_begging_the_wall <- function(run, meta) {
+  # Peak hit "desperate" — either ran out the clock or escalated.
+  sev <- mascot_severity(run$peak_mascot %||% "composed")
+  sev >= mascot_severity("desperate")
 }

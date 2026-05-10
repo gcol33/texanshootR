@@ -6,6 +6,7 @@
   tags: [p_hacking]
   rarity: common
   trigger_phase: blip
+  model_family_affinity: [cor]
   combo_chain:
     start: corr_caus
     next: ~
@@ -78,6 +79,7 @@
   tags: [overfitting]
   rarity: common
   trigger_phase: blip
+  model_family_affinity: [gam]
 
 - id: blip_pruning
   text: "pruning..."
@@ -155,12 +157,14 @@
   tags: [researcher_dof]
   rarity: common
   trigger_phase: blip
+  model_family_affinity: [wls]
 
 - id: blip_weighting
   text: "weighting..."
   tags: [researcher_dof]
   rarity: common
   trigger_phase: blip
+  model_family_affinity: [wls]
 
 - id: blip_predicting
   text: "predicting..."
@@ -407,6 +411,7 @@
   tags: [researcher_dof]
   rarity: common
   trigger_phase: blip
+  model_family_affinity: [wls]
 
 - id: blip_recurving
   text: "recurving..."
@@ -509,6 +514,7 @@
   tags: [story_first]
   rarity: uncommon
   trigger_phase: blip
+  model_family_affinity: [wls]
 
 - id: blip_redirecting
   text: "redirecting..."
@@ -611,12 +617,14 @@
   tags: [researcher_dof]
   rarity: common
   trigger_phase: blip
+  model_family_affinity: [glm]
 
 - id: blip_probit
   text: "probit..."
   tags: [researcher_dof]
   rarity: uncommon
   trigger_phase: blip
+  model_family_affinity: [glm]
 
 - id: blip_decentering
   text: "decentering..."
@@ -671,6 +679,7 @@
   tags: [overfitting]
   rarity: uncommon
   trigger_phase: blip
+  model_family_affinity: [gam]
 
 - id: blip_searching
   text: "searching..."
@@ -1713,3 +1722,903 @@
   rarity: uncommon
   trigger_phase: blip
   mascot_state_affinity: [anxious]
+
+# --- gam-flavored blips --------------------------------------------------
+
+- id: blip_gam_basis
+  text: "s(x) basis..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_edf_47
+  text: "edf = 4.7"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_edf_82
+  text: "edf = 8.2"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_knots
+  text: "knot at q₃..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_wiggling
+  text: "wiggling..."
+  tags: [overfitting]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_lambda
+  text: "λ chosen by GCV"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+# --- glmm-flavored blips -------------------------------------------------
+
+- id: blip_glmm_random_intercept
+  text: "(1 | group)"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_sigma_b
+  text: "σ_b² = 0.31"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_pooling
+  text: "partial pooling..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_shrinking
+  text: "shrinking..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_varying
+  text: "varying intercepts..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_icc
+  text: "ICC = 0.18"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+# --- sem-flavored blips --------------------------------------------------
+
+- id: blip_sem_indirect
+  text: "indirect path..."
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_via
+  text: "via mediator..."
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_sobel
+  text: "Sobel z = 2.18"
+  tags: [p_hacking, causal_overreach]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [sem]
+  mascot_state_affinity: [resolved]
+
+- id: blip_sem_ab
+  text: "a × b ≠ 0"
+  tags: [causal_overreach]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_tracing
+  text: "tracing path..."
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_full_mediation
+  text: "full mediation."
+  tags: [causal_overreach, story_first]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [sem]
+  mascot_state_affinity: [resolved]
+
+# --- wls-flavored blips --------------------------------------------------
+
+- id: blip_wls_sigma_trend
+  text: "σ trend..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_inv_var
+  text: "1/σ² weights..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_hetero
+  text: "heteroscedastic..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_downweight
+  text: "down-weighting fat tails..."
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_residual_fan
+  text: "residual fan-out..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_robust_se
+  text: "robust SEs."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+  mascot_state_affinity: [resolved]
+
+# --- cor-flavored blips --------------------------------------------------
+
+- id: blip_cor_pearson
+  text: "Pearson r..."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_spearman
+  text: "Spearman ρ..."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_kendall
+  text: "Kendall τ..."
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_rank
+  text: "rank-correlating..."
+  tags: [p_hacking]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_r_value
+  text: "r = 0.31"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_taub
+  text: "τ-b adjustment..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+# --- lm-flavored blips ---------------------------------------------------
+
+- id: blip_lm_ols
+  text: "OLS..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_lmfit
+  text: ".lm.fit()"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_qr
+  text: "QR step..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_residuals
+  text: "residuals..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_r2_22
+  text: "R² = 0.22"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_r2_31
+  text: "R² = 0.31"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+  mascot_state_affinity: [resolved]
+
+- id: blip_lm_f_318
+  text: "F = 3.18"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_f_447
+  text: "F = 4.47"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+  mascot_state_affinity: [resolved]
+
+- id: blip_lm_t_207
+  text: "t = 2.07"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_intercept
+  text: "intercept..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_anova
+  text: "ANOVA III"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_qq
+  text: "QQ..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_leverage
+  text: "leverage..."
+  tags: [outlier_exclusion]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_cooks
+  text: "Cook's D"
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_dropterm
+  text: "dropterm()"
+  tags: [stepwise_abuse]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_addterm
+  text: "addterm()"
+  tags: [stepwise_abuse]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_se_drop
+  text: "SE shrinking..."
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+- id: blip_lm_centered
+  text: "centered"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [lm]
+
+# --- glm-flavored blips --------------------------------------------------
+
+- id: blip_glm_logit
+  text: "logit"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_probit
+  text: "probit?"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_or_18
+  text: "OR = 1.8"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+  mascot_state_affinity: [resolved]
+
+- id: blip_glm_log_link
+  text: "log link"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_dichotomize
+  text: "dichotomizing..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glm]
+  mascot_state_affinity: [desperate]
+
+- id: blip_glm_round_clip
+  text: "round-clipping..."
+  tags: [researcher_dof, p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glm]
+  mascot_state_affinity: [desperate]
+
+- id: blip_glm_pseudo_r2
+  text: "pseudo-R² = 0.18"
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_deviance
+  text: "deviance..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_lrt
+  text: "LRT..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_dispersion
+  text: "φ = 1.4"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_overdispersed
+  text: "over-dispersed..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+  mascot_state_affinity: [anxious]
+
+- id: blip_glm_negbin
+  text: "neg-bin..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_offset
+  text: "+ offset()"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_gamma_inv
+  text: "Γ inverse"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_aic_swap
+  text: "ΔAIC = 1.2"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+- id: blip_glm_separation
+  text: "separation..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glm]
+  mascot_state_affinity: [anxious]
+
+- id: blip_glm_link_swap
+  text: "link swap..."
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glm]
+
+# --- cor-flavored blips (extra) -----------------------------------------
+
+- id: blip_cor_pair_only
+  text: "x ~ y only"
+  tags: [cherry_picking]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_partial
+  text: "partial r"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_one_sided
+  text: "one-sided p"
+  tags: [p_hacking, harking]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_bootstrap
+  text: "boot CI"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_log_log
+  text: "log-log..."
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_matrix_scan
+  text: "scanning matrix..."
+  tags: [data_dredging]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_again
+  text: "rho again..."
+  tags: [model_shopping]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_just_r
+  text: "just r"
+  tags: [story_first]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [cor]
+  mascot_state_affinity: [desperate]
+
+- id: blip_cor_42
+  text: "r = 0.42"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+  mascot_state_affinity: [resolved]
+
+- id: blip_cor_058
+  text: "r = 0.58"
+  tags: [p_hacking]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [cor]
+  mascot_state_affinity: [resolved]
+
+- id: blip_cor_subset_r
+  text: "subset r..."
+  tags: [subgroup_fishing]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [cor]
+
+- id: blip_cor_no_regression
+  text: "no regression"
+  tags: [story_first]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [cor]
+  mascot_state_affinity: [desperate]
+
+# --- wls-flavored blips (extra) -----------------------------------------
+
+- id: blip_wls_two_stage
+  text: "stage 2..."
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_var_func
+  text: "Var(σ²|x)"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_floor
+  text: "weight floor"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_iterated
+  text: "iterating w..."
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_white
+  text: "White SE"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_huber
+  text: "Huber w"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_bp_marginal
+  text: "BP marginal"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_funnel
+  text: "funnel tight"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_winsor
+  text: "winsor first"
+  tags: [outlier_exclusion]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_ci_narrow
+  text: "CI narrowed"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+  mascot_state_affinity: [resolved]
+
+- id: blip_wls_resid_flat
+  text: "resid flat"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+- id: blip_wls_kept_outlier
+  text: "kept outlier"
+  tags: [outlier_exclusion]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [wls]
+
+# --- gam-flavored blips (extra) -----------------------------------------
+
+- id: blip_gam_te_xy
+  text: "te(x, y)"
+  tags: [overfitting]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_thin_plate
+  text: "thin-plate"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_k_12
+  text: "k = 12"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_reml
+  text: "REML pick"
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_check_warn
+  text: "check() warned"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [gam]
+  mascot_state_affinity: [anxious]
+
+- id: blip_gam_concurv
+  text: "concurvity!"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_partial_eff
+  text: "partial effect"
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_p_smooth
+  text: "p_smooth = 0.04"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+  mascot_state_affinity: [resolved]
+
+- id: blip_gam_edf_11
+  text: "edf = 1.1"
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+- id: blip_gam_lambda_low
+  text: "λ → 0"
+  tags: [overfitting]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [gam]
+
+# --- glmm-flavored blips (extra) ----------------------------------------
+
+- id: blip_glmm_one_year
+  text: "(1 | year)"
+  tags: [researcher_dof]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_random_slope
+  text: "(x | site)"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_singular
+  text: "singular fit"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+  mascot_state_affinity: [desperate]
+
+- id: blip_glmm_blup
+  text: "BLUPs..."
+  tags: [data_dredging]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_sat
+  text: "Satterthwaite"
+  tags: [model_shopping]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_kr
+  text: "Kenward-Roger"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_nested
+  text: "site/region"
+  tags: [researcher_dof]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_three_groups
+  text: "G = 3"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+- id: blip_glmm_icc_42
+  text: "ICC = 0.42"
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+  mascot_state_affinity: [resolved]
+
+- id: blip_glmm_lrt_boundary
+  text: "boundary χ²"
+  tags: [researcher_dof]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [glmm]
+
+# --- sem-flavored blips (extra) -----------------------------------------
+
+- id: blip_sem_a_path
+  text: "a-path 0.41"
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_b_path
+  text: "b-path 0.27"
+  tags: [causal_overreach]
+  rarity: common
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_c_prime
+  text: "c' shrank"
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_full_med
+  text: "fully mediated"
+  tags: [causal_overreach, story_first]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [sem]
+  mascot_state_affinity: [resolved]
+
+- id: blip_sem_partial_med
+  text: "partial mediation"
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_boot
+  text: "boot CI clear"
+  tags: [p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_swap_mediator
+  text: "swap mediator..."
+  tags: [model_shopping]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [sem]
+  mascot_state_affinity: [desperate]
+
+- id: blip_sem_baron_kenny
+  text: "Baron & Kenny"
+  tags: [causal_overreach, narrative]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_serial_chain
+  text: "X → M1 → M2 → Y"
+  tags: [causal_overreach]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_arrows
+  text: "arrows pointing..."
+  tags: [story_first]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_supp_diagram
+  text: "supp diagram"
+  tags: [story_first, narrative]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_unmeasured
+  text: "unmeasured U"
+  tags: [omitted_variable]
+  rarity: rare
+  trigger_phase: blip
+  model_family_affinity: [sem]
+
+- id: blip_sem_indirect_strong
+  text: "ab > 0.10"
+  tags: [causal_overreach, p_hacking]
+  rarity: uncommon
+  trigger_phase: blip
+  model_family_affinity: [sem]
+  mascot_state_affinity: [resolved]

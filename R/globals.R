@@ -15,5 +15,9 @@ utils::globalVariables(c(
   "weight_final",
   # ggplot2 aesthetic columns referenced inside aes()
   "x",
-  "y"
+  "y",
+  # Rcpp-generated wrappers (R/RcppExports.R) — referenced from
+  # R/families.R via bare names through devtools::load_all().
+  "pls_gcv_cpp",
+  "lmm_profile_cpp"
 ))

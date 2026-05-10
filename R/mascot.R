@@ -1,12 +1,22 @@
-# Mascot module.
+# The shooter — the package's protagonist.
 #
-# Two layers of animation:
+# Every `shoot()` call is one of his runs. His emotional state is the
+# spine the rest of the system hangs off: it drives the TUI face, the
+# achievement triggers, the print() banner on `tx_run`, and the run
+# arc summary recorded on disk. Treat this file as the protagonist's
+# state machine, not a rendering helper.
+#
+# Two layers of animation render that state:
 #   1. EMOTIONAL STATE (slow): face changes on `mascot_state` transitions
-#      driven by run progress + best p-value. Five states: composed,
-#      uncertain, anxious, desperate, resolved.
+#      driven by run progress + best p-value. Seven states: composed,
+#      uncertain, worried, anxious, panicked, desperate, resolved.
 #   2. HEARTBEAT (fast): tiny 8-frame cycle on the gun line, ticked
 #      every ~300 ms. The point is to feel alive, not theatrical.
 #      Movement is one or two characters, never a full redraw.
+#
+# Severity ordering (`MASCOT_SEVERITY`) tracks the worst face hit
+# during a run; that peak is what survives onto the run record as
+# `peak_mascot` and feeds the panic / desperation achievements.
 #
 # All non-ASCII characters (faces, heartbeat frames) live in
 # inst/ascii/ so this source file remains ASCII-only and CRAN-portable.
@@ -32,6 +42,21 @@ mascot_state <- function(progress, best_p = NA_real_, escalating = FALSE) {
   if (progress >= 0.40) return("worried")
   if (progress >= 0.20) return("uncertain")
   "composed"
+}
+
+# Severity ordering used to track the peak emotional state of a run.
+# "resolved" is the publishable outcome and isn't an emotional peak,
+# so it's not on the ladder.
+MASCOT_SEVERITY <- c(composed = 0L, uncertain = 1L, worried = 2L,
+                     anxious = 3L, panicked = 4L, desperate = 5L)
+
+mascot_severity <- function(state) {
+  v <- MASCOT_SEVERITY[state]
+  if (is.na(v)) 0L else as.integer(v)
+}
+
+severity_to_state <- function(sev) {
+  names(MASCOT_SEVERITY)[match(sev, MASCOT_SEVERITY)] %||% "composed"
 }
 
 # -- Heartbeat --------------------------------------------------------

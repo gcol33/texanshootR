@@ -59,7 +59,7 @@ The tier-to-function mapping:
 | Tier              | Unlocks                                                    |
 |-------------------|------------------------------------------------------------|
 | Junior Researcher | `shoot()`, `career()`, `achievements()`, `wardrobe()`, `run_log()`, `progress()`, resets |
-| Postdoc           | `manuscript()`, `preprint()`                               |
+| Postdoc           | `manuscript()`                                             |
 | Senior Scientist  | `reviewer_response()`, `graphical_abstract()`, `presentation()` |
 | PI                | `funding()`                                                |
 
@@ -88,7 +88,6 @@ reached, the call works the same way for every generator:
 
 ```{r}
 manuscript(run)
-preprint(run)
 reviewer_response(run)
 graphical_abstract(run)
 presentation(run)

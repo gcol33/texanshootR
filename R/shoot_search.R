@@ -1,111 +1,175 @@
-# Build the forking-paths search grid.
+# Stateful, opportunistic spec generator.
 #
-# Every dimension maps to a row in the fallacy/mechanic contract:
+# The shooter does not enumerate a clean cartesian product. He starts
+# from a small seed pool (one spec per predictor subset, identity
+# transforms, no perturbations) and then drifts toward whatever subset
+# is producing the most encouraging p-values. Subsets that go cold
+# get abandoned. Near-misses (best_p in (0.05, 0.20]) get re-perturbed
+# along the other four dimensions. A wildcard is injected periodically
+# to keep him moving when nothing is pulsing.
+#
+# This is desperation, not exploration. Each fork in the search is the
+# shooter trying one more thing because the last thing was almost.
+#
+# Mechanic-to-fallacy contract (unchanged):
 #   subsets       = data dredging / multiple comparisons
 #   transforms    = researcher degrees of freedom
 #   interactions  = p-hacking
 #   outliers      = outlier exclusion
 #   subgroups     = subgroup fishing
-#
-# A "spec" is a (predictor_subset, transform_map, interaction_set,
-# outlier_seed, subgroup_seed) tuple. The grid is generated lazily so
-# we can cap by `budget * per_spec_seconds` without enumerating
-# everything up front.
 
-build_search_grid <- function(df, outcome, predictors,
-                              max_subset_size = 4L,
-                              transform_set = c("identity", "log", "sqrt", "scale"),
-                              interaction_top_k = 3L,
-                              outlier_seeds = c("none", "leverage_top_5pct", "random_5pct"),
-                              subgroup_seeds = c("none", "halves_a", "halves_b"),
-                              cap = 5000L) {
+NEAR_MISS_RANGE       <- c(0.05, 0.20)
+DEAD_AFTER_TRIES      <- 5L
+DEAD_P_THRESHOLD      <- 0.5
+WILDCARD_EVERY        <- 10L
+PERTURBATIONS_PER_HIT <- 3L
+PERTURB_KINDS         <- c("transform", "interaction", "outlier", "subgroup")
 
+new_spec <- function(subset,
+                     transforms    = NULL,
+                     interactions  = character(),
+                     outlier_seed  = "none",
+                     subgroup_seed = "none",
+                     source        = "seed",
+                     family        = list(fitter = "lm")) {
+  if (is.null(transforms)) {
+    transforms <- stats::setNames(rep("identity", length(subset)), subset)
+  }
+  list(subset        = subset,
+       transforms    = transforms,
+       interactions  = interactions,
+       outlier_seed  = outlier_seed,
+       subgroup_seed = subgroup_seed,
+       source        = source,
+       family        = family)
+}
+
+subset_key <- function(spec) paste(sort(spec$subset), collapse = ",")
+
+# Initial pool: one identity-only spec per non-empty subset of size 1..k,
+# in random order so the shooter doesn't grind methodically.
+seed_specs <- function(df, outcome, predictors, max_subset_size = 4L) {
   predictors <- intersect(predictors, names(df))
   predictors <- setdiff(predictors, outcome)
-
-  is_num <- vapply(predictors, function(p) is.numeric(df[[p]]), logical(1))
-  numeric_preds <- predictors[is_num]
-
-  # Predictor subsets: 1..k combinations, capped.
+  if (length(predictors) == 0L) return(list())
   ks <- seq_len(min(max_subset_size, length(predictors)))
-  subset_list <- list()
+  specs <- list()
   for (k in ks) {
     if (length(predictors) >= k) {
       combs <- utils::combn(predictors, k, simplify = FALSE)
-      subset_list <- c(subset_list, combs)
-    }
-  }
-  subset_list <- utils::head(subset_list, max(1L, cap %/% 4L))
-
-  # Transformation maps: per-numeric-predictor choice from transform_set.
-  # To keep the grid bounded we sample, not enumerate, the cartesian
-  # product. One identity map plus a handful of perturbations per subset.
-  transform_maps <- function(numeric_in_subset) {
-    if (length(numeric_in_subset) == 0L) return(list(stats::setNames(character(), character())))
-    out <- list(stats::setNames(rep("identity", length(numeric_in_subset)), numeric_in_subset))
-    for (t in transform_set[-1]) {
-      m <- stats::setNames(rep("identity", length(numeric_in_subset)), numeric_in_subset)
-      m[1] <- t
-      out[[length(out) + 1L]] <- m
-    }
-    out
-  }
-
-  # Top-k pairwise interactions, by univariate effect strength.
-  interaction_candidates <- top_interactions(df, outcome, numeric_preds,
-                                              top_k = interaction_top_k)
-
-  grid <- list()
-  for (subset in subset_list) {
-    in_subset_num <- intersect(subset, numeric_preds)
-    tmaps <- transform_maps(in_subset_num)
-    ints <- list(character())
-    for (cand in interaction_candidates) {
-      if (all(cand %in% subset)) {
-        ints[[length(ints) + 1L]] <- paste(cand, collapse = ":")
+      for (s in combs) {
+        specs[[length(specs) + 1L]] <- new_spec(s, source = "seed")
       }
     }
-    for (tm in tmaps) {
-      for (it in ints) {
-        for (oseed in outlier_seeds) {
-          for (gseed in subgroup_seeds) {
-            grid[[length(grid) + 1L]] <- list(
-              subset = subset,
-              transforms = tm,
-              interactions = it,
-              outlier_seed = oseed,
-              subgroup_seed = gseed
-            )
-            if (length(grid) >= cap) break
-          }
-          if (length(grid) >= cap) break
-        }
-        if (length(grid) >= cap) break
-      }
-      if (length(grid) >= cap) break
-    }
-    if (length(grid) >= cap) break
   }
-
-  grid
+  specs[sample.int(length(specs))]
 }
 
-# Identify the top-k pairwise interactions ranked by the absolute
-# bivariate correlation of the product term with the outcome. Cheap
-# proxy for which interactions are worth including in the search.
-top_interactions <- function(df, outcome, numeric_preds, top_k = 3L) {
-  if (length(numeric_preds) < 2L) return(list())
-  y <- df[[outcome]]
-  if (!is.numeric(y)) return(list())
-  pairs <- utils::combn(numeric_preds, 2L, simplify = FALSE)
-  scores <- vapply(pairs, function(p) {
-    prod <- df[[p[1]]] * df[[p[2]]]
-    if (sd(prod, na.rm = TRUE) == 0) return(0)
-    abs(stats::cor(prod, y, use = "complete.obs"))
-  }, numeric(1))
-  ord <- order(scores, decreasing = TRUE)
-  ord <- ord[seq_len(min(top_k, length(ord)))]
-  pairs[ord]
+# Perturb a single dimension of an existing spec. Used both for
+# near-miss follow-ups and for assembling wildcards.
+perturb_spec <- function(spec, kind, df, outcome) {
+  s <- spec
+  s$source <- paste0("perturb_", kind)
+  if (kind == "transform") {
+    nums <- intersect(s$subset, names(df))
+    nums <- nums[vapply(nums, function(p) is.numeric(df[[p]]), logical(1))]
+    if (length(nums)) {
+      var <- if (length(nums) == 1L) nums else sample(nums, 1L)
+      s$transforms[[var]] <- sample(c("log", "sqrt", "scale"), 1L)
+    }
+  } else if (kind == "interaction" && length(s$subset) >= 2L) {
+    pair <- sample(s$subset, 2L)
+    s$interactions <- unique(c(s$interactions,
+                               paste(sort(pair), collapse = ":")))
+  } else if (kind == "outlier") {
+    s$outlier_seed <- sample(c("leverage_top_5pct", "random_5pct"), 1L)
+  } else if (kind == "subgroup") {
+    s$subgroup_seed <- sample(c("halves_a", "halves_b"), 1L)
+  }
+  s
+}
+
+# Random subset + 1-3 random perturbations. Injected when the search
+# stalls or periodically to keep things flailing.
+wildcard_spec <- function(df, outcome, predictors, max_subset_size = 4L) {
+  predictors <- intersect(predictors, names(df))
+  predictors <- setdiff(predictors, outcome)
+  if (length(predictors) == 0L) return(NULL)
+  k_max <- min(max_subset_size, length(predictors))
+  k <- if (k_max == 1L) 1L else sample.int(k_max, 1L)
+  subset <- if (length(predictors) == k) predictors
+            else sample(predictors, k)
+  s <- new_spec(subset, source = "wildcard")
+  kinds <- sample(PERTURB_KINDS, size = sample.int(3L, 1L))
+  for (kk in kinds) s <- perturb_spec(s, kk, df, outcome)
+  s$source <- "wildcard"
+  s
+}
+
+new_search_state <- function(seeds) {
+  list(
+    seed_queue     = seeds,
+    perturb_queue  = list(),
+    dead_subsets   = character(),
+    subset_results = list()
+  )
+}
+
+# Update state with the just-completed fit: append p-value to the
+# subset's history; if the subset is in the near-miss band, enqueue a
+# few perturbations of THIS spec; if the subset has gone stone cold,
+# abandon it.
+record_result <- function(state, spec, result, df, outcome) {
+  if (is.null(result)) return(state)
+  key <- subset_key(spec)
+  ps  <- c(state$subset_results[[key]] %||% numeric(),
+           result$p_value %||% NA_real_)
+  state$subset_results[[key]] <- ps
+
+  best_p <- suppressWarnings(min(ps, na.rm = TRUE))
+  if (!is.finite(best_p)) best_p <- NA_real_
+
+  if (is.finite(best_p) &&
+      best_p > NEAR_MISS_RANGE[1] && best_p <= NEAR_MISS_RANGE[2]) {
+    kinds <- sample(PERTURB_KINDS, size = PERTURBATIONS_PER_HIT)
+    for (kk in kinds) {
+      state$perturb_queue[[length(state$perturb_queue) + 1L]] <-
+        perturb_spec(spec, kk, df, outcome)
+    }
+  }
+
+  if (length(ps) >= DEAD_AFTER_TRIES &&
+      all(is.na(ps) | ps > DEAD_P_THRESHOLD)) {
+    state$dead_subsets <- unique(c(state$dead_subsets, key))
+  }
+  state
+}
+
+# Decide what to fit next. Priority: scheduled wildcard tick > pending
+# perturbation > next live seed. Falls back to a wildcard when seeds
+# are exhausted, so the loop can run to budget instead of stopping
+# politely.
+next_spec <- function(state, df, outcome, predictors,
+                      iteration, max_subset_size = 4L) {
+  if (iteration > 0L && iteration %% WILDCARD_EVERY == 0L) {
+    return(list(state = state,
+                spec  = wildcard_spec(df, outcome, predictors,
+                                      max_subset_size)))
+  }
+  if (length(state$perturb_queue)) {
+    spec <- state$perturb_queue[[1L]]
+    state$perturb_queue <- state$perturb_queue[-1L]
+    return(list(state = state, spec = spec))
+  }
+  while (length(state$seed_queue)) {
+    spec <- state$seed_queue[[1L]]
+    state$seed_queue <- state$seed_queue[-1L]
+    if (!(subset_key(spec) %in% state$dead_subsets)) {
+      return(list(state = state, spec = spec))
+    }
+  }
+  list(state = state,
+       spec  = wildcard_spec(df, outcome, predictors, max_subset_size))
 }
 
 # Apply transformations + outlier/subgroup seeds to a data frame and
@@ -113,7 +177,6 @@ top_interactions <- function(df, outcome, numeric_preds, top_k = 3L) {
 materialise_spec <- function(df, outcome, spec) {
   d <- df
 
-  # Transformations.
   for (var in names(spec$transforms)) {
     t <- spec$transforms[[var]]
     if (t == "identity") next
@@ -127,10 +190,7 @@ materialise_spec <- function(df, outcome, spec) {
     )
   }
 
-  # Outlier seeds.
   d <- apply_outlier_seed(d, outcome, spec$outlier_seed)
-
-  # Subgroup seeds.
   d <- apply_subgroup_seed(d, spec$subgroup_seed)
 
   rhs <- if (length(spec$subset) == 0L) "1"

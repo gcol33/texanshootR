@@ -11,11 +11,17 @@ new_tx_run <- function(...) {
 #' @method print tx_run
 print.tx_run <- function(x, ...) {
   rule <- strrep("-", 48)
+  hs   <- x$highlighted_spec
+  resolved <- !is.null(hs) && is.finite(hs$p_value %||% NA_real_) &&
+              hs$p_value <= 0.05
+  final_state <- if (resolved) "resolved" else (x$peak_mascot %||% "composed")
+  face <- tryCatch(read_face(final_state), error = function(e) "( o_o)")
+
   cat(style_header(rule), "\n", sep = "")
-  cat(style_header(sprintf("Run %s", x$run_id)), "\n", sep = "")
+  cat(style_header(sprintf("%s  %s", face, run_arc_summary(x, final_state))),
+      "\n", sep = "")
   cat(style_header(rule), "\n", sep = "")
   cat(sprintf("Specifications fit:    %d\n", x$spec_count %||% 0L))
-  hs <- x$highlighted_spec
   if (!is.null(hs)) {
     cat(sprintf("Highlighted formula:   %s\n", hs$formula %||% ""))
     cat(sprintf("Selected p-value:      %s\n",
@@ -35,6 +41,23 @@ print.tx_run <- function(x, ...) {
     }
   }
   invisible(x)
+}
+
+# One-line emotional summary of how the run went, from the shooter's
+# point of view. Used in the print() banner.
+run_arc_summary <- function(x, final_state) {
+  peak <- x$peak_mascot %||% "composed"
+  if (final_state == "resolved") {
+    if (peak %in% c("panicked", "desperate")) {
+      sprintf("%s -> resolved (last-minute)", peak)
+    } else {
+      "composed -> resolved"
+    }
+  } else if (isTRUE(x$derived_used)) {
+    "escalated to derived metrics"
+  } else {
+    sprintf("%s -- still aiming", peak)
+  }
 }
 
 #' @export

@@ -71,7 +71,6 @@ test_that("progress() returns a tx_progress overview object", {
   unlocked_fns <- vapply(obj$rows, function(r) r$unlocked, logical(1))
   names(unlocked_fns) <- fn_names
   expect_true(unlocked_fns[["manuscript"]])
-  expect_true(unlocked_fns[["preprint"]])
   expect_false(unlocked_fns[["presentation"]])
   expect_false(unlocked_fns[["funding"]])
   expect_true(is.numeric(obj$ach_unlocked))

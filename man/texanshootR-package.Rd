@@ -11,7 +11,7 @@ search. The main entry point is \code{\link[=shoot]{shoot()}}, which fits a batt
 candidate specifications across predictor subsets, transformations,
 interactions, and outlier-removal seeds. Persistent career state
 tracks run history, awards achievements, and unlocks output
-generators (\code{\link[=manuscript]{manuscript()}}, \code{\link[=preprint]{preprint()}}, \code{\link[=presentation]{presentation()}},
+generators (\code{\link[=manuscript]{manuscript()}}, \code{\link[=presentation]{presentation()}},
 \code{\link[=reviewer_response]{reviewer_response()}}, \code{\link[=graphical_abstract]{graphical_abstract()}}, \code{\link[=funding]{funding()}}).
 }
 \section{Persistence}{

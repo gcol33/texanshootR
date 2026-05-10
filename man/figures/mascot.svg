@@ -3,7 +3,7 @@
   <defs>
     <style>
       .bg    { fill: #0d1117; }
-      text   { font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, monospace; }
+      text   { font-family: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", Menlo, Consolas, "Nirmala UI", monospace; }
       .face  { fill: #c9d1d9; font-size: 22px; }
       .gun   { fill: #f0883e; font-size: 22px; }
       .stat  { font-size: 12px; }
@@ -120,5 +120,5 @@
     </text>
   </g>
 
-  <text class="dim" x="80" y="180">manuscript(run)   preprint(run)   funding(run)</text>
+  <text class="dim" x="80" y="180">manuscript(run)   presentation(run)   funding(run)</text>
 </svg>

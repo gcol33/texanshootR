@@ -5,7 +5,7 @@
 #' candidate specifications across predictor subsets, transformations,
 #' interactions, and outlier-removal seeds. Persistent career state
 #' tracks run history, awards achievements, and unlocks output
-#' generators ([manuscript()], [preprint()], [presentation()],
+#' generators ([manuscript()], [presentation()],
 #' [reviewer_response()], [graphical_abstract()], [funding()]).
 #'
 #' @section Persistence:
@@ -20,4 +20,6 @@
 #'
 #' @keywords internal
 #' @importFrom stats runif sd cor complete.cases na.omit model.frame
+#' @importFrom Rcpp evalCpp
+#' @useDynLib texanshootR, .registration = TRUE
 "_PACKAGE"

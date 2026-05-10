@@ -1,5 +1,11 @@
 # texanshootR 0.2.0 (planned)
 
+## Breaking changes
+
+* `preprint()` removed. The canonical output set is `manuscript()`,
+  `presentation()`, `graphical_abstract()`, `reviewer_response()`,
+  `funding()`. Manuscripts already cover the preprint use case.
+
 ## API unlocks
 
 The output generators are gated by career tier. Calling a locked function
@@ -9,7 +15,7 @@ save state.
 
 * Junior Researcher: `shoot()`, `career()`, `achievements()`, `wardrobe()`,
   `run_log()`, `progress()`, resets.
-* Postdoc: `manuscript()`, `preprint()`.
+* Postdoc: `manuscript()`.
 * Senior Scientist: `reviewer_response()`, `graphical_abstract()`,
   `presentation()`.
 * PI: `funding()`.
@@ -41,7 +47,7 @@ Initial release.
 * Consent-gated save dir under `tools::R_user_dir("texanshootR", "data")`.
 
 ## Output generators
-* `manuscript()`, `preprint()`, `presentation()`, `reviewer_response()`, `graphical_abstract()`, `funding()`.
+* `manuscript()`, `presentation()`, `reviewer_response()`, `graphical_abstract()`, `funding()`.
 * Default output dir is `tempdir()`; override with `output_dir =` or `options(texanshootR.output_dir = ...)`.
 
 ## Reset and configuration

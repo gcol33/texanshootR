@@ -41,10 +41,9 @@ reference:
   - wardrobe
   - progress
 - title: Output generators
-  desc: Turn a run into a manuscript, preprint, presentation, or other artefact.
+  desc: Turn a run into a manuscript, presentation, or other artefact.
   contents:
   - manuscript
-  - preprint
   - presentation
   - reviewer_response
   - graphical_abstract
