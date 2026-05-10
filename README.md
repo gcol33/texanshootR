@@ -7,23 +7,22 @@
 <!-- badges: end -->
 
 <p align="center">
-  <img src="man/figures/mascot.gif" alt="texanshootR mascot — a cowboy in a terminal cycling through composure, dread, and derived metrics as the p-value drops" width="480">
+  <img src="man/figures/mascot.svg" alt="texanshootR mascot — a sad cowboy in a terminal cycling through emotional states as the p-value drops" width="480">
 </p>
 
-> **Mission.** A reproducible audit trail for research that does not, in
-> retrospect, deserve one.
+> **Mission.** To contribute to dubious research and questionable p-values.
 >
-> *Publish or perish* reigns king. A lone shooter is here to help. He has
-> shot many barns. He will shoot yours.
+> In this day and age where *publish or perish* reigns king, a lone shooter
+> helps you out in your predicament.
 
-Every `shoot()` is one barn, one shooter, one budget. He starts composed —
-theory-led predictors, no transformations, a single honest model. By the
-fiftieth attempt he is uncertain, dropping a covariate, logging the response.
-By two hundred he is worried, excluding outliers and discovering subgroups.
-With the budget almost out he is desperate, escalating to a derived metric
-while the word *exploratory* works forty hours of overtime. Either
-`p ≤ 0.05` lands somewhere on the wall or it does not. There is a banner
-about it either way.
+The shooter starts composed. He fires at the side of a barn, then walks over
+and paints the target around the densest cluster of bullet holes. By attempt
+fifty he is uncertain. By two hundred he is worried. By the time the budget
+is almost out he is desperate, and he has just enough breath left to escalate
+to a derived metric. Either `p ≤ 0.05` lands somewhere on the wall or it does
+not. There is a banner about it either way.
+
+`texanshootR` is the loop. Every `shoot()` call is one of his runs.
 
 ## Quick start
 
@@ -220,7 +219,7 @@ MIT &copy; Gilles Colling. See [LICENSE](LICENSE).
 ```bibtex
 @software{texanshootR,
   author = {Colling, Gilles},
-  title  = {texanshootR: Roguelike-Themed Framework for Exploratory Model Search},
+  title  = {texanshootR: Reproducible Audit Trails for Indefensible Research},
   year   = {2026},
   url    = {https://github.com/gcol33/texanshootR}
 }

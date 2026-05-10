@@ -1,4 +1,4 @@
-#' texanshootR: Roguelike-Themed Framework for Exploratory Model Search
+#' texanshootR: Reproducible Audit Trails for Indefensible Research
 #'
 #' A structured, terminal-first interface for exploratory linear-model
 #' search. The main entry point is [shoot()], which fits a battery of

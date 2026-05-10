@@ -1,6 +1,6 @@
 Package: texanshootR
 Type: Package
-Title: Roguelike-Themed Framework for Exploratory Model Search
+Title: Reproducible Audit Trails for Indefensible Research
 Version: 0.1.0
 Authors@R: person("Gilles", "Colling", email = "gilles.colling051@gmail.com",
                   role = c("aut", "cre"),

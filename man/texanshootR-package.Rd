@@ -4,7 +4,7 @@
 \name{texanshootR-package}
 \alias{texanshootR}
 \alias{texanshootR-package}
-\title{texanshootR: Roguelike-Themed Framework for Exploratory Model Search}
+\title{texanshootR: Reproducible Audit Trails for Indefensible Research}
 \description{
 A structured, terminal-first interface for exploratory linear-model
 search. The main entry point is \code{\link[=shoot]{shoot()}}, which fits a battery of
