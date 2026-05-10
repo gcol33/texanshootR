@@ -4,22 +4,35 @@
 \alias{progress}
 \title{Inspect API unlock progress}
 \usage{
-progress(fn = NULL)
+progress(what = NULL)
 }
 \arguments{
-\item{fn}{Optional function name (string). If supplied, return the
-status for just that function.}
+\item{what}{Optional. A gated-function name (e.g. \code{"manuscript"}) or
+an achievement id (e.g. \code{"ach_multiple_comparisons"}). When NULL,
+prints the overview.}
 }
 \value{
 A \code{tx_progress} object (invisible).
 }
 \description{
-Prints a HUD-style summary of which gated functions are currently
-unlocked, which are locked, and what the next unlock requires. Reads
-live save state.
+Prints a HUD-style summary of unlock state for gated functions and
+achievements. Reads live save state.
 }
 \details{
+Three call modes:
+\itemize{
+\item \code{progress()} -- overview: career tier, gated-function lock
+map, achievement / wardrobe counts, and in-flight progress for
+achievements with public thresholds.
+\item \code{progress("manuscript")} -- per-function card for a gated
+function.
+\item \code{progress("ach_multiple_comparisons")} -- per-achievement
+card.
+}
+
 Pairs with the static unlock requirement printed in each gated
 function's help page (e.g. \code{?presentation}). The help page documents
-the requirement; \code{progress()} reports the live state.
+the requirement; \code{progress()} reports the live state. Career-tier
+distance stays opaque by design -- only qualitative tier names are
+surfaced, never the underlying score.
 }

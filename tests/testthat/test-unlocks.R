@@ -60,10 +60,11 @@ test_that("calling a locked generator raises tx_locked", {
   expect_error(funding(list()),      class = "tx_locked")
 })
 
-test_that("progress() returns a tx_progress object with current state", {
+test_that("progress() returns a tx_progress overview object", {
   set_career_level("Postdoc")
   obj <- expect_invisible(progress())
   expect_s3_class(obj, "tx_progress")
+  expect_equal(obj$mode, "overview")
   expect_equal(obj$current, "Postdoc")
   fn_names <- vapply(obj$rows, function(r) r$fn, character(1))
   expect_setequal(fn_names, names(texanshootR:::UNLOCK_REGISTRY))
@@ -73,16 +74,47 @@ test_that("progress() returns a tx_progress object with current state", {
   expect_true(unlocked_fns[["preprint"]])
   expect_false(unlocked_fns[["presentation"]])
   expect_false(unlocked_fns[["funding"]])
+  expect_true(is.numeric(obj$ach_unlocked))
+  expect_true(is.numeric(obj$ach_total))
+  expect_true(is.list(obj$inflight))
 })
 
-test_that("progress(fn = ...) restricts to one function", {
+test_that("progress(\"presentation\") returns a per-function card", {
   set_career_level("Junior Researcher")
   obj <- progress("presentation")
-  expect_length(obj$rows, 1L)
-  expect_equal(obj$rows[[1]]$fn, "presentation")
-  expect_false(obj$rows[[1]]$unlocked)
+  expect_equal(obj$mode, "function")
+  expect_equal(obj$fn, "presentation")
+  expect_equal(obj$required, "Senior Scientist")
+  expect_false(obj$unlocked)
 })
 
-test_that("progress(fn = bogus) errors", {
-  expect_error(progress("not_a_fn"), "not a gated function")
+test_that("progress(\"ach_*\") returns a per-achievement card", {
+  obj <- progress("ach_multiple_comparisons")
+  expect_equal(obj$mode, "achievement")
+  expect_equal(obj$id, "ach_multiple_comparisons")
+  expect_false(obj$unlocked)
+  expect_false(obj$hidden_locked)
+  expect_equal(obj$detail$need, 1000L)
+})
+
+test_that("progress(\"ach_*\") for a hidden-locked achievement masks the name", {
+  obj <- progress("ach_glimpse")
+  expect_equal(obj$mode, "achievement")
+  expect_true(obj$hidden_locked)
+  expect_equal(obj$name, "???")
+  expect_null(obj$detail)
+})
+
+test_that("progress(bogus) errors", {
+  expect_error(progress("not_a_thing"),
+                "not a gated function or achievement id")
+})
+
+test_that("in-flight progress excludes hidden achievements", {
+  set_career_level("Junior Researcher")
+  obj <- progress()
+  ids <- vapply(obj$inflight, `[[`, character(1), "id")
+  reg <- texanshootR:::load_achievement_registry()
+  visibilities <- reg$visible[match(ids, reg$id)]
+  expect_true(all(visibilities))
 })
