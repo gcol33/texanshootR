@@ -63,23 +63,24 @@ fit_spec <- function(df, outcome, spec) {
   )
 }
 
-# Highlighted-spec selection. Implements section6b near-miss bias: prefer
-# specs whose p-value falls in [0.045, 0.07], breaking ties to land
-# closest to 0.051. Among ties, take the highest R^2.
+# Highlighted-spec selection. Implements the just-cleared bias from
+# Brodeur, Cook & Heyes (2020): prefer specs whose p-value falls in
+# [0.040, 0.0499] - distinctly under the 0.05 line but visibly close.
+# Break ties to land closest to 0.045. Among ties, take the highest R^2.
 choose_highlight <- function(results) {
   results <- Filter(Negate(is.null), results)
   if (length(results) == 0L) return(NULL)
   ps <- vapply(results, function(r) r$p_value %||% NA_real_, numeric(1))
   r2 <- vapply(results, function(r) r$r_squared %||% NA_real_, numeric(1))
 
-  in_strip <- !is.na(ps) & ps >= 0.045 & ps <= 0.07
+  in_strip <- !is.na(ps) & ps >= 0.040 & ps < 0.050
   if (any(in_strip)) {
     cand <- which(in_strip)
-    dist <- abs(ps[cand] - 0.051)
+    dist <- abs(ps[cand] - 0.045)
     cand <- cand[order(dist, -r2[cand])]
     return(results[[cand[1]]])
   }
-  # No near-miss strip: take the smallest p with valid value.
+  # No just-cleared strip: take the smallest p with valid value.
   ord <- order(ps, na.last = TRUE)
   results[[ord[1]]]
 }

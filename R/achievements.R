@@ -114,9 +114,9 @@ trigger_aim_after_data <- function(run, meta) {
 }
 
 trigger_p_hacked <- function(run, meta) {
-  # Highlighted p in the [0.045, 0.052] strip.
+  # Highlighted p in the just-cleared [0.040, 0.0499] strip.
   p <- run$highlighted_spec$p_value %||% NA_real_
-  is.finite(p) && p >= 0.045 && p <= 0.052
+  is.finite(p) && p >= 0.040 && p < 0.050
 }
 
 trigger_harker <- function(run, meta) {
