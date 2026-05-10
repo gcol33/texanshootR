@@ -186,6 +186,8 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
   now <- as.numeric(Sys.time())
   meta <- read_meta()
   career <- (meta %||% list())$career_level %||% "Junior Researcher"
+  flavor <- daily_flavor()
+  tag_boost <- flavor$tag_boost
 
   # Best p so far, for mascot state.
   ps <- vapply(results, function(r) r$p_value %||% NA_real_, numeric(1))
@@ -209,7 +211,8 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
       career = career,
       mascot_state = m,
       recent = recent_ids(state$recent_buf),
-      combo_state = state$combo_state
+      combo_state = state$combo_state,
+      tag_boost = tag_boost
     )
     if (!is.null(draw)) {
       ui_blip(ui, draw$text)
@@ -227,7 +230,8 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
       career = career,
       mascot_state = m,
       recent = recent_ids(state$recent_buf),
-      combo_state = state$combo_state
+      combo_state = state$combo_state,
+      tag_boost = tag_boost
     )
     if (!is.null(draw)) {
       ui_loading(ui, draw$text)
@@ -236,6 +240,20 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
     }
     ui_progress(ui, progress, "narrative coherence")
     state$last_loading_at <- now
+  }
+
+  # Ultra-rare "Glimpse of Tenure": once per run at most, low-prob
+  # roll per heartbeat tick. Gated on ANSI + animations.
+  if (!isTRUE(state$ultra_rare_seen) &&
+      isTRUE(opt("texanshootR.animations")) &&
+      runif(1) < getOption("texanshootR.glimpse_rate", 1 / 1000)) {
+    ultra_rare_glimpse()
+    state$ultra_rare_seen <- TRUE
+    append_sighting(list(
+      run_seed  = state$seed,
+      timestamp = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
+      progress  = progress
+    ))
   }
 
   # Mascot transition message.
@@ -264,6 +282,8 @@ finalize_run <- function(state, df, outcome, predictors, results, grid,
                           state$modifiers$reviewer_resistance %||% 0)
   state$modifiers$reviewer_resistance <-
     (state$modifiers$reviewer_resistance %||% 0) + rev$resist_delta
+
+  flags <- detect_causal_flags(df, outcome, predictors, highlight)
 
   run_id <- format(state$started, "%Y%m%d-%H%M%S")
   search_summary <- list(
@@ -302,6 +322,8 @@ finalize_run <- function(state, df, outcome, predictors, results, grid,
     stopped_early     = state$stopped_early,
     resolved_at_progress = state$resolved_at_progress,
     ultra_rare_seen   = state$ultra_rare_seen,
+    collider_conditioned     = flags$collider_conditioned,
+    omitted_variable_flagged = flags$omitted_variable_flagged,
     outputs_generated = character(),
     outputs_generated_files = character()
   )
@@ -318,13 +340,7 @@ finalize_run <- function(state, df, outcome, predictors, results, grid,
   write_recent_buffer(state$recent_buf)
 
   # Achievement evaluation.
-  awarded <- evaluate_achievements(run, meta)
-  for (id in awarded) {
-    cosmetic <- load_achievement_registry()
-    cid <- cosmetic$cosmetic[cosmetic$id == id]
-    if (length(cid) && !is.na(cid)) auto_equip(cid)
-  }
-  run$achievements_awarded <- awarded
+  run$achievements_awarded <- award_and_equip(run, meta)
 
   if (open_tui) ui_session_close(ui)
 
@@ -334,6 +350,60 @@ finalize_run <- function(state, df, outcome, predictors, results, grid,
   }
 
   invisible(run)
+}
+
+# Heuristic detection for the parody's causal-overreach achievements.
+#
+# collider_conditioned: highlighted spec includes an interaction term
+#   AND the product of that pair is more strongly correlated with the
+#   outcome than either component alone. That's the textbook fingerprint
+#   of conditioning on a path that opens by including a descendant
+#   interaction.
+#
+# omitted_variable_flagged: at least one dropped predictor has |cor|
+#   with the outcome above the OMITTED_THRESHOLD - i.e., the spec
+#   pruned a variable that obviously matters.
+detect_causal_flags <- function(df, outcome, predictors, highlight) {
+  out <- list(collider_conditioned = FALSE,
+              omitted_variable_flagged = FALSE)
+  if (is.null(highlight)) return(out)
+  if (!(outcome %in% names(df)) || !is.numeric(df[[outcome]])) return(out)
+  y <- df[[outcome]]
+
+  # Collider: interaction terms in the highlighted formula.
+  formula_str <- highlight$formula %||% ""
+  rhs <- sub("^[^~]*~", "", formula_str)
+  int_terms <- regmatches(rhs, gregexpr("[A-Za-z_.][A-Za-z0-9_.]*\\s*:\\s*[A-Za-z_.][A-Za-z0-9_.]*", rhs))[[1]]
+  for (tm in int_terms) {
+    parts <- trimws(strsplit(tm, ":", fixed = TRUE)[[1]])
+    if (length(parts) != 2L) next
+    if (!all(parts %in% names(df))) next
+    a <- df[[parts[1]]]; b <- df[[parts[2]]]
+    if (!is.numeric(a) || !is.numeric(b)) next
+    prod <- a * b
+    if (sd(prod, na.rm = TRUE) == 0) next
+    cab <- abs(suppressWarnings(stats::cor(prod, y, use = "complete.obs")))
+    ca  <- abs(suppressWarnings(stats::cor(a, y, use = "complete.obs")))
+    cb  <- abs(suppressWarnings(stats::cor(b, y, use = "complete.obs")))
+    if (is.finite(cab) && is.finite(ca) && is.finite(cb) &&
+        cab > max(ca, cb) + 0.05) {
+      out$collider_conditioned <- TRUE
+      break
+    }
+  }
+
+  # Omitted variable: dropped predictor with strong marginal cor.
+  dropped <- highlight$dropped %||% character()
+  for (v in dropped) {
+    if (!(v %in% names(df))) next
+    if (!is.numeric(df[[v]])) next
+    cv <- abs(suppressWarnings(stats::cor(df[[v]], y, use = "complete.obs")))
+    if (is.finite(cv) && cv >= 0.40) {
+      out$omitted_variable_flagged <- TRUE
+      break
+    }
+  }
+  out
 }
 
 numeric_summary <- function(df) {

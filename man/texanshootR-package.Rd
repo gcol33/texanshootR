@@ -31,6 +31,7 @@ be replayed.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://gillescolling.com/texanshootR/}
   \item \url{https://github.com/gcol33/texanshootR}
   \item Report bugs at \url{https://github.com/gcol33/texanshootR/issues}
 }

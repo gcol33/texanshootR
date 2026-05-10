@@ -98,6 +98,20 @@ evaluate_achievements <- function(run, career_meta) {
   newly
 }
 
+# Run the evaluator and auto-equip cosmetics for any newly-awarded
+# achievements. Returns the awarded ids.
+award_and_equip <- function(run, career_meta) {
+  awarded <- evaluate_achievements(run, career_meta)
+  if (length(awarded)) {
+    reg <- load_achievement_registry()
+    for (id in awarded) {
+      cid <- reg$cosmetic[reg$id == id]
+      if (length(cid) && !is.na(cid) && nzchar(cid)) auto_equip(cid)
+    }
+  }
+  awarded
+}
+
 # -- Trigger functions ------------------------------------------------
 #
 # Each function takes (run, career_meta) and returns TRUE on unlock.

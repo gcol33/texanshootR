@@ -115,6 +115,8 @@ read_run_record <- function(run_id) {
 
 # Convert a tx_run object to a privacy-stripped record. We keep
 # variable *names* and *summary stats*, never the raw data frame.
+# Achievement-relevant flags are preserved so the record can be
+# re-evaluated when output generators run later.
 run_to_record <- function(run) {
   list(
     run_id            = run$run_id,
@@ -130,7 +132,17 @@ run_to_record <- function(run) {
     events            = run$events,
     modifiers         = run$modifiers,
     displayed_message_ids = run$displayed_message_ids,
-    grid_hash         = run$grid_hash
+    grid_hash         = run$grid_hash,
+    search            = run$search,
+    stopped_early     = run$stopped_early %||% FALSE,
+    resolved_at_progress = run$resolved_at_progress,
+    ultra_rare_seen   = isTRUE(run$ultra_rare_seen),
+    collider_conditioned     = isTRUE(run$collider_conditioned),
+    omitted_variable_flagged = isTRUE(run$omitted_variable_flagged),
+    harked            = isTRUE(run$harked),
+    outputs_generated = run$outputs_generated %||% character(),
+    outputs_generated_files = run$outputs_generated_files %||% character(),
+    achievements_awarded    = run$achievements_awarded %||% character()
   )
 }
 

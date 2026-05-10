@@ -19,6 +19,7 @@ select_message <- function(phase,
                            mascot_state = NULL,
                            recent = character(),
                            combo_state = NULL,
+                           tag_boost = NULL,
                            registry = NULL) {
   reg <- registry %||% load_message_registry()
   if (nrow(reg) == 0L) return(NULL)
@@ -77,6 +78,14 @@ select_message <- function(phase,
   if (!is.null(combo_state)) {
     boost <- !is.na(candidates$combo_next) & candidates$combo_next == combo_state
     w[boost] <- w[boost] * 10
+  }
+
+  # 4b. Daily-flavor tag boost: 3x weight for entries carrying any of
+  #     the boosted tags (e.g. Tabulation Tuesday boosts `p_hacking`).
+  if (!is.null(tag_boost) && length(tag_boost)) {
+    has_boost <- vapply(candidates$tags,
+                        function(t) any(t %in% tag_boost), logical(1))
+    w[has_boost] <- w[has_boost] * 3
   }
 
   if (sum(w) == 0) return(NULL)

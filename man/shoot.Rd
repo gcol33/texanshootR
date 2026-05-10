@@ -28,7 +28,7 @@ interactive, opens the three-zone TUI and renders progress;
 when \code{FALSE}, the search runs silently.}
 
 \item{escalate}{Logical. Allow the derived-metric escalation phase
-when the main search produces no spec with p ≤ 0.05. Defaults to
+when the main search produces no spec with p <= 0.05. Defaults to
 \code{TRUE}; the package leans into the parody.}
 
 \item{depth}{\code{"default"} for the full search; \code{"demo"} for a

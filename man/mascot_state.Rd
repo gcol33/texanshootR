@@ -16,8 +16,8 @@ or \code{NA} if none.}
 currently active.}
 }
 \value{
-One of \code{"composed"}, \code{"uncertain"}, \code{"anxious"},
-\code{"desperate"}, \code{"resolved"}.
+One of \code{"composed"}, \code{"uncertain"}, \code{"worried"}, \code{"anxious"},
+\code{"panicked"}, \code{"desperate"}, \code{"resolved"}.
 }
 \description{
 Compute the mascot emotional state for a run snapshot.

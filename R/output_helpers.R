@@ -39,7 +39,8 @@ status_close <- function() {
 }
 
 # Track that a run produced a given output. Updates the per-run record
-# on disk so achievements like `trigger_all_outputs` can fire.
+# on disk and re-evaluates achievements so output-driven triggers (HARK,
+# all-outputs, filename archaeologist, publication pipeline) can fire.
 record_output <- function(run, output_name, file) {
   d <- save_dir()
   if (is.null(d)) return(invisible())
@@ -48,6 +49,15 @@ record_output <- function(run, output_name, file) {
   rec <- readRDS(fpath)
   rec$outputs_generated       <- unique(c(rec$outputs_generated %||% character(), output_name))
   rec$outputs_generated_files <- unique(c(rec$outputs_generated_files %||% character(), basename(file)))
+
+  # Carry over runtime-set flags from the in-memory run (e.g. `harked`
+  # is set by manuscript() before this call). The on-disk record is
+  # what evaluate_achievements() reads.
+  for (k in c("harked", "collider_conditioned", "omitted_variable_flagged",
+              "stopped_early", "resolved_at_progress", "ultra_rare_seen")) {
+    v <- run[[k]]
+    if (!is.null(v)) rec[[k]] <- v
+  }
   saveRDS(rec, fpath)
 
   meta <- read_meta()
@@ -55,6 +65,7 @@ record_output <- function(run, output_name, file) {
     meta$hidden$output_complexity <- (meta$hidden$output_complexity %||% 0) +
       output_complexity_score(output_name)
     write_meta(meta)
+    award_and_equip(rec, meta)
   }
   invisible()
 }
