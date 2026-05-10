@@ -7,9 +7,7 @@
 .RData
 .Ruserdata
 
-# pkgdown / docs
-docs/
-_pkgdown.yml
+# pkgdown built site is tracked for GitHub Pages (legacy mode)
 
 # OS / editor
 .DS_Store

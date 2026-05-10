@@ -1,0 +1,8 @@
+bibentry(
+  bibtype = "Manual",
+  title   = "texanshootR: Roguelike-Themed Framework for Exploratory Model Search",
+  author  = person("Gilles", "Colling"),
+  year    = "2026",
+  note    = sprintf("R package version %s", meta$Version),
+  url     = "https://github.com/gcol33/texanshootR"
+)

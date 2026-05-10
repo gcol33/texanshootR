@@ -11,3 +11,6 @@
 ^MESSAGE_SCHEMA\.md$
 ^CONTRIBUTING\.md$
 ^dev_smoke\.R$
+^build_site\.R$
+^texanshootR_.*\.tar\.gz$
+^.*\.Rcheck$

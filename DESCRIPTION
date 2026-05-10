@@ -13,7 +13,7 @@ Description: Provides a structured, terminal-first interface for
     presentation, funding letter, graphical abstract, reviewer
     response) are included.
 License: MIT + file LICENSE
-URL: https://github.com/gcol33/texanshootR
+URL: https://gillescolling.com/texanshootR/, https://github.com/gcol33/texanshootR
 BugReports: https://github.com/gcol33/texanshootR/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

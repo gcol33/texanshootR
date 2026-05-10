@@ -1,0 +1,77 @@
+url: https://gillescolling.com/texanshootR/
+template:
+  bootstrap: 5
+  light-switch: yes
+  bslib:
+    primary: '#5b8def'
+    base_font:
+      google: Inter
+    heading_font:
+      google: Inter
+    code_font:
+      google: JetBrains Mono
+  includes:
+    in_header: pkgdown/mathjax-config.html
+home:
+  title: texanshootR
+  description: A roguelike-themed framework for exploratory linear-model search in
+    R.
+navbar:
+  structure:
+    left:
+    - intro
+    - reference
+    - articles
+    - news
+    right:
+    - search
+    - github
+    - lightswitch
+reference:
+- title: Run a search
+  desc: Fit a battery of candidate specifications and inspect the result.
+  contents:
+  - shoot
+  - run_log
+- title: Persistent career
+  desc: Inspect career state, achievements, cosmetics.
+  contents:
+  - career
+  - achievements
+  - wardrobe
+- title: Output generators
+  desc: Turn a run into a manuscript, preprint, presentation, or other artefact.
+  contents:
+  - manuscript
+  - preprint
+  - presentation
+  - reviewer_response
+  - graphical_abstract
+  - funding
+- title: Resets and configuration
+  contents:
+  - reset_career
+  - reset_achievements
+  - reset_wardrobe
+  - reset_all
+  - '`texanshootR-options`'
+- title: Internals
+  desc: Vocabulary inspection and message-pack validation.
+  contents:
+  - validate_messages
+  - vocab_careers
+  - vocab_effects
+  - vocab_mascot_states
+  - vocab_phases
+  - vocab_tags
+articles:
+- title: Articles
+  navbar: ~
+  contents: getting-started
+figures:
+  dev: svglite
+  fig.ext: svg
+  bg: '#F5F6F8'
+  fig.width: 7.2916667
+  fig.height: 4.5
+  dpi: 100
