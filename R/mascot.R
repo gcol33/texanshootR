@@ -20,15 +20,17 @@
 #'   or `NA` if none.
 #' @param escalating Logical: is the derived-metric escalation phase
 #'   currently active.
-#' @return One of `"composed"`, `"uncertain"`, `"anxious"`,
-#'   `"desperate"`, `"resolved"`.
+#' @return One of `"composed"`, `"uncertain"`, `"worried"`, `"anxious"`,
+#'   `"panicked"`, `"desperate"`, `"resolved"`.
 #' @keywords internal
 mascot_state <- function(progress, best_p = NA_real_, escalating = FALSE) {
   if (!is.na(best_p) && best_p <= 0.05) return("resolved")
   if (isTRUE(escalating)) return("desperate")
-  if (progress >= 0.95) return("desperate")
-  if (progress >= 0.66) return("anxious")
-  if (progress >= 0.33) return("uncertain")
+  if (progress >= 0.90) return("desperate")
+  if (progress >= 0.75) return("panicked")
+  if (progress >= 0.55) return("anxious")
+  if (progress >= 0.40) return("worried")
+  if (progress >= 0.20) return("uncertain")
   "composed"
 }
 
@@ -65,7 +67,9 @@ read_face <- function(state) {
     switch(state,
       composed  = "( o_o)",
       uncertain = "( -_- )",
+      worried   = "( o_o;)",
       anxious   = "( o_o;)",
+      panicked  = "(>_<;)",
       desperate = "( O_O )",
       resolved  = "( -_-)",
       "( o_o)")
@@ -81,16 +85,7 @@ read_body_template <- function() {
   body <- if (nzchar(f) && file.exists(f)) {
     readLines(f, warn = FALSE)
   } else {
-    c(
-      "        _____",
-      "       /_____\\",
-      "   ___|_______|___",
-      "       {FACE} {GUN}",
-      "        /| |\\",
-      "        |* *|",
-      "        | | |",
-      "       d/   \\b"
-    )
+    "{FACE} {GUN}"
   }
   .tx$mascot_body <- body
   body
@@ -102,11 +97,18 @@ apply_cosmetics <- function(lines, cosmetics) {
   if (is.null(cosmetics)) return(lines)
   registry <- load_cosmetic_registry()
 
+  # The face line is whichever line contains the rendered face. Locate
+  # it by finding a line wider than the bare {FACE} placeholder; in the
+  # current minimalist body that's the only line.
+  face_idx <- which(grepl("[(<{\\[]", lines, perl = TRUE))[1]
+  if (is.na(face_idx)) face_idx <- length(lines)
+
   hat <- cosmetics$equipped$hat
   if (!is.na(hat)) {
     spec <- registry[registry$id == hat & registry$slot == "hat", ]
     if (nrow(spec) == 1L) {
       lines <- c(spec$overlay[[1]], lines)
+      face_idx <- face_idx + length(spec$overlay[[1]])
     }
   }
 
@@ -114,26 +116,23 @@ apply_cosmetics <- function(lines, cosmetics) {
   if (!is.na(badge)) {
     spec <- registry[registry$id == badge & registry$slot == "badge", ]
     if (nrow(spec) == 1L) {
-      face_idx <- 3L
-      if (length(lines) >= face_idx) {
-        lines[face_idx] <- paste0(lines[face_idx], " ", spec$overlay[[1]][1])
-      }
+      lines[face_idx] <- paste0(lines[face_idx], " ", spec$overlay[[1]][1])
     }
   }
 
   cloak <- cosmetics$equipped$cloak
   if (!is.na(cloak)) {
     spec <- registry[registry$id == cloak & registry$slot == "cloak", ]
-    if (nrow(spec) == 1L && length(lines) >= 5L) {
-      lines[length(lines)] <- spec$overlay[[1]][1]
+    if (nrow(spec) == 1L) {
+      lines <- c(lines, spec$overlay[[1]][1])
     }
   }
 
   poncho <- cosmetics$equipped$poncho
   if (!is.na(poncho)) {
     spec <- registry[registry$id == poncho & registry$slot == "poncho", ]
-    if (nrow(spec) == 1L && length(lines) >= 5L) {
-      lines[5] <- spec$overlay[[1]][1]
+    if (nrow(spec) == 1L) {
+      lines <- c(lines, spec$overlay[[1]][1])
     }
   }
 
@@ -141,10 +140,7 @@ apply_cosmetics <- function(lines, cosmetics) {
   if (!is.na(lanyard)) {
     spec <- registry[registry$id == lanyard & registry$slot == "lanyard", ]
     if (nrow(spec) == 1L) {
-      face_idx <- 3L
-      if (length(lines) >= face_idx) {
-        lines[face_idx] <- paste0(lines[face_idx], " ", spec$overlay[[1]][1])
-      }
+      lines[face_idx] <- paste0(lines[face_idx], " ", spec$overlay[[1]][1])
     }
   }
 
