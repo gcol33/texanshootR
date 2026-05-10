@@ -9,6 +9,7 @@
   hint: "Complete your first shoot()."
   reveal_text: "First Submission — A career begins."
   trigger: trigger_first_run
+  cosmetic: cosmetic_badge_orcid
 
 - id: ach_aim_after_data
   name: "Texas Sharpshooter"
@@ -52,6 +53,7 @@
   hint: "Highlight a result after dropping inconvenient observations."
   reveal_text: "Robustness Check — Result holds with informative subset."
   trigger: trigger_outlier_excluder
+  cosmetic: cosmetic_poncho_lab
 
 - id: ach_overfitter
   name: "High Fit Quality"
@@ -99,6 +101,7 @@
   hint: ~
   reveal_text: "Event Survivor — Three life events witnessed across the career."
   trigger: trigger_event_survivor
+  cosmetic: cosmetic_lanyard_esa
 
 - id: ach_reviewer_repeller
   name: "???"
@@ -113,6 +116,7 @@
   hint: ~
   reveal_text: "The Glimpse of Tenure — A sliver of something definite."
   trigger: trigger_glimpse
+  cosmetic: cosmetic_cloak_nature
 
 - id: ach_optional_stopping
   name: "???"

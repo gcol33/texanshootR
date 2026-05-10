@@ -23,7 +23,7 @@
   slot: poncho
   ascii_overlay: |
     /=====\
-  unlock_via: ~
+  unlock_via: ach_outlier_excluder
 
 - id: cosmetic_badge_oa
   slot: badge
@@ -33,7 +33,7 @@
 - id: cosmetic_badge_orcid
   slot: badge
   ascii_overlay: "[iD]"
-  unlock_via: ~
+  unlock_via: ach_first_run
 
 - id: cosmetic_lanyard_neurips
   slot: lanyard
@@ -43,7 +43,7 @@
 - id: cosmetic_lanyard_esa
   slot: lanyard
   ascii_overlay: "♦"
-  unlock_via: ~
+  unlock_via: ach_event_survivor
 
 - id: cosmetic_cloak_bayesian
   slot: cloak
@@ -55,4 +55,4 @@
   slot: cloak
   ascii_overlay: |
     /  N  \
-  unlock_via: ~
+  unlock_via: ach_glimpse
