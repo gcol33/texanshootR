@@ -34,10 +34,9 @@ exclusions, and subgroup splits — and surfaces the most defensible result. If
 nothing clears `p ≤ 0.05`, the run escalates to derived metrics, which is what
 you would have done anyway. There is now a banner about it.
 
-The TUI is optional (`theatrical = FALSE`). Every run is deterministic given a
-seed, and the seed, R version, package version, and a hash of the search grid
-are recorded on the returned object — so the *audit trail* is honest even when
-the *intent* is not.
+Every run is deterministic given a seed, and the seed, R version, package
+version, and a hash of the search grid are recorded on the returned object —
+so the *audit trail* is honest even when the *intent* is not.
 
 ## Outputs
 

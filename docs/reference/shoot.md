@@ -11,9 +11,7 @@ highlighted specification.
 shoot(
   df,
   formula = NULL,
-  budget = 40,
   seed = NULL,
-  theatrical = TRUE,
   escalate = TRUE,
   depth = c("default", "demo"),
   ...
@@ -31,25 +29,16 @@ shoot(
   Optional formula. When `NULL`, the first numeric column is used as the
   outcome and all other columns as predictors.
 
-- budget:
-
-  Wall-clock seconds to spend. Sweet spot: 30–50.
-
 - seed:
 
   Integer seed. When `NULL`, a random seed is generated and stored on
   the returned run.
 
-- theatrical:
-
-  Logical. When `TRUE` and the session is interactive, opens the
-  three-zone TUI and renders progress; when `FALSE`, the search runs
-  silently.
-
 - escalate:
 
   Logical. Allow the derived-metric escalation phase when the main
-  search produces no spec with p ≤ 0.05.
+  search produces no spec with p \<= 0.05. Defaults to `TRUE`; the
+  package leans into the parody.
 
 - depth:
 

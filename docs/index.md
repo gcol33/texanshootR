@@ -1,95 +1,79 @@
 # texanshootR
 
+![texanshootR mascot — a sad cowboy in a terminal cycling through
+emotional states as the p-value drops](reference/figures/mascot.svg)
+
+> **Mission.** To contribute to dubious research and questionable
+> p-values.
+>
+> In this day and age where *publish or perish* reigns king, a lone
+> shooter helps you out in your predicament.
+
 A roguelike-themed framework for exploratory linear-model search in R.
 
-## Quick Start
+## Quick start
 
 ``` r
 
 library(texanshootR)
 
-run <- shoot(mtcars, budget = 30)
+run <- shoot(mtcars)
 print(run)
 summary(run)
 ```
 
-A single call to
+The Texas sharpshooter fires at the side of a barn, then walks over and
+paints the target around the densest cluster of bullet holes.
 [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
-fits a battery of candidate specifications across predictor subsets,
-transformations, interactions, and outlier-removal seeds, returning a
-`tx_run` with the highlighted specification, the search summary, and any
-life events that fired.
+automates the firing — across predictor subsets, transformations,
+interactions, outlier exclusions, and subgroup splits — and surfaces the
+most defensible result. If nothing clears `p ≤ 0.05`, the run escalates
+to derived metrics, which is what you would have done anyway. There is
+now a banner about it.
 
-## What it does
+Every run is deterministic given a seed, and the seed, R version,
+package version, and a hash of the search grid are recorded on the
+returned object — so the *audit trail* is honest even when the *intent*
+is not.
 
-[`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
-runs an exploratory search across a parameterised grid of candidate
-specifications and surfaces the most defensible one. Around that engine,
-the package layers a persistent career, an achievement registry, ASCII
-cosmetics, and six output generators that turn a run into something
-shippable: a manuscript skeleton, a preprint, a slide deck, a
-reviewer-response letter, a graphical abstract, or a funding letter.
+## Outputs
 
-The TUI is optional (`theatrical = FALSE`) and the search itself is
-deterministic given a seed, with the seed, R version, package version,
-and a hash of the search grid recorded on every run.
-
-## Installation
+A finished run is a `tx_run`. Six generators turn it into something
+shippable:
 
 ``` r
 
-# Development version
-# install.packages("pak")
-pak::pak("gcol33/texanshootR")
-```
-
-## Features
-
-### Search
-
-``` r
-
-run <- shoot(mtcars, formula = mpg ~ ., budget = 30, seed = 42)
-run_log()                          # full history of recorded runs
-```
-
-- [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md):
-  search across subsets, transforms, interactions, outlier-removal
-  seeds, subgroup seeds.
-- `depth = "demo"`: single-fit smoke test for CRAN-safe examples.
-- `escalate = TRUE`: derived-metric escalation when no spec passes p ≤
-  0.05.
-
-### Outputs
-
-``` r
-
-manuscript(run)
-preprint(run)
-presentation(run)
-graphical_abstract(run)
-reviewer_response(run)
-funding(run)
+manuscript(run)         # IMRaD draft, Methods that match the *winning* spec
+preprint(run)           # arXiv-flavoured, with the limitations section pre-hedged
+presentation(run)       # 8-slide deck (slide 7 contains the only honest figure)
+graphical_abstract(run) # the figure your PI will retweet
+reviewer_response(run)  # opens with "we thank the reviewer for their thoughtful comments"
+funding(run)            # the next grant, citing the just-shipped finding
 ```
 
 Each writes to [`tempdir()`](https://rdrr.io/r/base/tempfile.html) by
 default and returns the file path invisibly. Override with
 `output_dir =` or `options(texanshootR.output_dir = ...)`.
 
-### Career, achievements, cosmetics
+## Career, achievements, cosmetics
+
+Every run feeds a persistent profile, because the joke does not work
+without progression.
 
 ``` r
 
-career()        # level, runs, favorite method, opaque scores
-achievements()  # registry of unlocked + still-hidden achievements
-wardrobe()      # equipped cosmetic slots
+career()        # level, runs, favourite method, opaque scores
+achievements()  # 20 unlockable badges; hidden ones show as ???
+wardrobe()      # equipped cosmetic slots (hat, badge, cloak, poncho, lanyard)
 ```
 
 State persists under `tools::R_user_dir("texanshootR", "data")`. The
-first interactive save prompts before writing. Opt out with
-`options(texanshootR.save_enabled = FALSE)`.
+first interactive save prompts before writing anything to disk. Opt out
+entirely with `options(texanshootR.save_enabled = FALSE)`.
 
-### Reset
+## Reset
+
+For when the simulation ends and you would like a new one:
 
 ``` r
 
@@ -97,6 +81,14 @@ reset_career(force = TRUE)
 reset_achievements(force = TRUE)
 reset_wardrobe(force = TRUE)
 reset_all(force = TRUE)
+```
+
+## Installation
+
+``` r
+
+# install.packages("pak")
+pak::pak("gcol33/texanshootR")
 ```
 
 ## Documentation
@@ -108,6 +100,19 @@ reset_all(force = TRUE)
   Schema](https://gillescolling.com/texanshootR/MESSAGE_SCHEMA.md)
 - [Contributing](https://gillescolling.com/texanshootR/CONTRIBUTING.md)
 
+## Further reading
+
+This package is a parody. The phenomenon it parodies is not.
+
+Brodeur, A., Cook, N. and Heyes, A. (2020). *Methods Matter: P-Hacking
+and Publication Bias in Causal Analysis in Economics.* **American
+Economic Review** 110(11): 3634–60.
+<https://doi.org/10.1257/aer.20190687>
+
+If [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
+feels uncomfortably close to a real workflow, that paper is a better
+starting point than the achievement registry.
+
 ## Support
 
 > “Where is the money, Lebowski?” — The Big Lebowski
@@ -116,8 +121,8 @@ I’m a PhD student who builds R packages in my free time because I
 believe good tools should be free and open. I started these projects for
 my own work and figured others might find them useful too.
 
-If this package saved you some time, buying me a coffee is a nice way to
-say thanks. It helps with my coffee addiction.
+If this package saved you some time — or pre-empted a fit of overfitting
+— buying me a coffee is a nice way to say thanks.
 
 [![Buy Me A
 Coffee](https://img.shields.io/badge/-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/gcol33)

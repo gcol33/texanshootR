@@ -26,3 +26,9 @@ reviewer_response(run, output_dir = NULL, file = NULL, force = FALSE)
 - force:
 
   Overwrite an existing file.
+
+## Details
+
+Unlock requirement: **Senior Scientist**. See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
+for live state.

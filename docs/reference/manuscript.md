@@ -33,3 +33,9 @@ manuscript(run, output_dir = NULL, file = NULL, force = FALSE)
 ## Value
 
 Character vector of file paths (invisible).
+
+## Details
+
+Unlock requirement: **Postdoc**. See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
+for live state.

@@ -10,9 +10,6 @@
 #'   column is used as the outcome and all other columns as predictors.
 #' @param seed Integer seed. When `NULL`, a random seed is generated
 #'   and stored on the returned run.
-#' @param theatrical Logical. When `TRUE` and the session is
-#'   interactive, opens the three-zone TUI and renders progress;
-#'   when `FALSE`, the search runs silently.
 #' @param escalate Logical. Allow the derived-metric escalation phase
 #'   when the main search produces no spec with p <= 0.05. Defaults to
 #'   `TRUE`; the package leans into the parody.
@@ -25,7 +22,6 @@
 shoot <- function(df,
                   formula    = NULL,
                   seed       = NULL,
-                  theatrical = TRUE,
                   escalate   = TRUE,
                   depth      = c("default", "demo"),
                   ...) {
@@ -41,7 +37,7 @@ shoot <- function(df,
   predictors <- parsed$predictors
 
   ui   <- NULL
-  open_tui <- isTRUE(theatrical) && interactive() && depth != "demo"
+  open_tui <- interactive() && depth != "demo"
   if (open_tui) ui <- ui_session_open()
 
   # Internal pacing. Theatrical runs are wall-clock paced so the show

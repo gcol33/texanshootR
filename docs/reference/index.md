@@ -11,7 +11,7 @@ Fit a battery of candidate specifications and inspect the result.
 
 ## Persistent career
 
-Inspect career state, achievements, cosmetics.
+Inspect career state, achievements, cosmetics, and unlock progress.
 
 - [`career()`](https://gillescolling.com/texanshootR/reference/career.md)
   : Inspect career state
@@ -19,6 +19,8 @@ Inspect career state, achievements, cosmetics.
   : Inspect the achievement registry
 - [`wardrobe()`](https://gillescolling.com/texanshootR/reference/wardrobe.md)
   : Inspect or modify the mascot wardrobe
+- [`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
+  : Inspect API unlock progress
 
 ## Output generators
 

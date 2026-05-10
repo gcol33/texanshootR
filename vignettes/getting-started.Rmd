@@ -23,7 +23,7 @@ exploratory linear-model search. The main entry point is `shoot()`.
 ```{r}
 library(texanshootR)
 
-run <- shoot(mtcars, theatrical = FALSE)
+run <- shoot(mtcars)
 print(run)
 summary(run)
 ```

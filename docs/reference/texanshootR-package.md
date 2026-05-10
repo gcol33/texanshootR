@@ -30,6 +30,8 @@ package version, and search-grid hash so past runs can be replayed.
 
 Useful links:
 
+- <https://gillescolling.com/texanshootR/>
+
 - <https://github.com/gcol33/texanshootR>
 
 - Report bugs at <https://github.com/gcol33/texanshootR/issues>

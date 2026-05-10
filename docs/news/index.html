@@ -56,6 +56,20 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="texanshootr-020-planned">texanshootR 0.2.0 (planned)<a class="anchor" aria-label="anchor" href="#texanshootr-020-planned"></a></h2>
+<div class="section level3">
+<h3 id="api-unlocks-0-2-0">API unlocks<a class="anchor" aria-label="anchor" href="#api-unlocks-0-2-0"></a></h3>
+<p>The output generators are gated by career tier. Calling a locked function returns a deadpan status block; the function is otherwise usable once the tier is reached. Unlocks are persistent across sessions via the existing save state.</p>
+<ul><li><p>Junior Researcher: <code><a href="../reference/shoot.html">shoot()</a></code>, <code><a href="../reference/career.html">career()</a></code>, <code><a href="../reference/achievements.html">achievements()</a></code>, <code><a href="../reference/wardrobe.html">wardrobe()</a></code>, <code><a href="../reference/run_log.html">run_log()</a></code>, <code><a href="../reference/progress.html">progress()</a></code>, resets.</p></li>
+<li><p>Postdoc: <code><a href="../reference/manuscript.html">manuscript()</a></code>, <code><a href="../reference/preprint.html">preprint()</a></code>.</p></li>
+<li><p>Senior Scientist: <code><a href="../reference/reviewer_response.html">reviewer_response()</a></code>, <code><a href="../reference/graphical_abstract.html">graphical_abstract()</a></code>, <code><a href="../reference/presentation.html">presentation()</a></code>.</p></li>
+<li><p>PI: <code><a href="../reference/funding.html">funding()</a></code>.</p></li>
+<li><p><code><a href="../reference/progress.html">progress()</a></code>: HUD-style companion to <code>?&lt;fn&gt;</code>. Reads live save state and prints which functions are unlocked, which are locked, and what the next unlock requires.</p></li>
+<li><p><code>require_unlocked()</code> (internal): single source of truth for gating. Signals a <code>tx_locked</code> condition so scripts fail loudly while interactive callers can <code>tryCatch(tx_locked = ...)</code>.</p></li>
+<li><p>Roxygen <code>@description</code> on each gated function carries the static unlock requirement, so <code><a href="../reference/presentation.html">?presentation</a></code> documents the tier even when the function is callable.</p></li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="texanshootr-010">texanshootR 0.1.0<a class="anchor" aria-label="anchor" href="#texanshootr-010"></a></h2>
 <p>Initial release.</p>
 <div class="section level3">

@@ -24,5 +24,5 @@ mascot_state(progress, best_p = NA_real_, escalating = FALSE)
 
 ## Value
 
-One of `"composed"`, `"uncertain"`, `"anxious"`, `"desperate"`,
-`"resolved"`.
+One of `"composed"`, `"uncertain"`, `"worried"`, `"anxious"`,
+`"panicked"`, `"desperate"`, `"resolved"`.

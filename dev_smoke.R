@@ -6,7 +6,7 @@ options(texanshootR.save_dir   = tempfile("tx-smoke-"),
         texanshootR.budget     = 20)
 suppressWarnings(devtools::load_all(quiet = TRUE))
 set.seed(7)
-run <- shoot(mtcars, theatrical = FALSE)
+run <- shoot(mtcars)
 cat("\nRUN OK, spec_count =", run$spec_count, "\n\n")
 print(run)
 cat("\n--- career ---\n")

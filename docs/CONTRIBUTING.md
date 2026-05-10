@@ -5,6 +5,9 @@ new life events, new achievements, new cosmetics. The package is built
 so that you can extend the corpus by dropping YAML into `inst/` without
 touching R source.
 
+By participating in this project you agree to abide by its [Code of
+Conduct](https://gillescolling.com/texanshootR/CODE_OF_CONDUCT.md).
+
 ## Adding messages
 
 1.  Read `MESSAGE_SCHEMA.md` end-to-end. The schema is the contract.

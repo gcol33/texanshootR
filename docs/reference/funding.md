@@ -26,3 +26,9 @@ funding(run, output_dir = NULL, file = NULL, force = FALSE)
 - force:
 
   Overwrite an existing file.
+
+## Details
+
+Unlock requirement: **PI**. See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
+for live state.

@@ -8,7 +8,6 @@ shoot(
   df,
   formula = NULL,
   seed = NULL,
-  theatrical = TRUE,
   escalate = TRUE,
   depth = c("default", "demo"),
   ...
@@ -22,10 +21,6 @@ column is used as the outcome and all other columns as predictors.}
 
 \item{seed}{Integer seed. When \code{NULL}, a random seed is generated
 and stored on the returned run.}
-
-\item{theatrical}{Logical. When \code{TRUE} and the session is
-interactive, opens the three-zone TUI and renders progress;
-when \code{FALSE}, the search runs silently.}
 
 \item{escalate}{Logical. Allow the derived-metric escalation phase
 when the main search produces no spec with p <= 0.05. Defaults to

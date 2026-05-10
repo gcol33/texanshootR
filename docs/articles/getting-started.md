@@ -10,7 +10,7 @@ exploratory linear-model search. The main entry point is
 
 library(texanshootR)
 
-run <- shoot(mtcars, theatrical = FALSE, budget = 5)
+run <- shoot(mtcars)
 print(run)
 summary(run)
 ```

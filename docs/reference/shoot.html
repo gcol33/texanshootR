@@ -74,9 +74,7 @@ highlighted specification.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">shoot</span><span class="op">(</span></span>
 <span>  <span class="va">df</span>,</span>
 <span>  formula <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  budget <span class="op">=</span> <span class="fl">40</span>,</span>
 <span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  theatrical <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  escalate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  depth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"default"</span>, <span class="st">"demo"</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -96,24 +94,15 @@ highlighted specification.</p>
 column is used as the outcome and all other columns as predictors.</p></dd>
 
 
-<dt id="arg-budget">budget<a class="anchor" aria-label="anchor" href="#arg-budget"></a></dt>
-<dd><p>Wall-clock seconds to spend. Sweet spot: 30–50.</p></dd>
-
-
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
 <dd><p>Integer seed. When <code>NULL</code>, a random seed is generated
 and stored on the returned run.</p></dd>
 
 
-<dt id="arg-theatrical">theatrical<a class="anchor" aria-label="anchor" href="#arg-theatrical"></a></dt>
-<dd><p>Logical. When <code>TRUE</code> and the session is
-interactive, opens the three-zone TUI and renders progress;
-when <code>FALSE</code>, the search runs silently.</p></dd>
-
-
 <dt id="arg-escalate">escalate<a class="anchor" aria-label="anchor" href="#arg-escalate"></a></dt>
 <dd><p>Logical. Allow the derived-metric escalation phase
-when the main search produces no spec with p ≤ 0.05.</p></dd>
+when the main search produces no spec with p &lt;= 0.05. Defaults to
+<code>TRUE</code>; the package leans into the parody.</p></dd>
 
 
 <dt id="arg-depth">depth<a class="anchor" aria-label="anchor" href="#arg-depth"></a></dt>

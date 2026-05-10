@@ -34,11 +34,12 @@ reference:
   - shoot
   - run_log
 - title: Persistent career
-  desc: Inspect career state, achievements, cosmetics.
+  desc: Inspect career state, achievements, cosmetics, and unlock progress.
   contents:
   - career
   - achievements
   - wardrobe
+  - progress
 - title: Output generators
   desc: Turn a run into a manuscript, preprint, presentation, or other artefact.
   contents:
