@@ -131,15 +131,25 @@ pick_glm_family <- function(outcome_kind, flail = FALSE) {
 # the smooth-vs-parametric choice (gam) and the random-effect choice
 # (glmm) carry the "fancier model" punch, so the family/link stays
 # canonical instead of doubling up on the desperation knob.
-pick_gam_family <- function(outcome_kind) {
-  base <- switch(outcome_kind,
+#
+# The two pickers share an outcome -> (family, link) table that differs
+# only in the "positive" branch: gam can use Gamma/log, but lme4's
+# Gamma path is finicky enough that glmm sticks with gaussian-log.
+canonical_family_link <- function(outcome_kind, positive_family, positive_link) {
+  switch(outcome_kind,
     binary     = list(family = "binomial", link = "logit"),
     count      = list(family = "poisson",  link = "log"),
-    positive   = list(family = "Gamma",    link = "log"),
+    positive   = list(family = positive_family, link = positive_link),
     continuous = list(family = "gaussian", link = "identity"),
                  list(family = "gaussian", link = "identity")
   )
-  c(list(fitter = "gam"), base)
+}
+
+pick_gam_family <- function(outcome_kind) {
+  c(list(fitter = "gam"),
+    canonical_family_link(outcome_kind,
+                          positive_family = "Gamma",
+                          positive_link   = "log"))
 }
 
 # sem (single-mediator path model): outcome shape doesn't change the
@@ -165,14 +175,8 @@ pick_wls_family <- function() {
 }
 
 pick_glmm_family <- function(outcome_kind) {
-  base <- switch(outcome_kind,
-    binary     = list(family = "binomial", link = "logit"),
-    count      = list(family = "poisson",  link = "log"),
-    # GLMM Gamma is finicky in lme4; gaussian-log is the conservative
-    # "positive outcome" pick.
-    positive   = list(family = "gaussian", link = "log"),
-    continuous = list(family = "gaussian", link = "identity"),
-                 list(family = "gaussian", link = "identity")
-  )
-  c(list(fitter = "glmm"), base)
+  c(list(fitter = "glmm"),
+    canonical_family_link(outcome_kind,
+                          positive_family = "gaussian",
+                          positive_link   = "log"))
 }

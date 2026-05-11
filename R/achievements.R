@@ -26,34 +26,20 @@ achievements <- function() {
 # Lazy-loaded achievement registry. Combines all YAMLs under
 # inst/achievements/.
 load_achievement_registry <- function(force = FALSE) {
-  if (!force && !is.null(.tx$achievements)) return(.tx$achievements)
-  dir <- system.file("achievements", package = "texanshootR")
-  if (!nzchar(dir) || !dir.exists(dir)) {
-    .tx$achievements <- empty_achievement_registry()
-    return(.tx$achievements)
-  }
-  files <- list.files(dir, pattern = "\\.ya?ml$", full.names = TRUE)
-  rows <- list()
-  for (f in files) {
-    entries <- yaml::read_yaml(f)
-    if (is.null(entries)) next
-    for (e in entries) {
-      rows[[length(rows) + 1L]] <- list(
-        id           = as.character(e$id),
-        name         = as.character(e$name),
-        visible      = isTRUE(e$visible),
-        hint         = if (is.null(e$hint) || is.na(e$hint)) NA_character_
-                       else as.character(e$hint),
-        reveal_text  = as.character(e$reveal_text %||% e$name),
-        trigger      = as.character(e$trigger %||% NA_character_),
-        cosmetic     = as.character(e$cosmetic %||% NA_character_)
-      )
-    }
-  }
-  if (length(rows) == 0L) {
-    out <- empty_achievement_registry()
-  } else {
-    out <- data.frame(
+  load_registry(
+    inst_dir   = "achievements",
+    cache_key  = "achievements",
+    entry_to_row = function(e) list(
+      id           = as.character(e$id),
+      name         = as.character(e$name),
+      visible      = isTRUE(e$visible),
+      hint         = if (is.null(e$hint) || is.na(e$hint)) NA_character_
+                     else as.character(e$hint),
+      reveal_text  = as.character(e$reveal_text %||% e$name),
+      trigger      = as.character(e$trigger %||% NA_character_),
+      cosmetic     = as.character(e$cosmetic %||% NA_character_)
+    ),
+    rows_to_frame = function(rows) data.frame(
       id          = vapply(rows, `[[`, "", "id"),
       name        = vapply(rows, `[[`, "", "name"),
       visible     = vapply(rows, `[[`, FALSE, "visible"),
@@ -62,10 +48,10 @@ load_achievement_registry <- function(force = FALSE) {
       trigger     = vapply(rows, `[[`, NA_character_, "trigger"),
       cosmetic    = vapply(rows, `[[`, NA_character_, "cosmetic"),
       stringsAsFactors = FALSE
-    )
-  }
-  .tx$achievements <- out
-  out
+    ),
+    empty = empty_achievement_registry,
+    force = force
+  )
 }
 
 empty_achievement_registry <- function() {

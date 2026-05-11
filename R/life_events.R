@@ -3,57 +3,43 @@
 # to the live run state.
 
 load_event_registry <- function(force = FALSE) {
-  if (!force && !is.null(.tx$events)) return(.tx$events)
-  dir <- system.file("events", package = "texanshootR")
-  if (!nzchar(dir) || !dir.exists(dir)) {
-    .tx$events <- empty_event_registry()
-    return(.tx$events)
-  }
-  files <- list.files(dir, pattern = "\\.ya?ml$", full.names = TRUE)
-  rows <- list()
-  for (f in files) {
-    entries <- yaml::read_yaml(f)
-    if (is.null(entries)) next
-    for (e in entries) {
-      rows[[length(rows) + 1L]] <- list(
-        id               = as.character(e$id),
-        event_text       = as.character(e$event_text),
-        consequence_text = as.character(e$consequence_text),
-        rarity           = as.character(e$rarity),
-        career_min       = if (is.null(e$career_min) || is.na(e$career_min))
-                             NA_character_ else as.character(e$career_min),
-        display_phase    = as.character(e$display_phase %||% "any"),
-        effects          = e$effects %||% list()
+  load_registry(
+    inst_dir   = "events",
+    cache_key  = "events",
+    entry_to_row = function(e) list(
+      id               = as.character(e$id),
+      event_text       = as.character(e$event_text),
+      consequence_text = as.character(e$consequence_text),
+      rarity           = as.character(e$rarity),
+      career_min       = if (is.null(e$career_min) || is.na(e$career_min))
+                           NA_character_ else as.character(e$career_min),
+      display_phase    = as.character(e$display_phase %||% "any"),
+      effects          = e$effects %||% list()
+    ),
+    rows_to_frame = function(rows) {
+      out <- data.frame(
+        id               = vapply(rows, `[[`, "", "id"),
+        event_text       = vapply(rows, `[[`, "", "event_text"),
+        consequence_text = vapply(rows, `[[`, "", "consequence_text"),
+        rarity           = vapply(rows, `[[`, "", "rarity"),
+        career_min       = vapply(rows, function(r) r$career_min %||% NA_character_, ""),
+        display_phase    = vapply(rows, `[[`, "", "display_phase"),
+        stringsAsFactors = FALSE
       )
-    }
-  }
-  if (length(rows) == 0L) {
-    out <- empty_event_registry()
-  } else {
-    out <- data.frame(
-      id               = vapply(rows, `[[`, "", "id"),
-      event_text       = vapply(rows, `[[`, "", "event_text"),
-      consequence_text = vapply(rows, `[[`, "", "consequence_text"),
-      rarity           = vapply(rows, `[[`, "", "rarity"),
-      career_min       = vapply(rows, function(r) r$career_min %||% NA_character_, ""),
-      display_phase    = vapply(rows, `[[`, "", "display_phase"),
-      stringsAsFactors = FALSE
-    )
-    out$effects <- I(lapply(rows, `[[`, "effects"))
-  }
-  .tx$events <- out
-  out
+      out$effects <- I(lapply(rows, `[[`, "effects"))
+      out
+    },
+    empty = empty_event_registry,
+    force = force
+  )
 }
 
 empty_event_registry <- function() {
-  out <- data.frame(
-    id = character(), event_text = character(),
-    consequence_text = character(), rarity = character(),
-    career_min = character(), display_phase = character(),
-    stringsAsFactors = FALSE
+  new_list_col_frame(
+    char_cols = c("id", "event_text", "consequence_text",
+                  "rarity", "career_min", "display_phase"),
+    list_col  = "effects"
   )
-  out$effects <- I(list())
-  out
 }
 
 # Roll once per run. Returns NULL when nothing fires; otherwise an

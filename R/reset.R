@@ -20,38 +20,36 @@ confirm <- function(prompt, force) {
   isTRUE(ans %in% c("y", "yes"))
 }
 
+# Shared body for the per-artifact resets. Returns TRUE on success,
+# FALSE on cancellation, TRUE invisibly when the save dir is missing.
+reset_save_artifact <- function(prompt, paths, force) {
+  d <- save_dir()
+  if (is.null(d) || !dir.exists(d)) return(invisible(TRUE))
+  if (!confirm(prompt, force)) return(invisible(FALSE))
+  for (p in paths) unlink(file.path(d, p), recursive = TRUE)
+  invisible(TRUE)
+}
+
 #' @rdname reset
 #' @export
 reset_career <- function(force = FALSE) {
-  d <- save_dir()
-  if (is.null(d) || !dir.exists(d)) return(invisible(TRUE))
-  if (!confirm("Reset career? This deletes all saved meta and runs. [y/N]: ", force)) {
-    return(invisible(FALSE))
-  }
-  unlink(file.path(d, "meta.json"))
-  unlink(file.path(d, "runs"), recursive = TRUE)
-  unlink(file.path(d, "recent_messages.rds"))
-  invisible(TRUE)
+  reset_save_artifact(
+    "Reset career? This deletes all saved meta and runs. [y/N]: ",
+    c("meta.json", "runs", "recent_messages.rds"),
+    force
+  )
 }
 
 #' @rdname reset
 #' @export
 reset_achievements <- function(force = FALSE) {
-  d <- save_dir()
-  if (is.null(d) || !dir.exists(d)) return(invisible(TRUE))
-  if (!confirm("Reset achievements? [y/N]: ", force)) return(invisible(FALSE))
-  unlink(file.path(d, "achievements.rds"))
-  invisible(TRUE)
+  reset_save_artifact("Reset achievements? [y/N]: ", "achievements.rds", force)
 }
 
 #' @rdname reset
 #' @export
 reset_wardrobe <- function(force = FALSE) {
-  d <- save_dir()
-  if (is.null(d) || !dir.exists(d)) return(invisible(TRUE))
-  if (!confirm("Reset wardrobe? [y/N]: ", force)) return(invisible(FALSE))
-  unlink(file.path(d, "wardrobe.rds"))
-  invisible(TRUE)
+  reset_save_artifact("Reset wardrobe? [y/N]: ", "wardrobe.rds", force)
 }
 
 #' @rdname reset

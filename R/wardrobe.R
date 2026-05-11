@@ -65,46 +65,33 @@ auto_equip <- function(cosmetic_id) {
 
 # Lazy registry loader. Reads inst/cosmetics/*.yaml.
 load_cosmetic_registry <- function(force = FALSE) {
-  if (!force && !is.null(.tx$cosmetics)) return(.tx$cosmetics)
-  dir <- system.file("cosmetics", package = "texanshootR")
-  if (!nzchar(dir) || !dir.exists(dir)) {
-    .tx$cosmetics <- empty_cosmetic_registry()
-    return(.tx$cosmetics)
-  }
-  files <- list.files(dir, pattern = "\\.ya?ml$", full.names = TRUE)
-  rows <- list()
-  for (f in files) {
-    entries <- yaml::read_yaml(f)
-    if (is.null(entries)) next
-    for (e in entries) {
-      rows[[length(rows) + 1L]] <- list(
-        id      = as.character(e$id),
-        slot    = as.character(e$slot),
-        overlay = as.list(strsplit(e$ascii_overlay %||% "", "\n", fixed = TRUE)[[1]]),
-        unlock_via = as.character(e$unlock_via %||% NA_character_)
+  load_registry(
+    inst_dir   = "cosmetics",
+    cache_key  = "cosmetics",
+    entry_to_row = function(e) list(
+      id         = as.character(e$id),
+      slot       = as.character(e$slot),
+      overlay    = as.list(strsplit(e$ascii_overlay %||% "", "\n", fixed = TRUE)[[1]]),
+      unlock_via = as.character(e$unlock_via %||% NA_character_)
+    ),
+    rows_to_frame = function(rows) {
+      out <- data.frame(
+        id         = vapply(rows, `[[`, "", "id"),
+        slot       = vapply(rows, `[[`, "", "slot"),
+        unlock_via = vapply(rows, `[[`, NA_character_, "unlock_via"),
+        stringsAsFactors = FALSE
       )
-    }
-  }
-  if (length(rows) == 0L) {
-    out <- empty_cosmetic_registry()
-  } else {
-    out <- data.frame(
-      id         = vapply(rows, `[[`, "", "id"),
-      slot       = vapply(rows, `[[`, "", "slot"),
-      unlock_via = vapply(rows, `[[`, NA_character_, "unlock_via"),
-      stringsAsFactors = FALSE
-    )
-    out$overlay <- I(lapply(rows, `[[`, "overlay"))
-  }
-  .tx$cosmetics <- out
-  out
+      out$overlay <- I(lapply(rows, `[[`, "overlay"))
+      out
+    },
+    empty = empty_cosmetic_registry,
+    force = force
+  )
 }
 
 empty_cosmetic_registry <- function() {
-  out <- data.frame(
-    id = character(), slot = character(), unlock_via = character(),
-    stringsAsFactors = FALSE
+  new_list_col_frame(
+    char_cols = c("id", "slot", "unlock_via"),
+    list_col  = "overlay"
   )
-  out$overlay <- I(list())
-  out
 }
