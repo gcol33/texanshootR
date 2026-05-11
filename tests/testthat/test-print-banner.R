@@ -6,7 +6,16 @@ capture_banner <- function(run) {
   utils::capture.output(print(run))
 }
 
+# Each test starts from a fresh save dir so earlier tests in the suite
+# can't promote the player past the tier assertions below (notably the
+# OUTPUTS test, which requires at least one locked stage to remain).
+local_fresh_save_dir <- function(env = parent.frame()) {
+  withr::local_options(texanshootR.save_dir = withr::local_tempdir(.local_envir = env),
+                       .local_envir = env)
+}
+
 test_that("banner header carries the run number, zero-padded to four", {
+  local_fresh_save_dir()
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(3)
   run <- shoot(mtcars)
@@ -16,6 +25,7 @@ test_that("banner header carries the run number, zero-padded to four", {
 })
 
 test_that("the five always-on sections render in order", {
+  local_fresh_save_dir()
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(5)
   run <- shoot(mtcars)
@@ -29,6 +39,7 @@ test_that("the five always-on sections render in order", {
 })
 
 test_that("RUN section reports status, career impact, mascot arc", {
+  local_fresh_save_dir()
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(7)
   run <- shoot(mtcars)
@@ -39,6 +50,7 @@ test_that("RUN section reports status, career impact, mascot arc", {
 })
 
 test_that("OUTPUTS section uses `fn(run)` for unlocked, bare for locked", {
+  local_fresh_save_dir()
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(9)
   run <- shoot(mtcars)
@@ -50,6 +62,7 @@ test_that("OUTPUTS section uses `fn(run)` for unlocked, bare for locked", {
 })
 
 test_that("DATA USED always reports the seven labeled fields", {
+  local_fresh_save_dir()
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(13)
   run <- shoot(mtcars)
@@ -63,6 +76,7 @@ test_that("DATA USED always reports the seven labeled fields", {
 })
 
 test_that("PUBLICATION PIPELINE appears only when run owns active chain", {
+  local_fresh_save_dir()
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(17)
   run <- shoot(mtcars)
