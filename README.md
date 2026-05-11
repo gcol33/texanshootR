@@ -47,7 +47,7 @@ Every run is deterministic given a seed. The seed, R version, package
 version, and a hash of the search trace are recorded on the returned
 object so the full search can be replayed from any saved run.
 
-Don't worry if your data is unpublishable — the shooter will change that.
+Unpublishable data is now the shooter's problem, not yours.
 
 ## What's in the box
 
@@ -96,12 +96,16 @@ graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-The stages must be redeemed in that order. You have 30 seconds per stage
-by default (`options(texanshootR.chain_window = N)` to change it). Land
-every stage in your currently-unlocked prefix and the chain pays out a
-length-bonus on top of the per-stage XP. Miss the window, call the wrong
-stage, or fire a fresh `shoot()` before finishing — the chain breaks,
-the bonus is forfeited, and the partial XP is what you keep.
+Stages must be redeemed in order, each within a 30-second window
+(`options(texanshootR.chain_window = N)` to change it). Finish the chain
+through your currently-unlocked prefix and you collect a length-bonus on
+top of the per-stage XP.
+
+The chain breaks — bonus forfeit, partial XP kept — if you:
+
+* miss the window,
+* call the wrong stage, or
+* fire a fresh `shoot()` before finishing.
 
 Each generator writes to `tempdir()` by default and returns the file path
 invisibly. Override with `output_dir =` or

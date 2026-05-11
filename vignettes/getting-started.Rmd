@@ -44,10 +44,9 @@ object so the full search can be replayed.
 ## The publication chain
 
 A finished `tx_run` that clears `p <= 0.05` is *shippable*. The first
-shippable run opens a **publication chain** — six ordered output stages
-that must be redeemed in order, each gated by its own wall-clock window
-(default 30 seconds, override with `options(texanshootR.chain_window =
-N)`):
+shippable run opens a **publication chain** — six output stages,
+redeemed in order, each within a 30-second window (override with
+`options(texanshootR.chain_window = N)`):
 
 ```r
 abstract(run)            # one-paragraph deadpan summary
@@ -58,11 +57,14 @@ graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-Land every stage in the currently-unlocked prefix and the chain pays
-out a length-bonus on top of the per-stage XP. Miss the window, call
-the wrong stage, or fire a fresh `shoot()` before finishing — the
-chain breaks, the bonus is forfeited, and the partial XP is what
-remains.
+Finish the chain through your currently-unlocked prefix and you
+collect a length-bonus on top of the per-stage XP.
+
+The chain breaks — bonus forfeit, partial XP kept — if you:
+
+* miss the window,
+* call the wrong stage, or
+* fire a fresh `shoot()` before finishing.
 
 Aliases are accepted: `powerpoint` (= `presentation`), `reviewer` (=
 `reviewer_response`), `graphical` (= `graphical_abstract`).
