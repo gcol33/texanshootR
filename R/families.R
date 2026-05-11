@@ -890,20 +890,82 @@ find_glmm_group <- function(df, outcome, spec) {
 
 # ---- registry ------------------------------------------------------
 
+# Shared batch scaffold. Every non-lm family currently routes through
+# this loop -- one R-level iteration per spec, calling the family's
+# single-spec fitter. The named fit_*_batch wrappers below are the
+# insertion points for future C++ batch kernels: replacing a wrapper
+# body with a single call to a `*_fit_batch_cpp` kernel collapses the
+# group into one R/C++ crossing without touching the dispatcher in
+# fit_specs_batch() or the FAMILIES registry.
+batch_via_loop <- function(df, outcome, specs, single_fitter) {
+  lapply(specs, function(s) single_fitter(df, outcome, s))
+}
+
+# TODO(C++ batch): replace body with a glm_fit_batch_cpp() kernel that
+# runs IRLS per spec, dispatches family/link internally, and returns the
+# deviance / null-deviance / LRT pieces that fit_glm() reads.
+fit_glm_batch <- function(df, outcome, specs) {
+  batch_via_loop(df, outcome, specs, fit_glm)
+}
+
+# TODO(C++ batch): replace body with a wls_fit_batch_cpp() kernel that
+# does the two-stage (OLS -> |resid| trend -> weighted refit) in one
+# crossing, mirroring fit_wls().
+fit_wls_batch <- function(df, outcome, specs) {
+  batch_via_loop(df, outcome, specs, fit_wls)
+}
+
+# TODO(C++ batch): pls_gcv_cpp() already does the per-spec heavy lift;
+# a gam_fit_batch_cpp() that builds the B-spline + penalty stack inside
+# C++ would amortise the basis-construction + R/C++ crossing across the
+# group.
+fit_gam_batch <- function(df, outcome, specs) {
+  batch_via_loop(df, outcome, specs, fit_gam)
+}
+
+# TODO(C++ batch): lmm_profile_cpp() is the single-spec kernel; a
+# glmm_fit_batch_cpp() that loops the profile likelihood in C++ keeps
+# the optimisation state hot across specs.
+fit_glmm_batch <- function(df, outcome, specs) {
+  batch_via_loop(df, outcome, specs, fit_glmm)
+}
+
+# TODO(C++ batch): bivariate Pearson/Spearman/Kendall is small and
+# pure -- a cor_fit_batch_cpp() that loops three correlation routines
+# is the cheapest kernel to write and the cleanest proof of the
+# scaffold.
+fit_cor_batch <- function(df, outcome, specs) {
+  batch_via_loop(df, outcome, specs, fit_cor)
+}
+
+# TODO(C++ batch): linear SEM (path / mediation) reduces to a sequence
+# of OLS fits; a sem_fit_batch_cpp() could reuse ols_fit_batch_cpp()
+# internally for the inner regressions.
+fit_sem_batch <- function(df, outcome, specs) {
+  batch_via_loop(df, outcome, specs, fit_sem)
+}
+
 FAMILIES <- list(
-  lm   = list(fitter = fit_lm,   available = function() TRUE,
+  lm   = list(fitter = fit_lm,   batch_fitter = fit_lm_batch,
+              available = function() TRUE,
               min_career = "Junior Researcher"),
-  cor  = list(fitter = fit_cor,  available = function() TRUE,
+  cor  = list(fitter = fit_cor,  batch_fitter = fit_cor_batch,
+              available = function() TRUE,
               min_career = "Postdoc"),
-  glm  = list(fitter = fit_glm,  available = function() TRUE,
+  glm  = list(fitter = fit_glm,  batch_fitter = fit_glm_batch,
+              available = function() TRUE,
               min_career = "Postdoc"),
-  wls  = list(fitter = fit_wls,  available = function() TRUE,
+  wls  = list(fitter = fit_wls,  batch_fitter = fit_wls_batch,
+              available = function() TRUE,
               min_career = "Senior Scientist"),
-  gam  = list(fitter = fit_gam,  available = function() TRUE,
+  gam  = list(fitter = fit_gam,  batch_fitter = fit_gam_batch,
+              available = function() TRUE,
               min_career = "Senior Scientist"),
-  glmm = list(fitter = fit_glmm, available = function() TRUE,
+  glmm = list(fitter = fit_glmm, batch_fitter = fit_glmm_batch,
+              available = function() TRUE,
               min_career = "PI"),
-  sem  = list(fitter = fit_sem,  available = function() TRUE,
+  sem  = list(fitter = fit_sem,  batch_fitter = fit_sem_batch,
+              available = function() TRUE,
               min_career = "PI")
 )
 
@@ -912,6 +974,13 @@ family_fitter <- function(name) {
   if (is.null(reg)) stop(sprintf("Unknown model family: %s", name),
                           call. = FALSE)
   reg$fitter
+}
+
+family_batch_fitter <- function(name) {
+  reg <- FAMILIES[[name]]
+  if (is.null(reg)) stop(sprintf("Unknown model family: %s", name),
+                          call. = FALSE)
+  reg$batch_fitter
 }
 
 available_families <- function(career_level) {
