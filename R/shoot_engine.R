@@ -34,7 +34,10 @@ fit_specs_batch <- function(df, outcome, specs) {
   }
 
   for (i in which(!is_lm)) {
-    out[[i]] <- fit_spec(df, outcome, specs[[i]])
+    # `[<-` with list(NULL) preserves the slot; `[[<-` with NULL would
+    # delete it, shrinking the result list below length(specs) and
+    # desynchronising the caller's per-spec index.
+    out[i] <- list(fit_spec(df, outcome, specs[[i]]))
   }
   out
 }
