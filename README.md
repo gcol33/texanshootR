@@ -12,8 +12,9 @@
 
 > **Mission.** To contribute to dubious research and questionable p-values.
 >
-> In this day and age where *publish or perish* reigns king, a lone shooter
-> helps you out in your predicament.
+> In this day and age where *publish or perish* reigns king, a [lone
+> shooter](https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy) helps
+> you out in your predicament.
 
 The shooter starts composed. He fires at the side of a barn, then walks over
 and paints the target around the densest cluster of bullet holes. By attempt
@@ -46,6 +47,8 @@ Every run is deterministic given a seed. The seed, R version, package
 version, and a hash of the search trace are recorded on the returned
 object so the full search can be replayed from any saved run.
 
+Don't worry if your data is unpublishable — the shooter will change that.
+
 ## What's in the box
 
 `texanshootR` is a state-of-the-art specification-search engine, generously
@@ -58,7 +61,7 @@ after all, is earned.
 
 * **Seven model families**, each with a native fitter (no soft dependencies on
   `mgcv`, `lme4`, or `lavaan` — the heavy ones are implemented in C++ via
-  `Rcpp`):
+  `Rcpp`, by hand, for your shooting needs):
   * `lm` — ordinary least squares via `.lm.fit()`
   * `cor` — bivariate Pearson / Spearman / Kendall
   * `glm` — Gaussian / binomial / Poisson / Gamma with link choices
@@ -120,6 +123,9 @@ governs which model families enter the search pool:
 | 5            | `graphical_abstract()` | 55        | Senior Scientist   | —                    |
 | 6            | `funding()`            | 90        | PI                 | `glmm`, `sem`        |
 
+As pressure in the research career increases, so does the need for
+`correlation = causation`...
+
 Locked stages, expired windows, the wrong run, and out-of-order calls
 all signal a structured `tx_chain_error` so your test suite can branch
 on `reason`. Locked families simply never appear in the search trace.
@@ -176,7 +182,8 @@ message is a YAML edit and a re-run of `validate_messages()`.
 ## Reset
 
 Should circumstances call for a fresh start — a new institution, a co-author
-dispute, an opportune hard-drive failure — your progression can be retired:
+dispute, an opportune hard-drive failure, or because some of you just want
+to see the world burn — your progression can be retired:
 
 ```r
 reset_career(force = TRUE)
@@ -217,9 +224,10 @@ Economics.* **American Economic Review** 110(11): 3634–60.
 > "Where is the money, Lebowski?"
 > &mdash; The Big Lebowski
 
-I'm a PhD student who builds R packages in my free time because I believe good
-tools should be free and open. I started these projects for my own work and
-figured others might find them useful too.
+I'm a PhD student who builds R packages in my free time, on the principle
+that the tools of dubious research should be free and open. I started these
+for my own questionable p-values, and figured the field deserved the same
+head start.
 
 If this package saved you some time (or pre-empted a fit of overfitting),
 buying me a coffee is a nice way to say thanks.

@@ -169,7 +169,8 @@ options(texanshootR.consent = TRUE)
 ## Resetting
 
 Should circumstances call for a fresh start — a new institution, a
-co-author dispute, an opportune hard-drive failure:
+co-author dispute, an opportune hard-drive failure, or because some of
+you just want to see the world burn:
 
 ```{r}
 reset_career(force = TRUE)

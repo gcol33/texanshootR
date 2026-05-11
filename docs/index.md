@@ -22,8 +22,9 @@ print(run)
 summary(run)
 ```
 
-The Texas sharpshooter fires at the side of a barn, then walks over and
-paints the target around the densest cluster of bullet holes.
+The [Texas sharpshooter](https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy)
+fires at the side of a barn, then walks over and paints the target around
+the densest cluster of bullet holes.
 [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
 automates the firing — across predictor subsets, transformations,
 interactions, outlier exclusions, and subgroup splits — and surfaces the
@@ -117,9 +118,10 @@ starting point than the achievement registry.
 
 > “Where is the money, Lebowski?” — The Big Lebowski
 
-I’m a PhD student who builds R packages in my free time because I
-believe good tools should be free and open. I started these projects for
-my own work and figured others might find them useful too.
+I’m a PhD student who builds R packages in my free time, on the
+principle that the tools of dubious research should be free and open. I
+started these for my own questionable p-values, and figured the field
+deserved the same head start.
 
 If this package saved you some time — or pre-empted a fit of overfitting
 — buying me a coffee is a nice way to say thanks.
