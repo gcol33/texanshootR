@@ -10,6 +10,14 @@ reviewer_response <- function(run, output_dir = NULL, file = NULL,
                               force = FALSE) {
   require_chain_stage("reviewer_response", run)
   require_pkg("officer", "reviewer_response")
+
+  # Roll the reviewer outcome the first time the player asks for a
+  # response. Subsequent calls reuse the persisted verdict. The
+  # `received_a_reject` achievement (and any future outcome-driven
+  # trigger) fires via record_output() below, which re-reads the
+  # updated record and re-runs evaluate_achievements().
+  run <- materialize_reviewer_outcome(run)
+
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "response_to_reviewers_FINAL"
   out  <- versioned_filename(d, stem, "docx", force)

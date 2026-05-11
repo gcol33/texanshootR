@@ -46,9 +46,6 @@ print.tx_run <- function(x, ...) {
     cat(sprintf("Searched %s candidates.\n",
                 format(x$spec_count %||% 0L, big.mark = ",")))
   }
-  if (!is.null(x$reviewer_outcome)) {
-    cat(sprintf("Reviewer 2:            %s\n", x$reviewer_outcome))
-  }
   if (length(x$events)) {
     cat("Events witnessed:\n")
     for (e in x$events) {

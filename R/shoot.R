@@ -604,10 +604,11 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
                           ui, open_tui, modifiers_used = character()) {
   highlight <- choose_highlight(results)
 
-  rev <- reviewer_roll(reviewer_resistance =
-                          state$modifiers$reviewer_resistance %||% 0)
-  state$modifiers$reviewer_resistance <-
-    (state$modifiers$reviewer_resistance %||% 0) + rev$resist_delta
+  # The reviewer roll has moved to reviewer_response(): a run is a
+  # finding, not a verdict, so the reviewer only enters when the
+  # player tries to turn the finding into publication bureaucracy.
+  # `reviewer_outcome` stays NA on the run until materialize_reviewer_outcome()
+  # fires from inside the generator.
 
   run_id <- format(state$started, "%Y%m%d-%H%M%S")
   search_summary <- summarise_trace(trace)
@@ -634,7 +635,7 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
     spec_count        = state$spec_count,
     highlighted_spec  = highlight,
     derived_used      = state$derived_used,
-    reviewer_outcome  = rev$outcome,
+    reviewer_outcome  = NA_character_,
     events            = state$events,
     modifiers         = state$modifiers,
     modifiers_used    = modifiers_used,
