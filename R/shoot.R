@@ -5,48 +5,98 @@
 #' seeds. Returns a `tx_run` object summarising the search and the
 #' highlighted specification.
 #'
-#' Every shoot has a wall-clock budget (default 30s). Each modifier
-#' you pass extends the budget by 3 seconds and unlocks an extra
-#' search behaviour. Without `"derived_metrics"`, runs that fail to
-#' clear `p <= 0.05` simply lose — the highlighted spec stays above
-#' threshold and the output gauntlet does not open.
+#' Every shoot has a wall-clock budget (default 30s). Modifiers are
+#' pre-rolled at run start by default: shoot() picks a random per-
+#' transition loadout (`+glmm`, `+derived_metrics`, ...) and applies
+#' each one when the matching mascot state transition fires, extending
+#' the deadline by the modifier's per-token bonus (2-5s) and redirecting
+#' the search priority. Pass `interactive_modifiers = TRUE` to opt into
+#' the readline tactical-prompt window at each transition instead.
+#' Without `+derived_metrics`, runs that fail to clear `p <= 0.05`
+#' simply lose — the highlighted spec stays above threshold and the
+#' output gauntlet does not open.
+#'
+#' Output flags (`abstract`, `manuscript`, `presentation` /
+#' `powerpoint`, `reviewer_response` / `reviewer`, `graphical_abstract`
+#' / `graphical`, `funding`) auto-generate the matching file when the
+#' run is shippable. The chain prefix needed to reach the highest
+#' enabled flag is generated in order: e.g. `presentation = TRUE`
+#' produces abstract, manuscript, and presentation.
 #'
 #' @param df A data frame.
 #' @param formula Optional formula. When `NULL`, the first numeric
 #'   column is used as the outcome and all other columns as predictors.
-#' @param modifiers Character vector of modifier names. Each adds 3s
-#'   to the budget and steers the search. Supported:
-#'   \describe{
-#'     \item{`"derived_metrics"`}{Allow the desperation phase to
-#'       manufacture a composite response when the regular search has
-#'       not cleared `p <= 0.05`.}
-#'     \item{`"subgroup"`}{Bias the perturbation queue toward subgroup
-#'       splits.}
-#'     \item{`"outliers"`}{Bias the perturbation queue toward
-#'       outlier-exclusion seeds.}
-#'     \item{`"gam"`, `"glm"`, `"wls"`, `"cor"`, `"glmm"`, `"sem"`}{
-#'       Insist the family selector consider this family for the run,
-#'       provided the player has unlocked it.}
-#'   }
 #' @param seed Integer seed. When `NULL`, a random seed is generated
 #'   and stored on the returned run.
 #' @param depth `"default"` for the full search; `"demo"` for a
 #'   single-fit smoke test used in CRAN-safe examples.
-#' @param ... Reserved for future arguments.
+#' @param terminal When `TRUE`, spawn an external Windows Terminal (or
+#'   fallback console window) and run `shoot()` inside it so the full
+#'   ANSI multi-zone TUI renders. Useful when calling from RStudio
+#'   Console, which only supports `\r`-overwrite and so falls back to
+#'   the compressed single-line status. The result is returned to the
+#'   calling session as usual. Windows-only.
+#' @param interactive_modifiers When `TRUE`, open a `readline()`
+#'   tactical-prompt window at each mascot transition so the player
+#'   can type `+command` modifiers live. Default `FALSE`: modifiers
+#'   are pre-rolled at run start and applied autonomously, which keeps
+#'   the in-place animation intact in RStudio's console.
+#' @param abstract,manuscript,presentation,reviewer_response,graphical_abstract,funding
+#'   Logical flags. When `TRUE` and the run is shippable, auto-generate
+#'   the matching output and every chain stage required to reach it.
+#'   Default `FALSE`.
+#' @param ... Reserved for future arguments and aliases. Recognised
+#'   aliases: `powerpoint` (= `presentation`), `reviewer` (=
+#'   `reviewer_response`), `graphical` (= `graphical_abstract`).
+#'   Internal: `prompt_fn` can be supplied to drive tactical-pause
+#'   input non-interactively (tests).
 #'
-#' @return A `tx_run` object (returned invisibly).
+#' @return A `tx_run` object. Returned visibly so the
+#'   [print.tx_run()] banner fires at the prompt; the demo path
+#'   (`depth = "demo"`) returns invisibly because there is no banner
+#'   worth showing for a one-fit smoke test.
 #' @export
 shoot <- function(df,
                   formula    = NULL,
-                  modifiers  = character(),
                   seed       = NULL,
                   depth      = c("default", "demo"),
+                  terminal   = FALSE,
+                  interactive_modifiers = FALSE,
+                  abstract           = FALSE,
+                  manuscript         = FALSE,
+                  presentation       = FALSE,
+                  reviewer_response  = FALSE,
+                  graphical_abstract = FALSE,
+                  funding            = FALSE,
                   ...) {
   depth <- match.arg(depth)
   if (!is.data.frame(df)) stop("`df` must be a data frame.", call. = FALSE)
 
-  modifiers <- normalise_modifiers(modifiers)
-  use_derived <- "derived_metrics" %in% modifiers
+  if (isTRUE(terminal)) {
+    return(spawn_shoot_in_terminal(df, formula = formula, seed = seed,
+                                    depth = depth, ...))
+  }
+
+  # Internal test seam: `prompt_fn` drives tactical_pause without a real
+  # terminal. Supplying it implies the test wants the readline path,
+  # so it forces interactive_modifiers regardless of the caller's flag.
+  dots <- list(...)
+  prompt_fn <- dots$prompt_fn
+  if (!is.null(prompt_fn)) interactive_modifiers <- TRUE
+
+  # Output-flag aliases. Fold them onto the canonical names so the rest
+  # of the function only has to look at one set of names.
+  if (isTRUE(dots$powerpoint)) presentation       <- TRUE
+  if (isTRUE(dots$reviewer))   reviewer_response  <- TRUE
+  if (isTRUE(dots$graphical))  graphical_abstract <- TRUE
+  output_flags <- list(
+    abstract           = isTRUE(abstract),
+    manuscript         = isTRUE(manuscript),
+    presentation       = isTRUE(presentation),
+    reviewer_response  = isTRUE(reviewer_response),
+    graphical_abstract = isTRUE(graphical_abstract),
+    funding            = isTRUE(funding)
+  )
 
   if (is.null(seed)) seed <- sample.int(.Machine$integer.max - 1L, 1L)
   seed <- as.integer(seed)
@@ -65,15 +115,15 @@ shoot <- function(df,
   outcome_vec    <- if (outcome %in% names(df)) df[[outcome]] else NULL
 
   ui   <- NULL
-  open_tui <- interactive() && depth != "demo"
+  open_tui <- is_interactive_ui() && depth != "demo"
   if (open_tui) ui <- ui_session_open()
 
-  # Wall-clock budget. Base is 30s; each modifier extends by 3s.
+  # Wall-clock budget. Base is 30s. Modifiers extend the deadline when
+  # they are injected mid-run via tactical_pause (per-modifier 2-5s).
   # `texanshootR.budget` overrides the base entirely (used by tests
   # to keep the suite fast).
   base_budget <- getOption("texanshootR.budget", 30L)
-  budget <- as.integer(base_budget) +
-            MODIFIER_BUDGET_BONUS * length(modifiers)
+  budget <- as.integer(base_budget)
 
   state <- list(
     seed              = seed,
@@ -81,6 +131,8 @@ shoot <- function(df,
     spec_count        = 0L,
     derived_used      = FALSE,
     modifiers         = list(),
+    consumed_modifiers = character(),
+    bias              = empty_bias(),
     events            = list(),
     displayed_messages = character(),
     recent_buf        = read_recent_buffer(),
@@ -98,7 +150,15 @@ shoot <- function(df,
     stopped_early     = FALSE,
     resolved_at_progress = NA_real_,
     ultra_rare_seen   = FALSE,
-    peak_severity     = 0L
+    peak_severity     = 0L,
+    # Peak severity hit BEFORE the run first cleared p<=0.05. This is
+    # the "true" emotional arc: a run that resolved at progress 0.05
+    # and then animated through to desperate has peak_severity =
+    # desperate (the visible peak) but peak_severity_before_resolve =
+    # composed (what the searcher actually felt during the work). The
+    # arc summary reads off this so the banner reflects what the run
+    # did rather than how long the bar animated.
+    peak_severity_before_resolve = 0L
   )
 
   # Demo path: one fit, no theatre, fast.
@@ -113,14 +173,54 @@ shoot <- function(df,
     return(invisible(finalize_run(state, df, outcome, predictors,
                                    results = list(one), trace = list(spec),
                                    ui = NULL, open_tui = FALSE,
-                                   modifiers_used = modifiers)))
+                                   modifiers_used = character())))
   }
 
+  # Fit count cap is deterministic in `budget` -- same seed + same
+  # budget yields the same trace (and therefore the same grid_hash).
+  # Wall-clock pacing happens *on top of* this: once the cap is hit the
+  # loop keeps animating the mascot and bar until end_time, but no
+  # more specs are fit.
   cap <- spec_cap_for_budget(budget)
   search <- new_search_state(seed_specs(df, outcome, predictors))
   trace   <- list()
   results <- list()
   end_time <- state$started + budget
+
+  # Chain unlock state (frozen at run start). The OUTPUTS row uses this
+  # to dim locked stages; career only advances on finalize_run, so a
+  # single read here is correct for the full run's worth of redraws.
+  meta_snap        <- tryCatch(read_meta(), error = function(e) NULL)
+  unlocked_length  <- progression_of(meta_snap %||% list())$length_unlocked
+
+  # Initial render of the two new zones. Subsequent updates happen
+  # inside the search loop -- ui_set_* has its own cache so identical
+  # consecutive renders are no-ops.
+  if (open_tui) {
+    ui <- ui_set_modifiers(ui,
+            available_modifiers(state$consumed_modifiers, career_level))
+    ui <- ui_set_outputs(ui, CHAIN_STAGES, unlocked_length)
+  }
+
+  # Modifier mode. By default shoot() pre-rolls a per-transition
+  # loadout at run start and applies each pick autonomously when its
+  # mascot transition fires -- the readline tactical prompt is opt-in
+  # via `interactive_modifiers = TRUE`. Pre-roll is the universal
+  # default because RStudio's console cannot host a readline without
+  # breaking the in-place \r overwrite (the readline echoes on a fresh
+  # line and every subsequent dyn_render overwrites that echo instead
+  # of the bar), and there is no upside to leaving the bug-prone path
+  # on by default for ANSI terminals either.
+  auto_picks <- if (!isTRUE(interactive_modifiers)) {
+    pre_roll_modifiers(career_level)
+  } else NULL
+  if (!is.null(auto_picks) && open_tui) {
+    rolled <- Filter(function(x) !is.na(x) && nzchar(x), auto_picks)
+    if (length(rolled)) {
+      ui_loading(ui, sprintf("Auto-loadout: %s",
+                              paste0("+", unlist(rolled), collapse = " ")))
+    }
+  }
 
   # Mini-batch the search. Each iteration collects up to `batch_size`
   # specs from next_spec(), fits them in one R/C++ crossing via
@@ -131,44 +231,76 @@ shoot <- function(df,
   # to batch granularity, but the R/C++ overhead drops accordingly.
   iter <- 0L
   batch_size <- getOption("texanshootR.batch_size", 8L)
-  while (state$spec_count < cap && Sys.time() < end_time) {
-    this_batch <- min(batch_size, cap - state$spec_count)
-    batch_specs <- vector("list", this_batch)
-    n_picked <- 0L
-    for (i in seq_len(this_batch)) {
-      pick   <- next_spec(search, df, outcome, predictors, iter)
-      search <- pick$state
-      spec   <- pick$spec
-      if (is.null(spec)) break
-      spec$subset_full <- paste(predictors, collapse = ",")
-      spec$family <- select_family(career_level, escalating = FALSE,
-                                    outcome   = outcome_vec,
-                                    available = family_pool)
-      n_picked <- n_picked + 1L
-      batch_specs[[n_picked]] <- spec
-      iter <- iter + 1L
+  # The loop has two phases under one driver:
+  #   (a) fit phase: spec_count < cap. Pull a batch, fit it, record
+  #       results. This is the only phase that mutates the trace, so
+  #       the trace (and grid_hash) stay seed-deterministic regardless
+  #       of how fast or slow the host CPU is.
+  #   (b) animate-out phase: cap hit, end_time not yet. Idle briefly
+  #       so the mascot + bar can fill the rest of the wall-clock
+  #       budget. The user explicitly wants the visible run to last
+  #       the full budget rather than truncate at the cap.
+  while (Sys.time() < end_time) {
+    if (state$spec_count >= cap) {
+      # Fitting done; just let the animation finish out the budget.
+      # 50ms keeps CPU low and is well under the 300ms mascot tick.
+      Sys.sleep(0.05)
+      # Keep the bar marching toward 100% during the animate-out phase.
+      # Without this the bar would freeze at whatever percent the last
+      # fitted spec reached, which on small data is a fraction of the
+      # budget -- defeating the "visible run lasts the full budget"
+      # intent of the cap-and-animate split.
+      if (open_tui) {
+        ui_progress(ui, elapsed_progress(state$started, budget))
+      }
+    } else {
+      this_batch <- min(batch_size, cap - state$spec_count)
+      batch_specs <- vector("list", this_batch)
+      n_picked <- 0L
+      for (i in seq_len(this_batch)) {
+        pick   <- next_spec(search, df, outcome, predictors, iter)
+        search <- pick$state
+        spec   <- pick$spec
+        if (is.null(spec)) break
+        spec$subset_full <- paste(predictors, collapse = ",")
+        spec$family <- pick_spec_family(state, career_level, outcome_vec,
+                                         family_pool, escalating = FALSE)
+        n_picked <- n_picked + 1L
+        batch_specs[[n_picked]] <- spec
+        iter <- iter + 1L
+      }
+      if (n_picked == 0L) {
+        # Search exhausted before cap. Fall into the animate-out path
+        # rather than breaking, so the bar still fills the budget.
+        Sys.sleep(0.05)
+      } else {
+        length(batch_specs) <- n_picked
+        batch_results <- fit_specs_batch(df, outcome, batch_specs)
+
+        for (i in seq_len(n_picked)) {
+          spec <- batch_specs[[i]]
+          r    <- batch_results[[i]]
+          state$current_family <- spec$family$fitter
+          state$spec_count <- state$spec_count + 1L
+          if (!is.null(r)) {
+            results[[length(results) + 1L]] <- r
+            trace[[length(trace)     + 1L]] <- spec
+            search <- record_result(search, spec, r, df, outcome,
+                                    bias_perturb = state$bias$perturb_tag)
+          }
+          # Per-spec bar redraw. The dedup cache in ui_progress()
+          # throttles to actual visual changes (integer-percent
+          # transitions), so this is cheap when nothing visible has
+          # changed.
+          if (open_tui) {
+            spec_prog <- elapsed_progress(state$started, budget)
+            ui_progress(ui, spec_prog)
+          }
+        }
+      }
     }
-    if (n_picked == 0L) break
-    length(batch_specs) <- n_picked
 
-    batch_results <- fit_specs_batch(df, outcome, batch_specs)
-
-    for (i in seq_len(n_picked)) {
-      spec <- batch_specs[[i]]
-      r    <- batch_results[[i]]
-      state$current_family <- spec$family$fitter
-      state$spec_count <- state$spec_count + 1L
-      if (is.null(r)) next
-      results[[length(results) + 1L]] <- r
-      trace[[length(trace)     + 1L]] <- spec
-      search <- record_result(search, spec, r, df, outcome)
-    }
-
-    progress <- min(1, max(
-      as.numeric(Sys.time() - state$started, units = "secs") /
-        max(1, as.numeric(budget)),
-      state$spec_count / max(1L, cap)
-    ))
+    progress <- elapsed_progress(state$started, budget)
     best_p <- suppressWarnings(min(vapply(results,
                                           function(rr) rr$p_value %||% NA_real_,
                                           numeric(1)), na.rm = TRUE))
@@ -177,9 +309,56 @@ shoot <- function(df,
     cur <- mascot_state(progress, best_p, escalating = state$derived_used)
     sev <- mascot_severity(cur)
     if (sev > state$peak_severity) state$peak_severity <- sev
+    # Track the peak severity hit while the searcher was actually
+    # still searching -- i.e., before best_p first crossed 0.05.
+    # After resolution the loop keeps animating to fill the budget,
+    # and the ladder mechanically walks to desperate at progress
+    # >= 0.90, which would over-state the difficulty of every run
+    # that resolved early.
+    if (!state$stopped_early && sev > state$peak_severity_before_resolve) {
+      state$peak_severity_before_resolve <- sev
+    }
 
+    prev_mascot <- state$mascot
     if (open_tui) {
       state <- maybe_animate(state, ui, progress, results, outcome)
+    } else {
+      state$mascot <- cur
+    }
+
+    # Mascot transition handler. Two paths:
+    #   - Auto (default): apply the pre-rolled pick for this transition,
+    #     if any, and announce it via the loading slot. No readline,
+    #     no blocking, no broken \r overwrite.
+    #   - Interactive: open a tactical_pause window with readline so
+    #     the player can type +commands. Opt-in via interactive_modifiers
+    #     (or implicitly when a test supplies prompt_fn).
+    if (!identical(prev_mascot, state$mascot)) {
+      if (!is.null(auto_picks)) {
+        pick <- auto_picks[[state$mascot]] %||% NA_character_
+        if (!is.na(pick) && nzchar(pick)) {
+          state <- apply_modifier(state, pick,
+                                  time_bonus_callback = function(secs) {
+                                    end_time <<- end_time + secs
+                                  })
+          if (open_tui) {
+            ui_loading(ui, sprintf("+%s applied. %s Deadline +%ds.",
+                                    pick,
+                                    format_bias_announcement(state$last_modifier$bias),
+                                    state$last_modifier$time_bonus))
+          }
+        }
+      } else if (is_interactive_ui() || !is.null(prompt_fn)) {
+        pres <- tactical_pause(state, end_time, ui = ui,
+                                career_level = career_level,
+                                prompt_fn    = prompt_fn)
+        state    <- pres$state
+        end_time <- pres$end_time
+        if (open_tui) {
+          ui <- ui_set_modifiers(ui,
+                  available_modifiers(state$consumed_modifiers, career_level))
+        }
+      }
     }
 
     if (!state$stopped_early && is.finite(best_p) && best_p <= 0.05) {
@@ -207,7 +386,7 @@ shoot <- function(df,
   } else NA_real_
   if (!is.finite(best_p)) best_p <- NA_real_
 
-  if (isTRUE(use_derived) && (is.na(best_p) || best_p > 0.05) &&
+  if (isTRUE(state$bias$escalate) && (is.na(best_p) || best_p > 0.05) &&
       Sys.time() < end_time) {
     derived <- apply_derived(df, outcome, predictors)
     if (!is.null(derived)) {
@@ -230,9 +409,9 @@ shoot <- function(df,
           spec <- wildcard_spec(d2, outcome, predictors)
           if (is.null(spec)) break
           spec$subset_full <- paste(predictors, collapse = ",")
-          spec$family <- select_family(career_level, escalating = TRUE,
-                                        outcome   = derived_outcome_vec,
-                                        available = family_pool)
+          spec$family <- pick_spec_family(state, career_level,
+                                           derived_outcome_vec, family_pool,
+                                           escalating = TRUE)
           n_picked <- n_picked + 1L
           batch_specs[[n_picked]] <- spec
         }
@@ -256,38 +435,53 @@ shoot <- function(df,
     }
   }
 
-  finalize_run(state, df, outcome, predictors, results, trace, ui,
-               open_tui, modifiers_used = modifiers)
-}
-
-# Modifier vocabulary. Validating up front so a typo doesn't silently
-# do nothing. Each modifier costs MODIFIER_BUDGET_BONUS seconds.
-SUPPORTED_MODIFIERS <- c(
-  "derived_metrics", "subgroup", "outliers",
-  "gam", "glm", "wls", "cor", "glmm", "sem"
-)
-MODIFIER_BUDGET_BONUS <- 3L
-
-normalise_modifiers <- function(mods) {
-  if (is.null(mods)) return(character())
-  mods <- as.character(mods)
-  mods <- mods[nzchar(mods)]
-  if (!length(mods)) return(character())
-  unknown <- setdiff(mods, SUPPORTED_MODIFIERS)
-  if (length(unknown)) {
-    stop(sprintf(
-      "Unknown modifier(s): %s.\nSupported: %s",
-      paste(unknown, collapse = ", "),
-      paste(SUPPORTED_MODIFIERS, collapse = ", ")
-    ), call. = FALSE)
+  # Final-frame mascot flash. The in-loop mascot walks the progress
+  # ladder regardless of significance -- "resolved" only appears here,
+  # as a one-frame snapshot before the TUI tears down, when the run is
+  # actually shippable. Done before finalize_run so the user sees the
+  # resolved face above whatever chain / promotion banner finalize
+  # prints below.
+  if (open_tui && length(results)) {
+    best_p_final <- suppressWarnings(min(vapply(results,
+                    function(rr) rr$p_value %||% NA_real_, numeric(1)),
+                    na.rm = TRUE))
+    if (is.finite(best_p_final) && best_p_final <= 0.05) {
+      ui_set_mascot(ui, "resolved", tick = state$tick + 1L, force = TRUE)
+    }
   }
-  unique(mods)
+
+  run <- finalize_run(state, df, outcome, predictors, results, trace, ui,
+                      open_tui, modifiers_used = state$consumed_modifiers)
+
+  # Auto-generate any flagged outputs. The chain enforces stage order
+  # internally, so we walk CHAIN_STAGES and call each generator the
+  # caller asked for plus every earlier stage required to reach it.
+  # Skips silently when the run isn't shippable -- the chain isn't open.
+  # Returns the run with outputs_generated re-synced from disk.
+  run <- generate_flagged_outputs(run, output_flags)
+
+  # Visible return so `shoot(df)` at the prompt auto-prints the
+  # tx_run banner (run arc + highlighted spec + chain HUD). Assignment
+  # (`run <- shoot(df)`) suppresses auto-print as usual.
+  run
 }
 
 # Heuristic: about 100 specs per second on a modern CPU for small df.
-# Cap at 5000 for safety.
+# Cap at 5000 for safety. The cap is what makes a run's trace
+# (and therefore its grid_hash) deterministic in `seed + budget` --
+# wall-clock pacing is layered on top to fill the rest of the budget
+# with idle animation, not extra fits.
 spec_cap_for_budget <- function(budget) {
   min(5000L, max(50L, as.integer(budget * 100L)))
+}
+
+# Fraction of the wall-clock budget that has elapsed since the run
+# started, clamped to [0, 1]. Drives both the progress bar and the
+# mascot state so a fast-fitting df still walks the full emotional arc
+# over the budget window.
+elapsed_progress <- function(started, budget) {
+  min(1, as.numeric(Sys.time() - started, units = "secs") /
+         max(1, as.numeric(budget)))
 }
 
 parse_shoot_inputs <- function(df, formula, depth) {
@@ -324,7 +518,9 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
 
   m <- mascot_state(progress, best_p, escalating = state$derived_used)
 
-  # Heartbeat: every ~300 ms.
+  # Heartbeat: every ~300 ms drives the mascot tick. The progress bar
+  # is redrawn per-spec inside the batch loop (see shoot.R), where it
+  # gets fresh progress on every fit rather than only at batch boundary.
   if (now - state$last_heartbeat_at >= 0.3) {
     state$tick <- state$tick + 1L
     ui_set_mascot(ui, m, tick = state$tick)
@@ -351,8 +547,10 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
     state$last_blip_at <- now
   }
 
-  # Progress bar + loading line: every 1.5-2.5s.
-  if (now - state$last_loading_at >= runif(1, 1.5, 2.5)) {
+  # Progress bar + loading line: every 3-5s. Slow enough to read the
+  # longest message (~70 chars) once at a relaxed pace; messages
+  # shorter than the budget get the same dwell rather than racing past.
+  if (now - state$last_loading_at >= runif(1, 3, 5)) {
     draw <- select_message(
       phase = "loading",
       career = career,
@@ -367,7 +565,6 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
       state$recent_buf <- recent_push(state$recent_buf, draw$id)
       state$displayed_messages <- c(state$displayed_messages, draw$id)
     }
-    ui_progress(ui, progress, "narrative coherence")
     state$last_loading_at <- now
   }
 
@@ -449,6 +646,8 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
     resolved_at_progress = state$resolved_at_progress,
     ultra_rare_seen   = state$ultra_rare_seen,
     peak_mascot       = severity_to_state(state$peak_severity),
+    peak_mascot_before_resolve =
+      severity_to_state(state$peak_severity_before_resolve),
     outputs_generated = character(),
     outputs_generated_files = character()
   )

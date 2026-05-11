@@ -25,16 +25,22 @@
 
 #' Compute the mascot emotional state for a run snapshot.
 #'
+#' Walks the progress ladder regardless of `best_p` so the player sees
+#' the full emotional arc unfold during a run. The `resolved` face is
+#' reserved for the final frame after a shippable run -- it isn't
+#' returned mid-flight from this function. `best_p` is kept on the
+#' signature for back-compat callers but no longer short-circuits the
+#' ladder.
+#'
 #' @param progress Numeric fraction of the run budget used (0 to 1).
 #' @param best_p   Numeric smallest p-value found so far in the run,
-#'   or `NA` if none.
+#'   or `NA` if none. Currently unused; retained for back-compat.
 #' @param escalating Logical: is the derived-metric escalation phase
 #'   currently active.
 #' @return One of `"composed"`, `"uncertain"`, `"worried"`, `"anxious"`,
-#'   `"panicked"`, `"desperate"`, `"resolved"`.
+#'   `"panicked"`, `"desperate"`.
 #' @keywords internal
 mascot_state <- function(progress, best_p = NA_real_, escalating = FALSE) {
-  if (!is.na(best_p) && best_p <= 0.05) return("resolved")
   if (isTRUE(escalating)) return("desperate")
   if (progress >= 0.90) return("desperate")
   if (progress >= 0.75) return("panicked")
@@ -73,9 +79,69 @@ read_heartbeat_frames <- function() {
   frames
 }
 
+# 8-frame heartbeat used by the ANSI multi-zone TUI, where each zone
+# (shooter, blip, modifiers, outputs, bar) gets its own row. The mascot
+# row's width drift doesn't ripple into adjacent zones, so the full
+# 8-frame variation in heartbeat.txt is safe there.
 heartbeat_frame <- function(tick) {
   fs <- read_heartbeat_frames()
   fs[(tick %% length(fs)) + 1L]
+}
+
+# 2-frame heartbeat used by the dynamic single-line TUI. RStudio Console
+# renders `一` (U+4E00) at a different cell width than `cli::ansi_nchar`
+# claims (likely 1 cell because the default RStudio font lacks the glyph
+# and falls back). The original 8-frame heartbeat cycles between frames
+# that include `一` (6 frames) and frames that don't (`-`, `—` substitutes
+# in frames 3 and 6). Each transition between those two compositions
+# shifted the mascot slot by 1 cell in RStudio, jittering the `|`
+# separators tick-over-tick.
+#
+# The fix: in dynamic mode, keep the wide-char prefix (`︻デ═一`)
+# IDENTICAL on every tick, and animate only the muzzle dot (`·` ↔ space)
+# at the end. Whatever cell width RStudio renders the prefix at, it
+# renders it the same on every tick, so the slot stays anchored. `·`
+# and space are both 1 cell in every terminal we have seen, so the dot
+# blinking does not change the slot width either.
+heartbeat_frame_dyn <- function(tick) {
+  fs <- read_heartbeat_frames()
+  base <- fs[1L]
+  if ((as.integer(tick) %% 2L) == 0L) {
+    base
+  } else {
+    sub("·$", " ", base)  # trailing `·` -> space
+  }
+}
+
+# Terminal cell widths for the mascot face glyphs and the dynamic-mode
+# gun frame. R's `nchar(type = "width")` returns inconsistent values
+# for box-drawing (`═`, `—`), CJK (`一`, `︻`, `デ`), and Devanagari /
+# Kannada (`ಠ`) glyphs on Windows, so we use a hand-verified lookup
+# instead. The dynamic-mode mascot slot pads to DYN_MASCOT_WIDTH cells
+# using these tables.
+FACE_CELL_WIDTH <- c(
+  composed   = 6L,   # ( o_o)
+  uncertain  = 7L,   # ( -_- )
+  worried    = 7L,   # ( o_o;)
+  anxious    = 7L,   # ( •_•;)  - bullet renders 1 cell
+  panicked   = 6L,   # (>_<;)
+  desperate  = 5L,   # (ಠ_ಠ)
+  resolved   = 6L    # ( -_-)
+)
+
+# Constant width: in dynamic mode the gun is always `︻デ═一` + 2 spaces
+# + (`·` or space) = 10 cells. Tick is ignored on this signature so
+# callers don't need to special-case across modes.
+gun_frame_cell_width <- function(tick) 10L
+
+face_cell_width <- function(state) {
+  w <- FACE_CELL_WIDTH[state]
+  if (is.na(w)) {
+    fallback <- tryCatch(nchar(read_face(state), type = "width"),
+                          error = function(e) nchar(read_face(state)))
+    return(as.integer(fallback))
+  }
+  as.integer(w)
 }
 
 # -- Frame loading ---------------------------------------------------

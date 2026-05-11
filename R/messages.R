@@ -172,6 +172,24 @@ validate_registry <- function(reg) {
          paste(unique(bad_combo), collapse = ", "), call. = FALSE)
   }
 
+  # Loading-slot budget: messages routed through ui_loading() in the
+  # dynamic single-line TUI share one slot with the mascot and bar.
+  # Anything longer than DYN_LOADING_BUDGET gets ellipsised at the
+  # 120-col target width. Phases that hit ui_loading directly --
+  # "loading" and "state_transition" -- are linted here. Other phases
+  # write to the blip stream in multi-zone ANSI mode and don't share
+  # the slot, so they're exempt.
+  loading_phases <- c("loading", "state_transition")
+  loading_rows <- reg$trigger_phase %in% loading_phases
+  over_budget <- loading_rows & nchar(reg$text) > DYN_LOADING_BUDGET
+  if (any(over_budget)) {
+    offenders <- sprintf("%s (%d)", reg$id[over_budget],
+                          nchar(reg$text[over_budget]))
+    stop("Message text exceeds DYN_LOADING_BUDGET = ",
+         DYN_LOADING_BUDGET, " chars: ",
+         paste(offenders, collapse = ", "), call. = FALSE)
+  }
+
   invisible(TRUE)
 }
 

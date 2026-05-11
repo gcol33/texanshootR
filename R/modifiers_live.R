@@ -148,6 +148,25 @@ modifier_available_for_career <- function(token, career_level) {
   tier_index(career_level) >= tier_index(reg$min_career)
 }
 
+# Pre-roll a per-transition loadout for non-interactive runs (RStudio
+# Console / dynamic mode). Returns a list keyed by mascot state name;
+# values are either a token string or NA (skip this transition). The
+# shoot() loop applies the pre-rolled token at each mascot transition
+# instead of opening a tactical_pause readline that RStudio cannot
+# render in place.
+pre_roll_modifiers <- function(career_level) {
+  states <- c("uncertain", "worried", "anxious", "panicked", "desperate")
+  out    <- as.list(setNames(rep(NA_character_, length(states)), states))
+  available <- available_modifiers(consumed = character(),
+                                   career_level = career_level)
+  if (!length(available)) return(out)
+  n_picks <- sample.int(min(3L, length(available)), 1L)
+  picks   <- sample(available, n_picks)
+  slots   <- sample(states, n_picks)
+  for (i in seq_along(picks)) out[[slots[i]]] <- picks[i]
+  out
+}
+
 # Human-friendly list of the available modifiers for the MODIFIERS TUI
 # row, e.g. "+gam  +derived  +subgroup".
 format_modifier_row <- function(tokens) {
@@ -224,19 +243,25 @@ tactical_pause <- function(state, end_time, ui,
     return(list(state = state, end_time = end_time, applied = NA_character_))
   }
 
-  ui_loading(ui, "METHODOLOGICAL PRIORITY WINDOW")
-  ui_loading(ui, sprintf("MODIFIERS  %s", format_modifier_row(available)))
+  # Render via the TUI session when one is open; otherwise fall back to
+  # plain stdout (covers non-interactive test runs with a mocked prompt_fn).
+  emit <- function(text) {
+    if (!is.null(ui)) ui_loading(ui, text) else cat(text, "\n", sep = "")
+  }
+
+  # The MODIFIERS row in the TUI already shows the live-available
+  # tokens; the prompt itself is just the cue + input. Empty input skips.
+  emit("METHODOLOGICAL PRIORITY WINDOW")
 
   buf   <- prompt_fn("+ ")
   token <- parse_mod_command(buf)
 
   if (is.na(token)) {
-    ui_loading(ui, "Submission abandoned.")
+    emit("Submission abandoned.")
     return(list(state = state, end_time = end_time, applied = NA_character_))
   }
   if (!(token %in% available)) {
-    ui_loading(ui, sprintf("+%s unavailable (consumed or career-locked).",
-                            token))
+    emit(sprintf("+%s unavailable (consumed or career-locked).", token))
     return(list(state = state, end_time = end_time, applied = NA_character_))
   }
 
@@ -246,10 +271,10 @@ tactical_pause <- function(state, end_time, ui,
                             new_end_time <<- new_end_time + secs
                           })
 
-  ui_loading(ui, sprintf("+%s applied. %s Deadline +%ds.",
-                          token,
-                          format_bias_announcement(state$last_modifier$bias),
-                          state$last_modifier$time_bonus))
+  emit(sprintf("+%s applied. %s Deadline +%ds.",
+               token,
+               format_bias_announcement(state$last_modifier$bias),
+               state$last_modifier$time_bonus))
 
   list(state = state, end_time = new_end_time, applied = token)
 }
@@ -263,4 +288,36 @@ format_bias_announcement <- function(bias) {
   if (!is.null(bias$perturb_tag))
     return(sprintf("Perturbation bias toward %s.", bias$perturb_tag))
   ""
+}
+
+# ---- Bias resolution for the search loop ---------------------------
+
+# When a family bias is active, bypass select_family() and return the
+# spec$family record directly. Mirrors the per-family pickers in
+# family_select.R, but with the family chosen instead of sampled.
+force_family <- function(family_token, outcome_vec) {
+  outcome_kind <- classify_outcome(outcome_vec)
+  switch(family_token,
+    glm  = pick_glm_family(outcome_kind, flail = FALSE),
+    gam  = pick_gam_family(outcome_kind),
+    glmm = pick_glmm_family(outcome_kind),
+    sem  = pick_sem_family(),
+    cor  = pick_cor_family(),
+    wls  = pick_wls_family(),
+    list(fitter = "lm")
+  )
+}
+
+# Single entry point for "what family should this spec be fit with?".
+# Honors the active family bias when one is set and the requested family
+# is available at the player's career tier; otherwise delegates to the
+# regular weighted random selector.
+pick_spec_family <- function(state, career_level, outcome_vec, family_pool,
+                              escalating = FALSE) {
+  fam <- state$bias$family %||% NA_character_
+  if (!is.na(fam) && fam %in% family_pool) {
+    return(force_family(fam, outcome_vec))
+  }
+  select_family(career_level, escalating = escalating,
+                outcome = outcome_vec, available = family_pool)
 }

@@ -17,7 +17,6 @@ reg <- texanshootR:::LIVE_MODIFIERS
 parse  <- texanshootR:::parse_mod_command
 avail  <- texanshootR:::available_modifiers
 apply_ <- texanshootR:::apply_modifier
-drain  <- texanshootR:::drain_pending_bias
 format_row <- texanshootR:::format_modifier_row
 
 cat("---- 1. registry shape ----\n")
@@ -92,7 +91,7 @@ stopifnot(!"glmm" %in% pi_av_after)
 stopifnot("sem" %in% pi_av_after)
 cat(sprintf("PI-glmm:  %s\n", paste(pi_av_after, collapse = ", ")))
 
-cat("\n---- 5. apply_modifier end-to-end ----\n")
+cat("\n---- 5. apply_modifier end-to-end (merged bias) ----\n")
 state <- list()
 deadline_extension <- 0L
 extend <- function(secs) {
@@ -100,37 +99,38 @@ extend <- function(secs) {
 }
 state <- apply_(state, "glmm", time_bonus_callback = extend)
 stopifnot("glmm" %in% state$consumed_modifiers)
-stopifnot(length(state$pending_bias) == 1L)
-stopifnot(identical(state$pending_bias[[1L]]$family, "glmm"))
-stopifnot(identical(state$last_modifier$token, "glmm"))
+stopifnot(identical(state$bias$family, "glmm"))
+stopifnot(is.na(state$bias$perturb_tag))
+stopifnot(isFALSE(state$bias$escalate))
 stopifnot(deadline_extension == 5L)
-cat(sprintf("glmm applied: consumed=%s, bias=%s, +%ds\n",
-            paste(state$consumed_modifiers, collapse = ","),
-            state$pending_bias[[1L]]$family,
-            deadline_extension))
+cat(sprintf("glmm applied: bias$family=%s, +%ds\n",
+            state$bias$family, deadline_extension))
 
-# Second injection: subgroup.
+# Stacking: subgroup adds to perturb_tag without disturbing family.
 state <- apply_(state, "subgroup", time_bonus_callback = extend)
-stopifnot(length(state$pending_bias) == 2L)
-stopifnot(identical(state$pending_bias[[2L]]$perturb_tag, "subgroup"))
-stopifnot(deadline_extension == 7L)  # 5 + 2
-cat(sprintf("subgroup applied: pending=%d, total +%ds\n",
-            length(state$pending_bias), deadline_extension))
+stopifnot(identical(state$bias$family, "glmm"))
+stopifnot(identical(state$bias$perturb_tag, "subgroup"))
+stopifnot(deadline_extension == 7L)
+cat(sprintf("subgroup stacked: family=%s, perturb_tag=%s, +%ds\n",
+            state$bias$family, state$bias$perturb_tag, deadline_extension))
 
-cat("\n---- 6. drain_pending_bias FIFO ----\n")
-res1 <- drain(state)
-stopifnot(identical(res1$bias$family, "glmm"))
-res2 <- drain(res1$state)
-stopifnot(identical(res2$bias$perturb_tag, "subgroup"))
-res3 <- drain(res2$state)
-stopifnot(is.null(res3$bias))
-cat("OK -- biases drained in injection order.\n")
+# Override: a later +gam replaces the family bias but leaves perturb_tag.
+state <- apply_(state, "gam", time_bonus_callback = extend)
+stopifnot(identical(state$bias$family, "gam"))
+stopifnot(identical(state$bias$perturb_tag, "subgroup"))
+cat(sprintf("gam overrides family: family=%s, perturb_tag=%s\n",
+            state$bias$family, state$bias$perturb_tag))
 
-cat("\n---- 7. TUI row formatter ----\n")
+# Escalate sticks.
+state <- apply_(state, "derived_metrics", time_bonus_callback = extend)
+stopifnot(isTRUE(state$bias$escalate))
+cat(sprintf("derived_metrics sets escalate=%s\n", state$bias$escalate))
+
+cat("\n---- 6. TUI row formatter ----\n")
 cat(sprintf("'%s'\n", format_row(c("gam", "derived_metrics", "subgroup"))))
 cat(sprintf("'%s'\n", format_row(character())))
 
-cat("\n---- 8. tactical_pause branches (mocked readline) ----\n")
+cat("\n---- 7. tactical_pause branches (mocked readline) ----\n")
 pause <- texanshootR:::tactical_pause
 ui_open  <- texanshootR:::ui_session_open
 # Open a real UI session so the loading lines have somewhere to land
@@ -176,7 +176,7 @@ res <- pause(state, end_time = 100, ui = ui, career_level = "PI",
 stopifnot(identical(res$applied, "glmm"))
 stopifnot(res$end_time == 105L)
 stopifnot("glmm" %in% res$state$consumed_modifiers)
-stopifnot(length(res$state$pending_bias) == 1L)
+stopifnot(identical(res$state$bias$family, "glmm"))
 cat(sprintf("(e) apply +glmm at PI:    OK (end_time 100 -> %d)\n",
             res$end_time))
 
@@ -187,5 +187,31 @@ stopifnot(identical(res$applied, "derived_metrics"))
 stopifnot(res$end_time == 105L)
 cat(sprintf("(f) alias +dm resolves:   OK (end_time 100 -> %d)\n",
             res$end_time))
+
+cat("\n---- 8. TUI zone renderers (plain mode) ----\n")
+set_mods <- texanshootR:::ui_set_modifiers
+set_outs <- texanshootR:::ui_set_outputs
+stages   <- texanshootR:::CHAIN_STAGES
+
+ui2 <- ui_open()
+cat("Initial MODIFIERS render:\n")
+ui2 <- set_mods(ui2, c("derived_metrics", "subgroup", "outliers",
+                       "gam", "glm", "wls", "cor", "glmm", "sem"))
+cat("After consuming +glmm:\n")
+ui2 <- set_mods(ui2, c("derived_metrics", "subgroup", "outliers",
+                       "gam", "glm", "wls", "cor", "sem"))
+cat("Repeat call (cached -- should be silent):\n")
+ui2 <- set_mods(ui2, c("derived_metrics", "subgroup", "outliers",
+                       "gam", "glm", "wls", "cor", "sem"))
+cat("All consumed:\n")
+ui2 <- set_mods(ui2, character())
+
+cat("\nInitial OUTPUTS render (Postdoc, length=2):\n")
+ui2 <- set_outs(ui2, stages, unlocked_length = 2L)
+cat("PI render (length=6):\n")
+ui2 <- set_outs(ui2, stages, unlocked_length = 6L)
+cat("With current_due = manuscript:\n")
+ui2 <- set_outs(ui2, stages, unlocked_length = 6L,
+                current_due = "manuscript")
 
 cat("\nSmoke OK.\n")

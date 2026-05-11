@@ -10,16 +10,21 @@ mascot_state(progress, best_p = NA_real_, escalating = FALSE)
 \item{progress}{Numeric fraction of the run budget used (0 to 1).}
 
 \item{best_p}{Numeric smallest p-value found so far in the run,
-or \code{NA} if none.}
+or \code{NA} if none. Currently unused; retained for back-compat.}
 
 \item{escalating}{Logical: is the derived-metric escalation phase
 currently active.}
 }
 \value{
 One of \code{"composed"}, \code{"uncertain"}, \code{"worried"}, \code{"anxious"},
-\code{"panicked"}, \code{"desperate"}, \code{"resolved"}.
+\code{"panicked"}, \code{"desperate"}.
 }
 \description{
-Compute the mascot emotional state for a run snapshot.
+Walks the progress ladder regardless of \code{best_p} so the player sees
+the full emotional arc unfold during a run. The \code{resolved} face is
+reserved for the final frame after a shippable run -- it isn't
+returned mid-flight from this function. \code{best_p} is kept on the
+signature for back-compat callers but no longer short-circuits the
+ladder.
 }
 \keyword{internal}

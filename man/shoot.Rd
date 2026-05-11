@@ -7,9 +7,16 @@
 shoot(
   df,
   formula = NULL,
-  modifiers = character(),
   seed = NULL,
   depth = c("default", "demo"),
+  terminal = FALSE,
+  interactive_modifiers = FALSE,
+  abstract = FALSE,
+  manuscript = FALSE,
+  presentation = FALSE,
+  reviewer_response = FALSE,
+  graphical_abstract = FALSE,
+  funding = FALSE,
   ...
 )
 }
@@ -19,31 +26,40 @@ shoot(
 \item{formula}{Optional formula. When \code{NULL}, the first numeric
 column is used as the outcome and all other columns as predictors.}
 
-\item{modifiers}{Character vector of modifier names. Each adds 3s
-to the budget and steers the search. Supported:
-\describe{
-\item{\code{"derived_metrics"}}{Allow the desperation phase to
-manufacture a composite response when the regular search has
-not cleared \code{p <= 0.05}.}
-\item{\code{"subgroup"}}{Bias the perturbation queue toward subgroup
-splits.}
-\item{\code{"outliers"}}{Bias the perturbation queue toward
-outlier-exclusion seeds.}
-\item{\code{"gam"}, \code{"glm"}, \code{"wls"}, \code{"cor"}, \code{"glmm"}, \code{"sem"}}{
-Insist the family selector consider this family for the run,
-provided the player has unlocked it.}
-}}
-
 \item{seed}{Integer seed. When \code{NULL}, a random seed is generated
 and stored on the returned run.}
 
 \item{depth}{\code{"default"} for the full search; \code{"demo"} for a
 single-fit smoke test used in CRAN-safe examples.}
 
-\item{...}{Reserved for future arguments.}
+\item{terminal}{When \code{TRUE}, spawn an external Windows Terminal (or
+fallback console window) and run \code{shoot()} inside it so the full
+ANSI multi-zone TUI renders. Useful when calling from RStudio
+Console, which only supports \verb{\\r}-overwrite and so falls back to
+the compressed single-line status. The result is returned to the
+calling session as usual. Windows-only.}
+
+\item{interactive_modifiers}{When \code{TRUE}, open a \code{readline()}
+tactical-prompt window at each mascot transition so the player
+can type \code{+command} modifiers live. Default \code{FALSE}: modifiers
+are pre-rolled at run start and applied autonomously, which keeps
+the in-place animation intact in RStudio's console.}
+
+\item{abstract, manuscript, presentation, reviewer_response, graphical_abstract, funding}{Logical flags. When \code{TRUE} and the run is shippable, auto-generate
+the matching output and every chain stage required to reach it.
+Default \code{FALSE}.}
+
+\item{...}{Reserved for future arguments and aliases. Recognised
+aliases: \code{powerpoint} (= \code{presentation}), \code{reviewer} (=
+\code{reviewer_response}), \code{graphical} (= \code{graphical_abstract}).
+Internal: \code{prompt_fn} can be supplied to drive tactical-pause
+input non-interactively (tests).}
 }
 \value{
-A \code{tx_run} object (returned invisibly).
+A \code{tx_run} object. Returned visibly so the
+\code{\link[=print.tx_run]{print.tx_run()}} banner fires at the prompt; the demo path
+(\code{depth = "demo"}) returns invisibly because there is no banner
+worth showing for a one-fit smoke test.
 }
 \description{
 Fits a battery of candidate specifications across predictor subsets,
@@ -52,9 +68,21 @@ seeds. Returns a \code{tx_run} object summarising the search and the
 highlighted specification.
 }
 \details{
-Every shoot has a wall-clock budget (default 30s). Each modifier
-you pass extends the budget by 3 seconds and unlocks an extra
-search behaviour. Without \code{"derived_metrics"}, runs that fail to
-clear \code{p <= 0.05} simply lose — the highlighted spec stays above
-threshold and the output gauntlet does not open.
+Every shoot has a wall-clock budget (default 30s). Modifiers are
+pre-rolled at run start by default: shoot() picks a random per-
+transition loadout (\code{+glmm}, \code{+derived_metrics}, ...) and applies
+each one when the matching mascot state transition fires, extending
+the deadline by the modifier's per-token bonus (2-5s) and redirecting
+the search priority. Pass \code{interactive_modifiers = TRUE} to opt into
+the readline tactical-prompt window at each transition instead.
+Without \code{+derived_metrics}, runs that fail to clear \code{p <= 0.05}
+simply lose — the highlighted spec stays above threshold and the
+output gauntlet does not open.
+
+Output flags (\code{abstract}, \code{manuscript}, \code{presentation} /
+\code{powerpoint}, \code{reviewer_response} / \code{reviewer}, \code{graphical_abstract}
+/ \code{graphical}, \code{funding}) auto-generate the matching file when the
+run is shippable. The chain prefix needed to reach the highest
+enabled flag is generated in order: e.g. \code{presentation = TRUE}
+produces abstract, manuscript, and presentation.
 }

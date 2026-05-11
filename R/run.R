@@ -28,15 +28,23 @@ print.tx_run <- function(x, ...) {
   cat(style_header(sprintf("%s  %s", face, run_arc_summary(x, final_state))),
       "\n", sep = "")
   cat(style_header(rule), "\n", sep = "")
-  cat(sprintf("Specifications fit:    %d\n", x$spec_count %||% 0L))
-  if (!is.null(hs)) {
-    cat(sprintf("Highlighted formula:   %s\n", hs$formula %||% ""))
-    cat(sprintf("Selected p-value:      %s\n",
+  if (isTRUE(x$shippable) && !is.null(hs)) {
+    # Present-tense framing: the run is a finding, not a table of
+    # diagnostics. The narrative reads off the highlighted formula +
+    # subgroup + outlier-drop context, with the p-value inline at the
+    # end. Detailed numerics (R^2, n, AIC) stay accessible on
+    # `run$highlighted_spec` for programmatic use but don't crowd the
+    # banner.
+    for (line in format_run_narrative(x)) cat(line, "\n", sep = "")
+  } else if (!is.null(hs)) {
+    # Non-shippable: show what was tried so the user can see why the
+    # search failed.
+    cat(sprintf("Closest formula:       %s\n", hs$formula %||% ""))
+    cat(sprintf("Best p-value seen:     %s\n",
                 if (!is.null(hs$p_value)) format.pval(hs$p_value, digits = 3)
                 else "-"))
-    cat(sprintf("R-squared:             %s\n",
-                if (!is.null(hs$r_squared)) sprintf("%.3f", hs$r_squared)
-                else "-"))
+    cat(sprintf("Searched %s candidates.\n",
+                format(x$spec_count %||% 0L, big.mark = ",")))
   }
   if (!is.null(x$reviewer_outcome)) {
     cat(sprintf("Reviewer 2:            %s\n", x$reviewer_outcome))
@@ -58,25 +66,84 @@ print.tx_run <- function(x, ...) {
       if (!is.null(hud)) cat("\n", hud, "\n", sep = "")
     }
   } else {
-    cat("\nNot shippable: no spec cleared p <= 0.05 in budget.\n")
+    cat("\nNo publishable narrative this run -- nothing under p <= 0.05.\n")
   }
   invisible(x)
 }
 
-# One-line emotional summary of how the run went, from the shooter's
-# point of view. Used in the print() banner.
+# Plain-English finding line(s) drawn from the highlighted spec. Dry by
+# design -- no strength adverbs, no editorial modulation. Just outcome,
+# predictors, optional subset / outlier context, and the p-value inline.
+# The trailing "Searched N candidate specifications." line is the
+# institutional tell: it reframes the regression as the survivor of a
+# search, which is the package's whole joke. `strwrap()` reflows to host
+# terminal width so wide RStudio sessions read on one line and 80-col
+# terminals wrap tightly.
+format_run_narrative <- function(x) {
+  hs <- x$highlighted_spec
+  if (is.null(hs)) return(character())
+
+  parts      <- parse_formula_parts(hs$formula %||% "")
+  outcome    <- if (nzchar(parts$outcome))    parts$outcome    else "outcome"
+  predictors <- if (nzchar(parts$predictors)) parts$predictors else "predictors"
+
+  context_phrase <- if (!is.na(hs$subgroup %||% NA_character_)) {
+    sprintf(" in the %s subset", hs$subgroup)
+  } else if ((hs$outliers_dropped %||% 0L) > 0L) {
+    n <- hs$outliers_dropped
+    sprintf(" after dropping %d outlier%s", n, if (n == 1L) "" else "s")
+  } else ""
+
+  pval_str <- if (is.finite(hs$p_value %||% NA_real_))
+                format.pval(hs$p_value, digits = 3)
+              else "-"
+
+  claim <- sprintf("%s is associated with %s%s (p = %s).",
+                   outcome, predictors, context_phrase, pval_str)
+
+  width      <- max(40L, getOption("width", 80L) - 2L)
+  body_lines <- strwrap(claim, width = width)
+
+  searched <- sprintf("Searched %s candidate specifications.",
+                      format(x$spec_count %||% 0L, big.mark = ","))
+
+  c("Publishable result:", body_lines, searched)
+}
+
+# Pull outcome / predictor sides off the formula via the parser, not
+# regex on the deparsed string (R formulas are already parse trees;
+# regex over them is brittle on multi-term RHS and i:i interactions).
+# Returns empty strings on parse failure so the caller can fall back.
+parse_formula_parts <- function(formula_str) {
+  f <- tryCatch(stats::as.formula(formula_str), error = function(e) NULL)
+  if (is.null(f) || length(f) < 3L) {
+    return(list(outcome = "", predictors = ""))
+  }
+  list(
+    outcome    = paste(deparse(f[[2]]), collapse = " "),
+    predictors = paste(deparse(f[[3]]), collapse = " ")
+  )
+}
+
+# System-log-style state transition for the banner header line. Reads
+# like an instrument readout rather than a sentence -- dry, institutional,
+# uniform format across all runs. Pre-resolve peak goes on the LHS (the
+# searcher's actual emotional arc; see `peak_mascot_before_resolve` on
+# tx_run for why this is not the all-run peak). Final state on the RHS
+# is `resolved` for any shippable run (the active-chain "polishing"
+# state is implementation detail), `derived escalation` when the
+# escalation branch fired without nominal predictors clearing 0.05, and
+# `unresolved` otherwise.
 run_arc_summary <- function(x, final_state) {
-  peak <- x$peak_mascot %||% "composed"
-  if (final_state == "resolved") {
-    if (peak %in% c("panicked", "desperate")) {
-      sprintf("%s -> resolved (last-minute)", peak)
-    } else {
-      "composed -> resolved"
-    }
+  arrow <- "→"  # U+2192 RIGHTWARDS ARROW
+  if (final_state %in% c("resolved", "polishing")) {
+    pre <- x$peak_mascot_before_resolve %||% x$peak_mascot %||% "composed"
+    sprintf("Mascot state: %s %s resolved", pre, arrow)
   } else if (isTRUE(x$derived_used)) {
-    "escalated to derived metrics"
+    "Mascot state: derived escalation"
   } else {
-    sprintf("%s -- still aiming", peak)
+    peak <- x$peak_mascot %||% "composed"
+    sprintf("Mascot state: %s %s unresolved", peak, arrow)
   }
 }
 

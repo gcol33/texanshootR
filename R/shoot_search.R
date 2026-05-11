@@ -119,7 +119,13 @@ new_search_state <- function(seeds) {
 # subset's history; if the subset is in the near-miss band, enqueue a
 # few perturbations of THIS spec; if the subset has gone stone cold,
 # abandon it.
-record_result <- function(state, spec, result, df, outcome) {
+#
+# `bias_perturb` (NA_character_ by default) is the kind to over-sample
+# when the player has injected a perturbation bias (+subgroup, +outliers).
+# When set and valid, ~2/3 of the enqueued perturbations are that kind;
+# the rest stay random so the search doesn't collapse onto one axis.
+record_result <- function(state, spec, result, df, outcome,
+                          bias_perturb = NA_character_) {
   if (is.null(result)) return(state)
   key <- subset_key(spec)
   ps  <- c(state$subset_results[[key]] %||% numeric(),
@@ -131,7 +137,7 @@ record_result <- function(state, spec, result, df, outcome) {
 
   if (is.finite(best_p) &&
       best_p > NEAR_MISS_RANGE[1] && best_p <= NEAR_MISS_RANGE[2]) {
-    kinds <- sample(PERTURB_KINDS, size = PERTURBATIONS_PER_HIT)
+    kinds <- biased_perturb_kinds(bias_perturb, PERTURBATIONS_PER_HIT)
     for (kk in kinds) {
       state$perturb_queue[[length(state$perturb_queue) + 1L]] <-
         perturb_spec(spec, kk, df, outcome)
@@ -143,6 +149,20 @@ record_result <- function(state, spec, result, df, outcome) {
     state$dead_subsets <- unique(c(state$dead_subsets, key))
   }
   state
+}
+
+# Sample N perturbation kinds, optionally over-sampling a biased tag.
+# Without a bias the result is a plain uniform draw -- matches the
+# previous behaviour exactly. With a bias, 2/3 of slots are forced to
+# the biased kind and 1/3 fall back to uniform random.
+biased_perturb_kinds <- function(bias_tag, n) {
+  if (is.null(bias_tag) || is.na(bias_tag) || !nzchar(bias_tag) ||
+      !(bias_tag %in% PERTURB_KINDS)) {
+    return(sample(PERTURB_KINDS, size = n))
+  }
+  rolls <- stats::runif(n)
+  ifelse(rolls < 2/3, bias_tag,
+         sample(PERTURB_KINDS, size = n, replace = TRUE))
 }
 
 # Decide what to fit next. Priority: scheduled wildcard tick > pending

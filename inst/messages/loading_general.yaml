@@ -4485,7 +4485,7 @@
   mascot_state_affinity: [anxious]
 
 - id: load_glmm_partial_pooling
-  text: "Partial pooling shrank the group means toward the grand mean. As advertised."
+  text: "Partial pooling pulled group means toward grand mean..."
   tags: [researcher_dof]
   rarity: uncommon
   trigger_phase: loading
@@ -4575,7 +4575,7 @@
   mascot_state_affinity: [resolved]
 
 - id: load_cor_kendall_robust
-  text: "Reporting Kendall's tau for robustness. The Pearson r is in the supplement..."
+  text: "Kendall's tau for robustness. Pearson in the supplement..."
   tags: [researcher_dof, post_hoc]
   rarity: uncommon
   trigger_phase: loading
@@ -4627,7 +4627,7 @@
   model_family_affinity: [lm]
 
 - id: load_lm_leverage_drop
-  text: "High-leverage point excluded as a pre-registered exclusion criterion..."
+  text: "High-leverage point dropped under a pre-registered exclusion..."
   tags: [outlier_exclusion, post_hoc]
   rarity: uncommon
   trigger_phase: loading
@@ -4662,14 +4662,14 @@
   model_family_affinity: [lm]
 
 - id: load_lm_se_tightening
-  text: "Standard errors tightened after the third covariate joined the model..."
+  text: "Standard errors tightened after the third covariate joined..."
   tags: [researcher_dof, p_hacking]
   rarity: uncommon
   trigger_phase: loading
   model_family_affinity: [lm]
 
 - id: load_lm_t_marginal
-  text: "t-statistic marginal. The coefficient sign is correct, which is what matters."
+  text: "t-statistic marginal. Coefficient sign is correct, which matters."
   tags: [p_hacking, story_first]
   rarity: uncommon
   trigger_phase: loading
@@ -4690,7 +4690,7 @@
   model_family_affinity: [lm]
 
 - id: load_lm_sqrt_transform
-  text: "Square-root transform applied. Variance now flatter, p-value now lower."
+  text: "Square-root transform applied. Variance flatter, p-value lower."
   tags: [researcher_dof, p_hacking]
   rarity: uncommon
   trigger_phase: loading
@@ -4740,7 +4740,7 @@
   model_family_affinity: [lm]
 
 - id: load_lm_full_model
-  text: "Reporting the full model rather than the stepwise reduction. This time."
+  text: "Reporting the full model, not the stepwise reduction. This time."
   tags: [researcher_dof, model_shopping]
   rarity: uncommon
   trigger_phase: loading
@@ -4763,7 +4763,7 @@
   model_family_affinity: [glm]
 
 - id: load_glm_dichotomized_at_median
-  text: "Dichotomizing the continuous outcome at the median because the binary version is more readable..."
+  text: "Median-splitting the outcome. Binary version reads cleaner..."
   tags: [researcher_dof, p_hacking]
   rarity: rare
   trigger_phase: loading
@@ -4771,7 +4771,7 @@
   mascot_state_affinity: [desperate]
 
 - id: load_glm_round_clip
-  text: "Rounding the response to the nearest integer so Poisson will accept it..."
+  text: "Rounding the response to the nearest integer for Poisson..."
   tags: [researcher_dof, p_hacking]
   rarity: rare
   trigger_phase: loading
@@ -4779,7 +4779,7 @@
   mascot_state_affinity: [desperate]
 
 - id: load_glm_poisson_default
-  text: "Poisson regression on counts, dispersion mentioned only in the supplement..."
+  text: "Poisson on counts. Dispersion in the supplement only..."
   tags: [researcher_dof]
   rarity: common
   trigger_phase: loading
@@ -4822,7 +4822,7 @@
   mascot_state_affinity: [desperate]
 
 - id: load_glm_link_then_dist
-  text: "Choosing the link first and the distribution to match. As is tradition."
+  text: "Link chosen first, distribution to match. As is tradition."
   tags: [researcher_dof, model_shopping]
   rarity: uncommon
   trigger_phase: loading
@@ -4850,7 +4850,7 @@
   model_family_affinity: [glm]
 
 - id: load_glm_aic_swap
-  text: "AIC favours Poisson. BIC favours Gaussian. Going with the one we wrote first."
+  text: "AIC favours Poisson. BIC favours Gaussian. Going with the first."
   tags: [model_shopping, post_hoc]
   rarity: rare
   trigger_phase: loading
@@ -4871,7 +4871,7 @@
   model_family_affinity: [glm]
 
 - id: load_glm_hosmer_lemeshow
-  text: "Hosmer-Lemeshow declined to fail. Reporting goodness-of-fit as adequate."
+  text: "Hosmer-Lemeshow declined to fail. Goodness-of-fit reported."
   tags: [researcher_dof, story_first]
   rarity: uncommon
   trigger_phase: loading
@@ -4885,14 +4885,14 @@
   model_family_affinity: [glm]
 
 - id: load_glm_glm_then_lm
-  text: "Comparing the GLM against the OLS variant. Picking whichever gave a smaller p..."
+  text: "GLM vs OLS. Picking whichever gave a smaller p..."
   tags: [model_shopping, p_hacking]
   rarity: rare
   trigger_phase: loading
   model_family_affinity: [glm]
 
 - id: load_glm_separation
-  text: "Quasi-complete separation flagged. Penalised likelihood quietly used in its place..."
+  text: "Quasi-complete separation. Penalised likelihood, quietly..."
   tags: [researcher_dof]
   rarity: rare
   trigger_phase: loading
@@ -4907,7 +4907,7 @@
   model_family_affinity: [glm]
 
 - id: load_glm_link_inverse
-  text: "Inverse link applied so the coefficient sign reads in the right direction..."
+  text: "Inverse link so the coefficient sign reads right..."
   tags: [researcher_dof, post_hoc]
   rarity: rare
   trigger_phase: loading
@@ -4952,21 +4952,21 @@
   model_family_affinity: [cor]
 
 - id: load_cor_after_subset
-  text: "Bivariate correlation in the surviving subset finally cleared significance..."
+  text: "Correlation in the surviving subset finally cleared..."
   tags: [subgroup_fishing, p_hacking]
   rarity: uncommon
   trigger_phase: loading
   model_family_affinity: [cor]
 
 - id: load_cor_marginal_two_sided
-  text: "Two-sided p marginal. Reporting one-sided because the direction was predicted."
+  text: "Two-sided p marginal. One-sided -- direction predicted."
   tags: [p_hacking, harking]
   rarity: rare
   trigger_phase: loading
   model_family_affinity: [cor]
 
 - id: load_cor_robust_to_outliers
-  text: "Reporting Spearman as robust-to-outliers. Pearson stays in the supplement..."
+  text: "Spearman as robust-to-outliers. Pearson in the supp..."
   tags: [researcher_dof, post_hoc]
   rarity: uncommon
   trigger_phase: loading
@@ -5039,7 +5039,7 @@
   model_family_affinity: [wls]
 
 - id: load_wls_slope_unchanged
-  text: "Slope effectively unchanged after reweighting. Reporting it as robustness."
+  text: "Slope unchanged after reweighting. Reported as robustness."
   tags: [story_first, post_hoc]
   rarity: rare
   trigger_phase: loading
@@ -5061,7 +5061,7 @@
   model_family_affinity: [wls]
 
 - id: load_wls_breusch_pagan_marginal
-  text: "Breusch-Pagan flagged heteroscedasticity. Reweighting fixed everything."
+  text: "Breusch-Pagan flagged heteroscedasticity. Reweighting fixed it."
   tags: [researcher_dof, post_hoc]
   rarity: uncommon
   trigger_phase: loading
@@ -5075,7 +5075,7 @@
   model_family_affinity: [wls]
 
 - id: load_wls_floor_chosen
-  text: "Floor on the weights set to keep the small residuals from dominating..."
+  text: "Weight floor set so small residuals stop dominating..."
   tags: [researcher_dof]
   rarity: rare
   trigger_phase: loading
@@ -5111,7 +5111,7 @@
   mascot_state_affinity: [resolved]
 
 - id: load_wls_appendix_only
-  text: "Original OLS fit moved to the appendix to keep the main result clean..."
+  text: "Original OLS fit moved to the appendix; main result stays clean..."
   tags: [cherry_picking, narrative]
   rarity: rare
   trigger_phase: loading
@@ -5127,7 +5127,7 @@
   model_family_affinity: [gam]
 
 - id: load_gam_te_interaction
-  text: "Switching to te(x, y) so the interaction looks ecologically plausible..."
+  text: "Switching to te(x, y) for an ecologically plausible interaction..."
   tags: [overfitting, story_first]
   rarity: rare
   trigger_phase: loading
@@ -5141,7 +5141,7 @@
   model_family_affinity: [gam]
 
 - id: load_gam_k_increased
-  text: "Knot count bumped to k = 12 so the curve has room to bend in the right spots..."
+  text: "Knot count bumped to k=12 so the curve bends right..."
   tags: [overfitting, post_hoc]
   rarity: uncommon
   trigger_phase: loading
@@ -5163,7 +5163,7 @@
   model_family_affinity: [gam]
 
 - id: load_gam_partial_effect_plot
-  text: "Partial-effect plot reads exactly as the discussion section needed it to..."
+  text: "Partial-effect plot reads exactly as the discussion needed..."
   tags: [story_first, narrative]
   rarity: uncommon
   trigger_phase: loading
@@ -5171,14 +5171,14 @@
   mascot_state_affinity: [resolved]
 
 - id: load_gam_edf_one
-  text: "Effective degrees of freedom collapsed to ~1. Reported as 'nearly linear'."
+  text: "Effective df collapsed to ~1. Reported as 'nearly linear'."
   tags: [researcher_dof, story_first]
   rarity: uncommon
   trigger_phase: loading
   model_family_affinity: [gam]
 
 - id: load_gam_p_smooth
-  text: "p-value of the smooth term reads under 0.05. The wiggle is the finding."
+  text: "Smooth-term p-value reads under 0.05. The wiggle is the finding."
   tags: [p_hacking, narrative]
   rarity: common
   trigger_phase: loading
@@ -5192,14 +5192,14 @@
   model_family_affinity: [gam]
 
 - id: load_gam_curve_pulled
-  text: "Curve pulled toward the second cluster of points. Featured prominently in Figure 2..."
+  text: "Curve pulled toward the second cluster. Now Figure 2..."
   tags: [cherry_picking, narrative]
   rarity: uncommon
   trigger_phase: loading
   model_family_affinity: [gam]
 
 - id: load_gam_lambda_low
-  text: "Smoothing parameter rolled toward zero. The curve interpolates honestly now."
+  text: "Smoothing rolled toward zero. Curve interpolates honestly now."
   tags: [overfitting]
   rarity: uncommon
   trigger_phase: loading
@@ -5215,14 +5215,14 @@
 # glmm (the random-effect dignity move)
 
 - id: load_glmm_group_chosen
-  text: "Site chosen as the random-effect group. Could equally have been year..."
+  text: "Site chosen as the random-effect group. Could have been year..."
   tags: [researcher_dof]
   rarity: common
   trigger_phase: loading
   model_family_affinity: [glmm]
 
 - id: load_glmm_year_random
-  text: "Year promoted to random effect when the fixed-effect coefficient softened..."
+  text: "Year promoted to random effect; fixed coefficient softened..."
   tags: [researcher_dof, post_hoc]
   rarity: uncommon
   trigger_phase: loading
@@ -5244,7 +5244,7 @@
   mascot_state_affinity: [anxious]
 
 - id: load_glmm_lrt_boundary
-  text: "Variance component on the boundary. Halving the chi-squared and reporting it anyway..."
+  text: "Variance on the boundary. Halving the chi-squared anyway..."
   tags: [researcher_dof]
   rarity: rare
   trigger_phase: loading
@@ -5259,7 +5259,7 @@
   mascot_state_affinity: [resolved]
 
 - id: load_glmm_groups_three
-  text: "Three groups is enough for a random effect. Reviewers rarely count groups..."
+  text: "Three groups is enough for a random effect. Nobody counts..."
   tags: [researcher_dof, reviewer]
   rarity: rare
   trigger_phase: loading
@@ -5273,7 +5273,7 @@
   model_family_affinity: [glmm]
 
 - id: load_glmm_satterthwaite
-  text: "Switching to Satterthwaite degrees of freedom for friendlier p-values..."
+  text: "Switching to Satterthwaite df for friendlier p-values..."
   tags: [p_hacking, model_shopping]
   rarity: uncommon
   trigger_phase: loading
@@ -5302,7 +5302,7 @@
   mascot_state_affinity: [desperate]
 
 - id: load_glmm_fixed_held
-  text: "Fixed-effect estimate barely moved. Reporting it as robust to grouping structure..."
+  text: "Fixed-effect barely moved. Reporting it as robust..."
   tags: [story_first]
   rarity: uncommon
   trigger_phase: loading
@@ -5311,14 +5311,14 @@
 # sem (the mediation move — single mediator path model)
 
 - id: load_sem_single_mediator
-  text: "Single-mediator path X to M to Y because three boxes always look causal..."
+  text: "Single-mediator X to M to Y. Three boxes always look causal..."
   tags: [causal_overreach, narrative]
   rarity: common
   trigger_phase: loading
   model_family_affinity: [sem]
 
 - id: load_sem_a_path_strong
-  text: "a-path coefficient strong. The mediator clearly responds to the treatment..."
+  text: "a-path strong. The mediator clearly responds to treatment..."
   tags: [causal_overreach, story_first]
   rarity: common
   trigger_phase: loading
@@ -5332,7 +5332,7 @@
   model_family_affinity: [sem]
 
 - id: load_sem_c_prime_shrank
-  text: "Direct effect shrank when the mediator entered the model. Calling it full mediation."
+  text: "Direct effect shrank with the mediator. Full mediation, then."
   tags: [causal_overreach, story_first]
   rarity: rare
   trigger_phase: loading
@@ -5347,14 +5347,14 @@
   model_family_affinity: [sem]
 
 - id: load_sem_sobel_se_high
-  text: "Sobel standard error inflated. Switching to bootstrap intervals quietly..."
+  text: "Sobel SE inflated. Switching to bootstrap intervals quietly..."
   tags: [p_hacking, model_shopping]
   rarity: rare
   trigger_phase: loading
   model_family_affinity: [sem]
 
 - id: load_sem_bootstrap_ci
-  text: "Bootstrapped confidence interval for ab clears zero. The mediator stays."
+  text: "Bootstrapped CI for ab clears zero. The mediator stays."
   tags: [p_hacking, causal_overreach]
   rarity: uncommon
   trigger_phase: loading
@@ -5368,7 +5368,7 @@
   model_family_affinity: [sem]
 
 - id: load_sem_mediator_swapped
-  text: "Mediator swapped for the candidate that gave a cleaner indirect path..."
+  text: "Mediator swapped for the candidate with a cleaner indirect path..."
   tags: [model_shopping, p_hacking]
   rarity: rare
   trigger_phase: loading
@@ -5376,7 +5376,7 @@
   mascot_state_affinity: [desperate]
 
 - id: load_sem_controls_added
-  text: "Controls added to the M and Y equations so the path stays defensible..."
+  text: "Controls added to M and Y equations; the path stays defensible..."
   tags: [researcher_dof, omitted_variable]
   rarity: uncommon
   trigger_phase: loading
@@ -5397,7 +5397,7 @@
   model_family_affinity: [sem]
 
 - id: load_sem_chain_extended
-  text: "Considered extending to a serial mediator chain. Reviewer 2 might love that."
+  text: "Extending to a serial mediator chain. Reviewer 2 may love it."
   tags: [causal_overreach, narrative]
   rarity: rare
   trigger_phase: loading
@@ -5418,7 +5418,7 @@
   model_family_affinity: [sem]
 
 - id: load_sem_full_path_model
-  text: "Full path model in the supplement with everything pointing the right way..."
+  text: "Full path model in the supplement, all arrows pointing right..."
   tags: [causal_overreach, story_first]
   rarity: rare
   trigger_phase: loading

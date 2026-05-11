@@ -32,15 +32,27 @@ test_that("seed makes runs reproducible", {
   expect_equal(r1$grid_hash, r2$grid_hash)
 })
 
-test_that("unknown modifier errors", {
-  expect_error(shoot(mtcars, modifiers = "not_a_modifier", depth = "demo"),
-               "Unknown modifier")
+test_that("tactical_pause rejects unknown +commands softly", {
+  withr::local_options(texanshootR.budget = 2)
+  withr::local_seed(13)
+  run <- shoot(mtcars,
+               prompt_fn = function(prompt) "+not_a_modifier")
+  expect_s3_class(run, "tx_run")
+  expect_length(run$modifiers_used %||% character(), 0L)
 })
 
-test_that("derived_metrics modifier engages the escalation phase", {
+test_that("typing +derived_metrics mid-run engages the escalation phase", {
   withr::local_options(texanshootR.budget = 2)
   withr::local_seed(7)
-  run <- shoot(mtcars, modifiers = "derived_metrics")
+  # Reply with +derived_metrics to whichever tactical-pause window fires
+  # first; later windows return "" (skip).
+  responses <- c("+derived_metrics")
+  i <- 0L
+  pf <- function(prompt) {
+    i <<- i + 1L
+    if (i <= length(responses)) responses[i] else ""
+  }
+  run <- shoot(mtcars, prompt_fn = pf)
   expect_s3_class(run, "tx_run")
   expect_true("derived_metrics" %in% (run$modifiers_used %||% character()))
 })

@@ -24,5 +24,10 @@ output functions. Default: \code{FALSE}.}
 probability of a life-event encounter. Default: \code{1/6}.}
 \item{\code{texanshootR.life_events}}{Logical. Enable life-event
 encounters during runs. Default: \code{TRUE}.}
+\item{\code{texanshootR.ui_mode}}{Optional character override for the
+TUI rendering mode. One of \code{"ansi"}, \code{"dynamic"}, \code{"plain"}.
+Unset (the default) means auto-detect. Use this if auto-detect
+picks the wrong mode for your terminal (e.g., a remote RStudio
+session that does not report \code{.Platform$GUI == "RStudio"}).}
 }
 }

@@ -13,11 +13,11 @@
 \format{
 An object of class \code{character} of length 37.
 
-An object of class \code{character} of length 12.
+An object of class \code{character} of length 16.
 
 An object of class \code{character} of length 4.
 
-An object of class \code{character} of length 5.
+An object of class \code{character} of length 9.
 
 An object of class \code{character} of length 9.
 }

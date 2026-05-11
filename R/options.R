@@ -19,6 +19,11 @@
 #'     probability of a life-event encounter. Default: `1/6`.}
 #'   \item{`texanshootR.life_events`}{Logical. Enable life-event
 #'     encounters during runs. Default: `TRUE`.}
+#'   \item{`texanshootR.ui_mode`}{Optional character override for the
+#'     TUI rendering mode. One of `"ansi"`, `"dynamic"`, `"plain"`.
+#'     Unset (the default) means auto-detect. Use this if auto-detect
+#'     picks the wrong mode for your terminal (e.g., a remote RStudio
+#'     session that does not report `.Platform$GUI == "RStudio"`).}
 #' }
 #' @name texanshootR-options
 NULL
