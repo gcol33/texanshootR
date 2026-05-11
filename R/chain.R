@@ -229,6 +229,7 @@ require_chain_stage <- function(stage, run) {
                        paste(completed, collapse = ", ") else "none"
     meta <- close_chain(meta, "broken")
     write_meta(meta)
+    say_chain_broken("window_expired", completed)
     msg <- paste0(stage, "() failed:\n",
                   "window expired\n\n",
                   "Completed before timeout:\n",
@@ -270,14 +271,77 @@ require_chain_stage <- function(stage, run) {
 }
 
 # Called by an output generator after it has successfully produced
-# its file. Persists chain advance + XP. Returns the new meta (with
-# attributes describing the transition for the post-stage HUD).
+# its file. Persists chain advance + XP, then announces the transition
+# (per-stage HUD line and a flavour pick from the message bank).
+# Returns the new meta with attributes describing the transition.
 advance_chain_after_stage <- function(stage) {
   meta <- read_meta()
   if (is.null(meta) || is.null(meta$active_chain)) return(invisible(NULL))
   meta <- advance_chain(meta, stage)
   write_meta(meta)
+  say_stage_landed(meta, stage)
   invisible(meta)
+}
+
+# ---- Chain announcement helpers ------------------------------------
+#
+# These print one or two lines after a chain transition so the player
+# sees the chain state evolve. Flavour is drawn from the message bank
+# (inst/messages/chain.yaml). Each helper respects `texanshootR.quiet`
+# via say(). The TUI session has already closed at this point, so we
+# print plain lines rather than redrawing into the three-zone manager.
+
+say_chain_flavor <- function(phase, mascot_state) {
+  draw <- tryCatch(
+    select_message(phase = phase, mascot_state = mascot_state),
+    error = function(e) NULL
+  )
+  if (!is.null(draw)) say(draw$text)
+}
+
+say_chain_opened <- function(meta) {
+  ac <- meta$active_chain
+  if (is.null(ac)) return(invisible())
+  due <- CHAIN_STAGES[[ac$stage_idx]]
+  remaining <- chain_seconds_remaining(meta)
+  say_chain_flavor("chain_opened", "polishing")
+  say(sprintf("Publication chain opened. %s() due in %.0fs.",
+              due, max(0, remaining)))
+  invisible()
+}
+
+say_stage_landed <- function(meta, stage) {
+  if (isTRUE(attr(meta, "chain_completed"))) {
+    say_chain_flavor("chain_completed", "granted")
+    prog <- progression_of(meta)
+    bonus <- as.integer(attr(meta, "xp_awarded") %||% 0L)
+    say(sprintf("Chain complete. %s landed (+%d XP this stage incl. bonus). Total XP: %d.",
+                stage, bonus, prog$xp))
+    return(invisible())
+  }
+  ac <- meta$active_chain
+  if (is.null(ac)) return(invisible())
+  state_pick <- if (stage == "abstract") "polishing" else "submitting"
+  say_chain_flavor("stage_advanced", state_pick)
+  prog <- progression_of(meta)
+  due  <- CHAIN_STAGES[[ac$stage_idx]]
+  remaining <- chain_seconds_remaining(meta)
+  say(sprintf("Stage %s landed (+1 XP, total %d). Next: %s() in %.0fs.",
+              stage, prog$xp, due, max(0, remaining)))
+  invisible()
+}
+
+say_chain_broken <- function(reason, completed = character()) {
+  say_chain_flavor("chain_broken", "rejected")
+  completed_str <- if (length(completed))
+                     paste(completed, collapse = ", ") else "none"
+  msg <- switch(reason,
+    window_expired = sprintf("Publication window closed. Chain broken; landed before timeout: %s.",
+                              completed_str),
+    "Publication chain broken."
+  )
+  say(msg)
+  invisible()
 }
 
 format_locked_stage <- function(stage, xp, xp_needed) {

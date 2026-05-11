@@ -90,13 +90,17 @@ read_face <- function(state) {
   } else {
     # ASCII-clean fallbacks used during dev when inst/ isn't installed.
     switch(state,
-      composed  = "( o_o)",
-      uncertain = "( -_- )",
-      worried   = "( o_o;)",
-      anxious   = "( o_o;)",
-      panicked  = "(>_<;)",
-      desperate = "( O_O )",
-      resolved  = "( -_-)",
+      composed   = "( o_o)",
+      uncertain  = "( -_- )",
+      worried    = "( o_o;)",
+      anxious    = "( o_o;)",
+      panicked   = "(>_<;)",
+      desperate  = "( O_O )",
+      resolved   = "( -_-)",
+      polishing  = "( ._. )",
+      submitting = "( o_o )?",
+      granted    = "( -_- )b",
+      rejected   = "( x_x )",
       "( o_o)")
   }
   cache[[state]] <- txt

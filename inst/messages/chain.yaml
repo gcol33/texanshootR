@@ -1,0 +1,144 @@
+# Publication-chain transition messages. Fired by say_chain_opened(),
+# say_stage_landed(), and say_chain_broken() in R/chain.R. Tone is
+# institutional ceremony (passive voice, opaque registry), matching
+# banner / promotion / reviewer.
+
+- id: chain_opened_machinery
+  text: "Publication machinery engaged."
+  tags: [career, publication_bias]
+  rarity: common
+  trigger_phase: chain_opened
+  mascot_state_affinity: [polishing]
+
+- id: chain_opened_finding
+  text: "A finding has cleared threshold. Pipeline armed."
+  tags: [career, story_first]
+  rarity: common
+  trigger_phase: chain_opened
+  mascot_state_affinity: [polishing]
+
+- id: chain_opened_paper_track
+  text: "Paper track opened."
+  tags: [career, narrative]
+  rarity: common
+  trigger_phase: chain_opened
+  mascot_state_affinity: [polishing]
+
+- id: chain_opened_clock
+  text: "The clock is running."
+  tags: [career]
+  rarity: uncommon
+  trigger_phase: chain_opened
+  mascot_state_affinity: [polishing]
+
+- id: chain_opened_inevitable
+  text: "Inevitability noted."
+  tags: [career, publication_bias]
+  rarity: rare
+  trigger_phase: chain_opened
+  mascot_state_affinity: [polishing]
+
+- id: stage_advanced_logged
+  text: "Stage logged."
+  tags: [career]
+  rarity: common
+  trigger_phase: stage_advanced
+  mascot_state_affinity: [polishing, submitting]
+
+- id: stage_advanced_dossier
+  text: "Dossier updated."
+  tags: [career, publication_bias]
+  rarity: common
+  trigger_phase: stage_advanced
+  mascot_state_affinity: [submitting]
+
+- id: stage_advanced_pipeline
+  text: "Pipeline advances."
+  tags: [career, narrative]
+  rarity: common
+  trigger_phase: stage_advanced
+  mascot_state_affinity: [submitting]
+
+- id: stage_advanced_momentum
+  text: "Momentum preserved."
+  tags: [career]
+  rarity: uncommon
+  trigger_phase: stage_advanced
+  mascot_state_affinity: [submitting]
+
+- id: stage_advanced_window
+  text: "Window extended."
+  tags: [career]
+  rarity: uncommon
+  trigger_phase: stage_advanced
+  mascot_state_affinity: [submitting]
+
+- id: chain_completed_filed
+  text: "Chain filed."
+  tags: [career, publication_bias]
+  rarity: common
+  trigger_phase: chain_completed
+  mascot_state_affinity: [granted]
+
+- id: chain_completed_acknowledged
+  text: "Contribution acknowledged."
+  tags: [career, narrative]
+  rarity: common
+  trigger_phase: chain_completed
+  mascot_state_affinity: [granted]
+
+- id: chain_completed_bonus
+  text: "Bonus credited."
+  tags: [career, funding]
+  rarity: common
+  trigger_phase: chain_completed
+  mascot_state_affinity: [granted]
+
+- id: chain_completed_cycle
+  text: "Cycle complete. Begin next."
+  tags: [career, publication_bias]
+  rarity: uncommon
+  trigger_phase: chain_completed
+  mascot_state_affinity: [granted]
+
+- id: chain_completed_field
+  text: "Field shifts another increment."
+  tags: [career, story_first]
+  rarity: rare
+  trigger_phase: chain_completed
+  mascot_state_affinity: [granted]
+
+- id: chain_broken_window
+  text: "Window closed. Chain abandoned."
+  tags: [career, publication_bias]
+  rarity: common
+  trigger_phase: chain_broken
+  mascot_state_affinity: [rejected]
+
+- id: chain_broken_partial
+  text: "Partial credit retained."
+  tags: [career]
+  rarity: common
+  trigger_phase: chain_broken
+  mascot_state_affinity: [rejected]
+
+- id: chain_broken_lapsed
+  text: "Filing deadline lapsed."
+  tags: [career, publication_bias]
+  rarity: common
+  trigger_phase: chain_broken
+  mascot_state_affinity: [rejected]
+
+- id: chain_broken_cooled
+  text: "Manuscript cooled."
+  tags: [career, story_first]
+  rarity: uncommon
+  trigger_phase: chain_broken
+  mascot_state_affinity: [rejected]
+
+- id: chain_broken_committee
+  text: "Committee noted absence."
+  tags: [career, reviewer]
+  rarity: rare
+  trigger_phase: chain_broken
+  mascot_state_affinity: [rejected]

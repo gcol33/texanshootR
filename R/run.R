@@ -14,7 +14,14 @@ print.tx_run <- function(x, ...) {
   hs   <- x$highlighted_spec
   resolved <- !is.null(hs) && is.finite(hs$p_value %||% NA_real_) &&
               hs$p_value <= 0.05
-  final_state <- if (resolved) "resolved" else (x$peak_mascot %||% "composed")
+  active_chain <- tryCatch({
+    m <- read_meta()
+    !is.null(m) && !is.null(m$active_chain) &&
+      identical(m$active_chain$run_id, x$run_id)
+  }, error = function(e) FALSE)
+  final_state <- if (resolved && active_chain) "polishing"
+                 else if (resolved) "resolved"
+                 else (x$peak_mascot %||% "composed")
   face <- tryCatch(read_face(final_state), error = function(e) "( o_o)")
 
   cat(style_header(rule), "\n", sep = "")

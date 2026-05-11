@@ -150,6 +150,9 @@ validate_registry <- function(reg) {
   # one fallacy tag (per the content design contract). Phases that are
   # institutional ceremony (banner, promotion, reviewer, state
   # transition, daily) are exempt.
+  # Phases that are institutional ceremony (banner, promotion, reviewer,
+  # state transition, daily, chain transitions) are exempt from the
+  # fallacy-tag requirement.
   fallacy_phases <- c("blip", "loading", "derived_escalation",
                        "ultra_rare", "event", "event_consequence")
   fallacy_tags <- vocab_tags[seq_len(23)]

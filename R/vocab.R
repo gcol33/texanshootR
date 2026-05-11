@@ -67,7 +67,11 @@ vocab_phases <- c(
   "daily",
   "banner",
   "event",
-  "event_consequence"
+  "event_consequence",
+  "chain_opened",
+  "stage_advanced",
+  "chain_completed",
+  "chain_broken"
 )
 
 #' @describeIn vocab Valid `career_min` values.
@@ -86,7 +90,11 @@ vocab_mascot_states <- c(
   "uncertain",
   "anxious",
   "desperate",
-  "resolved"
+  "resolved",
+  "polishing",
+  "submitting",
+  "granted",
+  "rejected"
 )
 
 #' @describeIn vocab Valid event-effect keys for `inst/events/*.yaml`.

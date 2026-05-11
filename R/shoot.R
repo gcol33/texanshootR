@@ -474,6 +474,8 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
 
   if (open_tui) ui_session_close(ui)
 
+  if (isTRUE(shippable)) say_chain_opened(meta)
+
   if (isTRUE(attr(meta, "promoted"))) {
     say(sprintf("Career advancement detected. %s -> %s",
                 attr(meta, "from_level"), attr(meta, "to_level")))
