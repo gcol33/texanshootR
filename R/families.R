@@ -50,6 +50,11 @@ spec_metadata <- function(df, spec, n_used) {
                           length(spec$subset),
     outliers_dropped = if (spec$outlier_seed == "none") 0L
                        else as.integer(round(0.05 * nrow(df))),
+    # Carry the outlier seed token (e.g. "leverage_top_5pct", "random_5pct")
+    # so the print banner's DATA USED section can label the rule, not just
+    # report the count. NA when no outlier perturbation was applied.
+    outlier_rule     = if (spec$outlier_seed == "none") NA_character_
+                       else spec$outlier_seed,
     subgroup         = if (spec$subgroup_seed == "none") NA_character_
                        else spec$subgroup_seed
   )

@@ -665,6 +665,14 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
   if (isTRUE(shippable)) {
     meta <- open_chain(meta, run$run_id)
   }
+  # Stamp the cumulative run number and the promotion flag onto the run
+  # AFTER update_career() has incremented meta$runs_count and set the
+  # transient `promoted` attribute (which is lost on write_meta because
+  # JSON doesn't carry R attributes). The print banner reads these
+  # fields for the "texanshootR :: run 0007" header and the RUN section's
+  # `career impact:` line.
+  run$run_index <- as.integer(meta$runs_count %||% 0L)
+  run$promoted  <- isTRUE(attr(meta, "promoted"))
   write_meta(meta)
   write_run_record(run)
   write_recent_buffer(state$recent_buf)
@@ -704,12 +712,23 @@ numeric_summary <- function(df) {
 # actually fitted. Replaces the old "grid summary" — there is no grid
 # anymore, only the trace of what the shooter ended up trying.
 summarise_trace <- function(trace) {
+  # Distinct model families the search actually fitted, sorted in
+  # registry order so the banner reads "lm glm gam" consistently
+  # across runs that happened to hit the same families in different
+  # encounter order.
+  fams_seen <- unique(vapply(trace,
+                              function(s) s$family$fitter %||% "lm",
+                              character(1)))
+  fams_sorted <- intersect(c("lm", "glm", "gam", "wls", "cor", "glmm", "sem"),
+                            fams_seen)
+
   list(
     subset_count      = length(unique(vapply(trace, function(s) paste(s$subset, collapse = ","), ""))),
     transform_count   = length(unique(vapply(trace, function(s) paste(names(s$transforms), s$transforms, sep = ":", collapse = ","), ""))),
     interaction_count = length(unique(unlist(lapply(trace, function(s) s$interactions)))),
     outlier_count     = length(unique(vapply(trace, function(s) s$outlier_seed, ""))),
-    subgroup_count    = length(unique(vapply(trace, function(s) s$subgroup_seed, "")))
+    subgroup_count    = length(unique(vapply(trace, function(s) s$subgroup_seed, ""))),
+    families_explored = fams_sorted
   )
 }
 

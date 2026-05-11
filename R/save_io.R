@@ -131,6 +131,8 @@ read_run_record <- function(run_id) {
 run_to_record <- function(run) {
   list(
     run_id            = run$run_id,
+    run_index         = as.integer(run$run_index %||% 0L),
+    promoted          = isTRUE(run$promoted),
     seed              = run$seed,
     timestamp         = run$timestamp,
     package_version   = run$package_version,
@@ -151,6 +153,8 @@ run_to_record <- function(run) {
     resolved_at_progress = run$resolved_at_progress,
     ultra_rare_seen   = isTRUE(run$ultra_rare_seen),
     peak_mascot       = run$peak_mascot %||% "composed",
+    peak_mascot_before_resolve =
+      run$peak_mascot_before_resolve %||% "composed",
     harked            = isTRUE(run$harked),
     outputs_generated = run$outputs_generated %||% character(),
     outputs_generated_files = run$outputs_generated_files %||% character(),

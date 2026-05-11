@@ -10,107 +10,226 @@ new_tx_run <- function(...) {
 #' @export
 #' @method print tx_run
 print.tx_run <- function(x, ...) {
-  rule <- strrep("-", 48)
-  hs   <- x$highlighted_spec
-  resolved <- !is.null(hs) && is.finite(hs$p_value %||% NA_real_) &&
-              hs$p_value <= 0.05
-  active_chain <- tryCatch({
-    m <- read_meta()
-    !is.null(m) && !is.null(m$active_chain) &&
-      identical(m$active_chain$run_id, x$run_id)
-  }, error = function(e) FALSE)
-  final_state <- if (resolved && active_chain) "polishing"
-                 else if (resolved) "resolved"
-                 else (x$peak_mascot %||% "composed")
-  face <- tryCatch(read_face(final_state), error = function(e) "( o_o)")
+  # Single read of meta — every section that needs it (career impact,
+  # OUTPUTS, PUBLICATION PIPELINE) shares this snapshot. Reading it
+  # once also means the banner reflects the state at print time, not
+  # the state from when the run finalized (the player may have called
+  # output generators or claimed chain stages in between).
+  meta <- tryCatch(read_meta(), error = function(e) NULL)
 
-  cat(style_header(rule), "\n", sep = "")
-  cat(style_header(sprintf("%s  %s", face, run_arc_summary(x, final_state))),
-      "\n", sep = "")
-  cat(style_header(rule), "\n", sep = "")
-  if (isTRUE(x$shippable) && !is.null(hs)) {
-    # Present-tense framing: the run is a finding, not a table of
-    # diagnostics. The narrative reads off the highlighted formula +
-    # subgroup + outlier-drop context, with the p-value inline at the
-    # end. Detailed numerics (R^2, n, AIC) stay accessible on
-    # `run$highlighted_spec` for programmatic use but don't crowd the
-    # banner.
-    for (line in format_run_narrative(x)) cat(line, "\n", sep = "")
-  } else if (!is.null(hs)) {
-    # Non-shippable: show what was tried so the user can see why the
-    # search failed.
-    cat(sprintf("Closest formula:       %s\n", hs$formula %||% ""))
-    cat(sprintf("Best p-value seen:     %s\n",
-                if (!is.null(hs$p_value)) format.pval(hs$p_value, digits = 3)
-                else "-"))
-    cat(sprintf("Searched %s candidates.\n",
-                format(x$spec_count %||% 0L, big.mark = ",")))
+  active_chain <- !is.null(meta) && !is.null(meta$active_chain) &&
+                  identical(meta$active_chain$run_id, x$run_id)
+  final_state  <- compute_final_state(x, active_chain)
+
+  cat(banner_header(x, final_state), "\n", sep = "")
+  cat("\n")
+
+  cat("RUN\n")
+  cat("status: ",         format_run_status(x),     "\n", sep = "")
+  cat("career impact: ",  format_career_impact(x),  "\n", sep = "")
+  cat("mascot state: ",   format_mascot_arc(x, final_state), "\n", sep = "")
+  cat("\n")
+
+  cat("FINDING\n")
+  for (line in format_finding_block(x)) cat(line, "\n", sep = "")
+  cat("\n")
+
+  cat("SEARCH\n")
+  for (line in format_search_block(x)) cat(line, "\n", sep = "")
+  cat("\n")
+
+  cat("OUTPUTS\n")
+  for (line in format_outputs_block(meta)) cat(line, "\n", sep = "")
+  cat("\n")
+
+  if (active_chain) {
+    cat("PUBLICATION PIPELINE\n")
+    for (line in format_pipeline_block(meta)) cat(line, "\n", sep = "")
+    cat("\n")
   }
-  if (length(x$events)) {
-    cat("Events witnessed:\n")
-    for (e in x$events) {
-      cat("  - ", e$event_text, " - ", e$consequence_text, "\n", sep = "")
-    }
-  }
-  if (length(x$modifiers_used)) {
-    cat(sprintf("Modifiers used:        %s\n",
-                paste0("+", x$modifiers_used, collapse = " ")))
-  }
-  if (isTRUE(x$shippable)) {
-    meta <- tryCatch(read_meta(), error = function(e) NULL)
-    if (!is.null(meta)) {
-      hud <- format_chain_hud(meta)
-      if (!is.null(hud)) cat("\n", hud, "\n", sep = "")
-    }
-  } else {
-    cat("\nNo publishable narrative this run -- nothing under p <= 0.05.\n")
-  }
+
+  cat("DATA USED\n")
+  for (line in format_data_used_block(x)) cat(line, "\n", sep = "")
+
   invisible(x)
 }
 
-# Plain-English finding line(s) drawn from the highlighted spec. Dry by
-# design -- no strength adverbs, no editorial modulation. Just outcome,
-# predictors, optional subset / outlier context, and the p-value inline.
-# The trailing "Searched N candidate specifications." line is the
-# institutional tell: it reframes the regression as the survivor of a
-# search, which is the package's whole joke. `strwrap()` reflows to host
-# terminal width so wide RStudio sessions read on one line and 80-col
-# terminals wrap tightly.
-format_run_narrative <- function(x) {
-  hs <- x$highlighted_spec
-  if (is.null(hs)) return(character())
-
-  parts      <- parse_formula_parts(hs$formula %||% "")
-  outcome    <- if (nzchar(parts$outcome))    parts$outcome    else "outcome"
-  predictors <- if (nzchar(parts$predictors)) parts$predictors else "predictors"
-
-  context_phrase <- if (!is.na(hs$subgroup %||% NA_character_)) {
-    sprintf(" in the %s subset", hs$subgroup)
-  } else if ((hs$outliers_dropped %||% 0L) > 0L) {
-    n <- hs$outliers_dropped
-    sprintf(" after dropping %d outlier%s", n, if (n == 1L) "" else "s")
-  } else ""
-
-  pval_str <- if (is.finite(hs$p_value %||% NA_real_))
-                format.pval(hs$p_value, digits = 3)
-              else "-"
-
-  claim <- sprintf("%s is associated with %s%s (p = %s).",
-                   outcome, predictors, context_phrase, pval_str)
-
-  width      <- max(40L, getOption("width", 80L) - 2L)
-  body_lines <- strwrap(claim, width = width)
-
-  searched <- sprintf("Searched %s candidate specifications.",
-                      format(x$spec_count %||% 0L, big.mark = ","))
-
-  c("Publishable result:", body_lines, searched)
+# Banner header: double-rule, face+gun, "texanshootR :: run NNNN",
+# double-rule. The face is the resting state at print time -- "polishing"
+# when the printed run owns the active chain (the player is between
+# stages), "resolved" for any other shippable run, and the run's
+# `peak_mascot` for non-shippable runs (the worst face they wore).
+banner_header <- function(x, final_state) {
+  rule <- strrep("=", 64)
+  face <- tryCatch(read_face(final_state), error = function(e) "( o_o)")
+  gun  <- "︻デ═一  ·"  # canonical frame from inst/ascii/heartbeat.txt
+  idx  <- as.integer(x$run_index %||% 0L)
+  title <- sprintf("texanshootR :: run %04d", idx)
+  paste(rule, paste(face, gun), title, rule, sep = "\n")
 }
 
-# Pull outcome / predictor sides off the formula via the parser, not
-# regex on the deparsed string (R formulas are already parse trees;
-# regex over them is brittle on multi-term RHS and i:i interactions).
-# Returns empty strings on parse failure so the caller can fall back.
+compute_final_state <- function(x, active_chain) {
+  if (isTRUE(x$shippable) && active_chain) return("polishing")
+  if (isTRUE(x$shippable))                  return("resolved")
+  x$peak_mascot %||% "composed"
+}
+
+format_run_status <- function(x) {
+  if (isTRUE(x$shippable)) "publishable result identified"
+  else                     "no publishable narrative this run"
+}
+
+# Three-state career-impact verdict:
+#   promoted  = career tier changed during update_career() of this run
+#   advanced  = shippable run, chain opened, no promotion
+#   stalled   = not shippable (no chain opened, no XP path)
+format_career_impact <- function(x) {
+  if (!isTRUE(x$shippable))  return("stalled")
+  if (isTRUE(x$promoted))    return("promoted")
+  "advanced"
+}
+
+# `peak_pre_resolve → final` arc. Tells the actual emotional shape of
+# the run: composed→resolved is a glide, desperate→resolved is a save,
+# *→desperate is a defeat. The arc reports the RUN's outcome, not the
+# player's current stance -- so "polishing" (which is the resting face
+# shown atop the banner when the run owns an active chain) maps back
+# to "resolved" here. The top-line face still shows polishing.
+format_mascot_arc <- function(x, final_state) {
+  arc_end <- if (identical(final_state, "polishing")) "resolved" else final_state
+  pre <- x$peak_mascot_before_resolve %||% x$peak_mascot %||% "composed"
+  sprintf("%s → %s", pre, arc_end)
+}
+
+format_finding_block <- function(x) {
+  hs <- x$highlighted_spec
+  if (isTRUE(x$shippable) && !is.null(hs)) {
+    c(
+      hs$formula %||% "",
+      sprintf("subset: %s", hs$subgroup %||% "none"),
+      sprintf("p: %s",
+              if (is.finite(hs$p_value %||% NA_real_))
+                format.pval(hs$p_value, digits = 3)
+              else "—")
+    )
+  } else if (!is.null(hs)) {
+    c(
+      sprintf("closest formula: %s", hs$formula %||% ""),
+      sprintf("best p seen: %s",
+              if (is.finite(hs$p_value %||% NA_real_))
+                format.pval(hs$p_value, digits = 3)
+              else "—"),
+      sprintf("searched: %s specs",
+              format(x$spec_count %||% 0L, big.mark = ","))
+    )
+  } else {
+    "(no candidate specifications materialised)"
+  }
+}
+
+format_search_block <- function(x) {
+  fams <- x$search$families_explored %||% character()
+  mods <- x$modifiers_used %||% character()
+  c(
+    sprintf("candidate specifications: %s",
+            format(x$spec_count %||% 0L, big.mark = ",")),
+    sprintf("model families explored: %s",
+            if (length(fams)) paste(fams, collapse = " ") else "none"),
+    sprintf("modifiers used: %s",
+            if (length(mods)) paste0("+", mods, collapse = " ") else "none")
+  )
+}
+
+# OUTPUTS block. Walks CHAIN_STAGES against meta$progression$length_unlocked
+# and CHAIN_TIER_BY_LENGTH. Unlocked stages stack as `available now:
+# fn(run)` with indented continuation. Locked stages render under
+# `locked:` in the deadpan two-line format already established for
+# `tx_locked` errors: `fn() requires <tier>`. Locked function names are
+# width-padded so the requires-column lines up.
+format_outputs_block <- function(meta) {
+  prog <- progression_of(meta %||% list())
+  n_unlocked <- prog$length_unlocked
+  stages <- CHAIN_STAGES
+  unlocked <- stages[seq_len(n_unlocked)]
+  locked   <- if (n_unlocked < length(stages))
+                stages[(n_unlocked + 1L):length(stages)]
+              else character()
+
+  lines <- character()
+
+  if (length(unlocked)) {
+    label   <- "available now: "
+    pad     <- strrep(" ", nchar(label))
+    lines   <- c(lines,
+                 paste0(label, sprintf("%s(run)", unlocked[1])))
+    for (s in unlocked[-1]) {
+      lines <- c(lines, paste0(pad, sprintf("%s(run)", s)))
+    }
+  }
+
+  if (length(locked)) {
+    if (length(unlocked)) lines <- c(lines, "")
+    lines <- c(lines, "locked:")
+    # Width-pad fn() column so `requires <tier>` aligns across rows.
+    fns <- sprintf("%s()", locked)
+    width <- max(nchar(fns))
+    for (i in seq_along(locked)) {
+      idx <- match(locked[i], stages)
+      tier <- CHAIN_TIER_BY_LENGTH[[idx]]
+      lines <- c(lines,
+                 sprintf("%-*s requires %s", width, fns[i], tier))
+    }
+  }
+
+  if (!length(lines)) lines <- "(no stages defined)"
+  lines
+}
+
+# PUBLICATION PIPELINE block. Only invoked when `meta$active_chain$run_id`
+# matches the printed run -- i.e. the player is mid-chain on THIS run.
+# Reports the next due stage and the claimed / unlocked ratio.
+format_pipeline_block <- function(meta) {
+  ac   <- meta$active_chain
+  prog <- progression_of(meta)
+  due  <- CHAIN_STAGES[[ac$stage_idx]]
+  done <- length(ac$completed_stages %||% character())
+  c(
+    sprintf("next available output: %s(run)", due),
+    sprintf("pipeline progress: %d / %d", done, prog$length_unlocked)
+  )
+}
+
+format_data_used_block <- function(x) {
+  hs        <- x$highlighted_spec
+  subgroup  <- hs$subgroup %||% NA_character_
+  out_rule  <- hs$outlier_rule %||% NA_character_
+  n_used    <- hs$n %||% NA_integer_
+  n_total   <- x$df_meta$nrow %||% NA_integer_
+  excluded  <- if (is.finite(n_total) && is.finite(n_used))
+                 as.integer(n_total - n_used) else NA_integer_
+
+  stored <- !is.null(save_dir()) && isTRUE(opt("texanshootR.save_enabled"))
+
+  c(
+    sprintf("subset applied: %s",
+            if (!is.na(subgroup)) subgroup else "none"),
+    sprintf("rows excluded by subset: %s",
+            if (is.finite(excluded)) format(excluded, big.mark = ",")
+            else "0"),
+    sprintf("outliers removed: %d", as.integer(hs$outliers_dropped %||% 0L)),
+    sprintf("outlier rule: %s",
+            if (!is.na(out_rule)) out_rule else "none"),
+    sprintf("derived metrics: %s",
+            if (isTRUE(x$derived_used)) "enabled" else "disabled"),
+    sprintf("search seed: %s",
+            if (!is.null(x$seed)) as.character(x$seed) else "none"),
+    sprintf("run stored: %s", if (isTRUE(stored)) "yes" else "no")
+  )
+}
+
+# Parser-based formula split. Kept for callers that need the
+# outcome / predictors decomposition (e.g. future banner extensions).
+# Returns empty strings on parse failure.
 parse_formula_parts <- function(formula_str) {
   f <- tryCatch(stats::as.formula(formula_str), error = function(e) NULL)
   if (is.null(f) || length(f) < 3L) {
@@ -120,28 +239,6 @@ parse_formula_parts <- function(formula_str) {
     outcome    = paste(deparse(f[[2]]), collapse = " "),
     predictors = paste(deparse(f[[3]]), collapse = " ")
   )
-}
-
-# System-log-style state transition for the banner header line. Reads
-# like an instrument readout rather than a sentence -- dry, institutional,
-# uniform format across all runs. Pre-resolve peak goes on the LHS (the
-# searcher's actual emotional arc; see `peak_mascot_before_resolve` on
-# tx_run for why this is not the all-run peak). Final state on the RHS
-# is `resolved` for any shippable run (the active-chain "polishing"
-# state is implementation detail), `derived escalation` when the
-# escalation branch fired without nominal predictors clearing 0.05, and
-# `unresolved` otherwise.
-run_arc_summary <- function(x, final_state) {
-  arrow <- "→"  # U+2192 RIGHTWARDS ARROW
-  if (final_state %in% c("resolved", "polishing")) {
-    pre <- x$peak_mascot_before_resolve %||% x$peak_mascot %||% "composed"
-    sprintf("Mascot state: %s %s resolved", pre, arrow)
-  } else if (isTRUE(x$derived_used)) {
-    "Mascot state: derived escalation"
-  } else {
-    peak <- x$peak_mascot %||% "composed"
-    sprintf("Mascot state: %s %s unresolved", peak, arrow)
-  }
 }
 
 #' @export
