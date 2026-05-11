@@ -1,8 +1,23 @@
-# Career-tier gating for the output-generator API. The four tiers in
-# CAREER_TIERS (R/career.R) are the only gating axis. Each gated function
-# calls `require_unlocked()` at the top; locked calls signal a `tx_locked`
-# condition with a deadpan two-block status message.
+# Output-generator unlock model. Each generator maps to a chain stage
+# (see R/chain.R). The legacy career-tier UNLOCK_REGISTRY remains here
+# only as the metadata `progress()` displays — the actual gate is the
+# XP-driven chain length, checked via require_chain_stage() from each
+# generator's source file.
 
+# Maps each gated function to the chain stage it produces. The chain
+# stage index dictates the XP required (CHAIN_XP_THRESHOLDS).
+GENERATOR_STAGE <- list(
+  abstract           = "abstract",
+  manuscript         = "manuscript",
+  presentation       = "presentation",
+  reviewer_response  = "reviewer_response",
+  graphical_abstract = "graphical_abstract",
+  funding            = "funding"
+)
+
+# Retained for legacy progress() rows and tests that reference tier
+# labels. Derived from chain index: the lowest tier at which each
+# stage's chain length becomes unlocked.
 UNLOCK_REGISTRY <- list(
   manuscript         = "Postdoc",
   reviewer_response  = "Senior Scientist",
@@ -12,25 +27,27 @@ UNLOCK_REGISTRY <- list(
 )
 
 tier_index <- function(level) {
-  for (i in seq_along(CAREER_TIERS)) {
-    if (identical(CAREER_TIERS[[i]]$level, level)) return(i)
-  }
-  0L
+  tiers <- unique(CHAIN_TIER_BY_LENGTH)
+  m <- match(level, tiers)
+  if (is.na(m)) return(0L)
+  m
 }
 
 current_career_level <- function() {
   meta <- tryCatch(read_meta(), error = function(e) NULL)
-  meta$career_level %||% "Junior Researcher"
+  if (is.null(meta)) return("Junior Researcher")
+  prog <- progression_of(meta)
+  career_level_for_length(prog$length_unlocked)
 }
 
 is_unlocked <- function(fn_name, level = current_career_level()) {
-  required <- UNLOCK_REGISTRY[[fn_name]]
-  if (is.null(required)) return(TRUE)
-  tier_index(level) >= tier_index(required)
+  stage <- GENERATOR_STAGE[[fn_name]]
+  if (is.null(stage)) return(TRUE)
+  meta <- read_meta() %||% default_meta(save_dir() %||% tempfile())
+  prog <- progression_of(meta)
+  stage_index(stage) <= prog$length_unlocked
 }
 
-# Format the deadpan two-block status message. No second-person voice,
-# no encouragement, no question marks - reads as a system message.
 format_locked_message <- function(fn_name, required, current) {
   paste0(
     fn_name, "() requires:\n",
@@ -41,11 +58,14 @@ format_locked_message <- function(fn_name, required, current) {
   )
 }
 
+# Legacy-shaped check kept for backwards compatibility with anything
+# that still calls it. New code routes through require_chain_stage()
+# in R/chain.R. We re-implement on top of progression so the two views
+# stay consistent.
 require_unlocked <- function(fn_name) {
-  required <- UNLOCK_REGISTRY[[fn_name]]
-  if (is.null(required)) return(invisible(TRUE))
-  current <- current_career_level()
-  if (tier_index(current) >= tier_index(required)) return(invisible(TRUE))
+  if (is_unlocked(fn_name)) return(invisible(TRUE))
+  required <- UNLOCK_REGISTRY[[fn_name]] %||% "Postdoc"
+  current  <- current_career_level()
   cond <- structure(
     class = c("tx_locked", "error", "condition"),
     list(
@@ -60,9 +80,7 @@ require_unlocked <- function(fn_name) {
 }
 
 # Achievement progress extractors. Each takes (runs, meta) and returns
-# list(have, need, label) for in-flight rendering. Only achievements with
-# deterministic public thresholds belong here; atomic achievements
-# (p_hacked, harker, ...) and hidden ones do not.
+# list(have, need, label).
 ACHIEVEMENT_PROGRESS <- list(
   ach_multiple_comparisons = function(runs, meta) {
     best <- max(c(0L, vapply(runs,
@@ -92,9 +110,6 @@ ACHIEVEMENT_PROGRESS <- list(
   }
 )
 
-# Build the in-flight progress rows: visible-locked achievements that
-# have an extractor. Hidden-locked achievements are excluded so the
-# discovery mechanic is preserved.
 inflight_progress_rows <- function(runs, meta, ach_state, ach_reg) {
   ids <- intersect(names(ACHIEVEMENT_PROGRESS), ach_reg$id)
   out <- list()
@@ -123,19 +138,11 @@ inflight_progress_rows <- function(runs, meta, ach_state, ach_reg) {
 #' Three call modes:
 #' \itemize{
 #'   \item `progress()` -- overview: career tier, gated-function lock
-#'     map, achievement / wardrobe counts, and in-flight progress for
-#'     achievements with public thresholds.
-#'   \item `progress("manuscript")` -- per-function card for a gated
-#'     function.
+#'     map, achievement / wardrobe counts, and in-flight progress.
+#'   \item `progress("manuscript")` -- per-function card.
 #'   \item `progress("ach_multiple_comparisons")` -- per-achievement
 #'     card.
 #' }
-#'
-#' Pairs with the static unlock requirement printed in each gated
-#' function's help page (e.g. `?presentation`). The help page documents
-#' the requirement; `progress()` reports the live state. Career-tier
-#' distance stays opaque by design -- only qualitative tier names are
-#' surfaced, never the underlying score.
 #'
 #' @param what Optional. A gated-function name (e.g. `"manuscript"`) or
 #'   an achievement id (e.g. `"ach_multiple_comparisons"`). When NULL,
@@ -146,7 +153,8 @@ progress <- function(what = NULL) {
   current <- current_career_level()
   if (is.null(what)) {
     obj <- progress_overview(current)
-  } else if (!is.null(UNLOCK_REGISTRY[[what]])) {
+  } else if (!is.null(UNLOCK_REGISTRY[[what]]) ||
+             !is.null(GENERATOR_STAGE[[what]])) {
     obj <- progress_function(what, current)
   } else if (startsWith(what, "ach_")) {
     obj <- progress_achievement(what)
@@ -165,10 +173,11 @@ progress_overview <- function(current) {
   cos_reg   <- load_cosmetic_registry()
   wd        <- read_wardrobe_state()
   runs      <- recent_run_records()
+  prog      <- progression_of(meta)
 
   rows <- lapply(names(UNLOCK_REGISTRY), function(nm) {
     list(fn = nm, required = UNLOCK_REGISTRY[[nm]],
-         unlocked = tier_index(current) >= tier_index(UNLOCK_REGISTRY[[nm]]))
+         unlocked = is_unlocked(nm, current))
   })
 
   ach_unlocked <- sum(vapply(ach_state, isTRUE, logical(1)))
@@ -182,6 +191,10 @@ progress_overview <- function(current) {
     mode      = "overview",
     current   = current,
     rows      = rows,
+    chain_length = prog$length_unlocked,
+    xp        = prog$xp,
+    xp_next   = next_xp_threshold(prog$length_unlocked),
+    active_chain_hud = format_chain_hud(meta),
     ach_unlocked = ach_unlocked,
     ach_total    = ach_total,
     cos_unlocked = cos_unlocked,
@@ -191,13 +204,13 @@ progress_overview <- function(current) {
 }
 
 progress_function <- function(fn, current) {
-  required <- UNLOCK_REGISTRY[[fn]]
+  required <- UNLOCK_REGISTRY[[fn]] %||% "Junior Researcher"
   structure(list(
     mode     = "function",
     fn       = fn,
     current  = current,
     required = required,
-    unlocked = tier_index(current) >= tier_index(required)
+    unlocked = is_unlocked(fn, current)
   ), class = "tx_progress")
 }
 
@@ -246,6 +259,15 @@ print_progress_overview <- function(x) {
   cat(style_header(rule), "\n", sep = "")
   cat(style_header(sprintf("Career: %s", x$current)), "\n", sep = "")
   cat(style_header(rule), "\n", sep = "")
+  cat(sprintf("Chain length:  %d / %d\n", x$chain_length,
+              length(CHAIN_STAGES)))
+  if (!is.na(x$xp_next)) {
+    cat(sprintf("XP:            %d / %d (next unlock)\n",
+                x$xp, x$xp_next))
+  } else {
+    cat(sprintf("XP:            %d (chain fully unlocked)\n", x$xp))
+  }
+  cat("\n")
   unlocked <- Filter(function(r) r$unlocked, x$rows)
   locked   <- Filter(function(r) !r$unlocked, x$rows)
   if (length(unlocked) > 0L) {
@@ -260,6 +282,9 @@ print_progress_overview <- function(x) {
       cat(sprintf("  %-*s requires %s\n", width,
                    paste0(r$fn, "()"), r$required))
     }
+  }
+  if (!is.null(x$active_chain_hud)) {
+    cat("\n", x$active_chain_hud, "\n", sep = "")
   }
   cat(sprintf("\nAchievements: %d / %d\n", x$ach_unlocked, x$ach_total))
   cat(sprintf("Wardrobe:     %d / %d\n", x$cos_unlocked, x$cos_total))

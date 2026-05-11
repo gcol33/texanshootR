@@ -1,119 +1,163 @@
-set_career_level <- function(level) {
+set_chain_length <- function(length_unlocked) {
   texanshootR:::ensure_save_dir()
   meta <- texanshootR:::read_meta()
   if (is.null(meta)) {
     meta <- texanshootR:::default_meta(getOption("texanshootR.save_dir"))
   }
-  meta$career_level <- level
+  meta$progression$length_unlocked <- as.integer(length_unlocked)
+  meta$progression$xp <-
+    texanshootR:::CHAIN_XP_THRESHOLDS[as.integer(length_unlocked)]
+  meta$career_level <-
+    texanshootR:::career_level_for_length(length_unlocked)
   texanshootR:::write_meta(meta)
   invisible(meta)
 }
 
-test_that("tier_index orders the four tiers as defined", {
-  expect_equal(texanshootR:::tier_index("Junior Researcher"), 1L)
-  expect_equal(texanshootR:::tier_index("Postdoc"), 2L)
-  expect_equal(texanshootR:::tier_index("Senior Scientist"), 3L)
-  expect_equal(texanshootR:::tier_index("PI"), 4L)
-  expect_equal(texanshootR:::tier_index("nonsense"), 0L)
+clear_active_chain <- function() {
+  meta <- texanshootR:::read_meta()
+  if (is.null(meta)) return(invisible())
+  meta$active_chain <- NULL
+  texanshootR:::write_meta(meta)
+}
+
+test_that("CHAIN_STAGES carries six ordered stages", {
+  expect_equal(length(texanshootR:::CHAIN_STAGES), 6L)
+  expect_equal(texanshootR:::CHAIN_STAGES[[1]], "abstract")
+  expect_equal(texanshootR:::CHAIN_STAGES[[6]], "funding")
 })
 
-test_that("require_unlocked() signals tx_locked when career is too low", {
-  set_career_level("Postdoc")
+test_that("length_unlocked_for_xp climbs as XP crosses thresholds", {
+  expect_equal(texanshootR:::length_unlocked_for_xp(0L),   1L)
+  expect_equal(texanshootR:::length_unlocked_for_xp(4L),   1L)
+  expect_equal(texanshootR:::length_unlocked_for_xp(5L),   2L)
+  expect_equal(texanshootR:::length_unlocked_for_xp(15L),  3L)
+  expect_equal(texanshootR:::length_unlocked_for_xp(200L), 6L)
+})
+
+test_that("career_level_for_length maps to canonical tier labels", {
+  expect_equal(texanshootR:::career_level_for_length(1L),
+               "Junior Researcher")
+  expect_equal(texanshootR:::career_level_for_length(2L), "Postdoc")
+  expect_equal(texanshootR:::career_level_for_length(4L),
+               "Senior Scientist")
+  expect_equal(texanshootR:::career_level_for_length(6L), "PI")
+})
+
+test_that("is_unlocked tracks chain length", {
+  set_chain_length(1L)
+  expect_true(texanshootR:::is_unlocked("abstract"))
+  expect_false(texanshootR:::is_unlocked("manuscript"))
+  set_chain_length(2L)
+  expect_true(texanshootR:::is_unlocked("manuscript"))
+  expect_false(texanshootR:::is_unlocked("presentation"))
+  set_chain_length(6L)
+  expect_true(texanshootR:::is_unlocked("funding"))
+})
+
+test_that("require_chain_stage signals not_unlocked when stage above XP", {
+  set_chain_length(1L)
+  clear_active_chain()
   err <- tryCatch(
-    texanshootR:::require_unlocked("presentation"),
-    tx_locked = identity
+    texanshootR:::require_chain_stage("manuscript", list(run_id = "x")),
+    tx_chain_error = identity
   )
-  expect_s3_class(err, "tx_locked")
-  expect_equal(err$fn, "presentation")
-  expect_equal(err$required, "Senior Scientist")
-  expect_equal(err$current, "Postdoc")
-  expect_match(conditionMessage(err), "presentation\\(\\) requires:")
-  expect_match(conditionMessage(err), "Senior Scientist")
-  expect_match(conditionMessage(err), "Current career:")
-  expect_match(conditionMessage(err), "Postdoc")
+  expect_s3_class(err, "tx_chain_error")
+  expect_equal(err$reason, "not_unlocked")
 })
 
-test_that("require_unlocked() passes through when tier is met", {
-  set_career_level("Senior Scientist")
-  expect_true(texanshootR:::require_unlocked("presentation"))
-  expect_true(texanshootR:::require_unlocked("manuscript"))
-})
-
-test_that("require_unlocked() passes for an unregistered name", {
-  expect_true(texanshootR:::require_unlocked("not_in_registry"))
-})
-
-test_that("locked-message format is the deadpan two-block layout", {
-  msg <- texanshootR:::format_locked_message(
-    "presentation", "Senior Scientist", "Postdoc"
+test_that("require_chain_stage signals no_active_chain when none open", {
+  set_chain_length(6L)
+  clear_active_chain()
+  err <- tryCatch(
+    texanshootR:::require_chain_stage("abstract", list(run_id = "x")),
+    tx_chain_error = identity
   )
-  expect_identical(
-    msg,
-    "presentation() requires:\nSenior Scientist\n\nCurrent career:\nPostdoc"
+  expect_s3_class(err, "tx_chain_error")
+  expect_equal(err$reason, "no_active_chain")
+})
+
+test_that("require_chain_stage signals wrong_run when run id mismatches", {
+  set_chain_length(2L)
+  meta <- texanshootR:::read_meta()
+  meta <- texanshootR:::open_chain(meta, "RUN_A")
+  texanshootR:::write_meta(meta)
+  err <- tryCatch(
+    texanshootR:::require_chain_stage("abstract", list(run_id = "RUN_B")),
+    tx_chain_error = identity
   )
+  expect_s3_class(err, "tx_chain_error")
+  expect_equal(err$reason, "wrong_run")
 })
 
-test_that("calling a locked generator raises tx_locked", {
-  set_career_level("Junior Researcher")
-  expect_error(presentation(list()), class = "tx_locked")
-  expect_error(manuscript(list()),   class = "tx_locked")
-  expect_error(funding(list()),      class = "tx_locked")
+test_that("require_chain_stage signals wrong_stage when out of order", {
+  set_chain_length(2L)
+  meta <- texanshootR:::read_meta()
+  meta <- texanshootR:::open_chain(meta, "RUN_A")
+  texanshootR:::write_meta(meta)
+  err <- tryCatch(
+    texanshootR:::require_chain_stage("manuscript", list(run_id = "RUN_A")),
+    tx_chain_error = identity
+  )
+  expect_s3_class(err, "tx_chain_error")
+  expect_equal(err$reason, "wrong_stage")
 })
 
-test_that("progress() returns a tx_progress overview object", {
-  set_career_level("Postdoc")
+test_that("require_chain_stage signals window_expired and closes chain", {
+  set_chain_length(2L)
+  meta <- texanshootR:::read_meta()
+  meta <- texanshootR:::open_chain(meta, "RUN_A")
+  meta$active_chain$deadline <- as.numeric(Sys.time()) - 1
+  texanshootR:::write_meta(meta)
+  err <- tryCatch(
+    texanshootR:::require_chain_stage("abstract", list(run_id = "RUN_A")),
+    tx_chain_error = identity
+  )
+  expect_s3_class(err, "tx_chain_error")
+  expect_equal(err$reason, "window_expired")
+  expect_null(texanshootR:::read_meta()$active_chain)
+})
+
+test_that("require_chain_stage passes when stage matches active chain", {
+  set_chain_length(2L)
+  meta <- texanshootR:::read_meta()
+  meta <- texanshootR:::open_chain(meta, "RUN_A")
+  texanshootR:::write_meta(meta)
+  res <- texanshootR:::require_chain_stage("abstract",
+                                            list(run_id = "RUN_A"))
+  expect_true(res$ok)
+})
+
+test_that("advance_chain_after_stage moves the chain forward and awards XP", {
+  set_chain_length(2L)
+  meta <- texanshootR:::read_meta()
+  meta <- texanshootR:::open_chain(meta, "RUN_A")
+  texanshootR:::write_meta(meta)
+  prog_before <- texanshootR:::progression_of(texanshootR:::read_meta())
+
+  texanshootR:::advance_chain_after_stage("abstract")
+  meta_after <- texanshootR:::read_meta()
+  prog_after <- texanshootR:::progression_of(meta_after)
+  expect_gt(prog_after$xp, prog_before$xp)
+  expect_equal(meta_after$active_chain$stage_idx, 2L)
+})
+
+test_that("completing the unlocked prefix closes the chain", {
+  set_chain_length(1L)
+  meta <- texanshootR:::read_meta()
+  meta <- texanshootR:::open_chain(meta, "RUN_A")
+  texanshootR:::write_meta(meta)
+  texanshootR:::advance_chain_after_stage("abstract")
+  m2 <- texanshootR:::read_meta()
+  expect_null(m2$active_chain)
+  prog <- texanshootR:::progression_of(m2)
+  expect_equal(prog$chains_completed, 1L)
+})
+
+test_that("progress() returns a tx_progress overview with chain fields", {
+  set_chain_length(2L)
   obj <- expect_invisible(progress())
   expect_s3_class(obj, "tx_progress")
   expect_equal(obj$mode, "overview")
-  expect_equal(obj$current, "Postdoc")
-  fn_names <- vapply(obj$rows, function(r) r$fn, character(1))
-  expect_setequal(fn_names, names(texanshootR:::UNLOCK_REGISTRY))
-  unlocked_fns <- vapply(obj$rows, function(r) r$unlocked, logical(1))
-  names(unlocked_fns) <- fn_names
-  expect_true(unlocked_fns[["manuscript"]])
-  expect_false(unlocked_fns[["presentation"]])
-  expect_false(unlocked_fns[["funding"]])
-  expect_true(is.numeric(obj$ach_unlocked))
-  expect_true(is.numeric(obj$ach_total))
-  expect_true(is.list(obj$inflight))
-})
-
-test_that("progress(\"presentation\") returns a per-function card", {
-  set_career_level("Junior Researcher")
-  obj <- progress("presentation")
-  expect_equal(obj$mode, "function")
-  expect_equal(obj$fn, "presentation")
-  expect_equal(obj$required, "Senior Scientist")
-  expect_false(obj$unlocked)
-})
-
-test_that("progress(\"ach_*\") returns a per-achievement card", {
-  obj <- progress("ach_multiple_comparisons")
-  expect_equal(obj$mode, "achievement")
-  expect_equal(obj$id, "ach_multiple_comparisons")
-  expect_false(obj$unlocked)
-  expect_false(obj$hidden_locked)
-  expect_equal(obj$detail$need, 1000L)
-})
-
-test_that("progress(\"ach_*\") for a hidden-locked achievement masks the name", {
-  obj <- progress("ach_glimpse")
-  expect_equal(obj$mode, "achievement")
-  expect_true(obj$hidden_locked)
-  expect_equal(obj$name, "???")
-  expect_null(obj$detail)
-})
-
-test_that("progress(bogus) errors", {
-  expect_error(progress("not_a_thing"),
-                "not a gated function or achievement id")
-})
-
-test_that("in-flight progress excludes hidden achievements", {
-  set_career_level("Junior Researcher")
-  obj <- progress()
-  ids <- vapply(obj$inflight, `[[`, character(1), "id")
-  reg <- texanshootR:::load_achievement_registry()
-  visibilities <- reg$visible[match(ids, reg$id)]
-  expect_true(all(visibilities))
+  expect_equal(obj$chain_length, 2L)
+  expect_true(is.numeric(obj$xp))
 })

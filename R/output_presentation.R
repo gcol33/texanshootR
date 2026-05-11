@@ -5,13 +5,13 @@
 #' shape collisions); slide-transition and per-element animation XML
 #' injection lands in a follow-up.
 #'
-#' Unlock requirement: \strong{Senior Scientist}. See [progress()] for live state.
+#' Chain stage: \strong{presentation} (length 3). See [progress()].
 #'
 #' @inheritParams manuscript
 #' @export
 presentation <- function(run, output_dir = NULL, file = NULL,
                          force = FALSE) {
-  require_unlocked("presentation")
+  require_chain_stage("presentation", run)
   require_pkg("officer", "presentation")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "presentation"
@@ -72,5 +72,6 @@ presentation <- function(run, output_dir = NULL, file = NULL,
   print(pp, target = out)
   status_close()
   record_output(run, "presentation", out)
+  advance_chain_after_stage("presentation")
   invisible(out)
 }

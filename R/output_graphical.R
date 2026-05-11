@@ -4,13 +4,13 @@
 #' as a multi-panel layout with conceptual arrows. Renders via ggplot2
 #' to PNG.
 #'
-#' Unlock requirement: \strong{Senior Scientist}. See [progress()] for live state.
+#' Chain stage: \strong{graphical_abstract} (length 5). See [progress()].
 #'
 #' @inheritParams manuscript
 #' @export
 graphical_abstract <- function(run, output_dir = NULL, file = NULL,
                                force = FALSE) {
-  require_unlocked("graphical_abstract")
+  require_chain_stage("graphical_abstract", run)
   require_pkg("ggplot2", "graphical_abstract")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "figure_final"
@@ -44,5 +44,6 @@ graphical_abstract <- function(run, output_dir = NULL, file = NULL,
                   dpi = 150)
   status_close()
   record_output(run, "graphical_abstract", out)
+  advance_chain_after_stage("graphical_abstract")
   invisible(out)
 }

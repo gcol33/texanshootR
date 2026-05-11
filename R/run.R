@@ -40,6 +40,19 @@ print.tx_run <- function(x, ...) {
       cat("  - ", e$event_text, " - ", e$consequence_text, "\n", sep = "")
     }
   }
+  if (length(x$modifiers_used)) {
+    cat(sprintf("Modifiers used:        %s\n",
+                paste0("+", x$modifiers_used, collapse = " ")))
+  }
+  if (isTRUE(x$shippable)) {
+    meta <- tryCatch(read_meta(), error = function(e) NULL)
+    if (!is.null(meta)) {
+      hud <- format_chain_hud(meta)
+      if (!is.null(hud)) cat("\n", hud, "\n", sep = "")
+    }
+  } else {
+    cat("\nNot shippable: no spec cleared p <= 0.05 in budget.\n")
+  }
   invisible(x)
 }
 

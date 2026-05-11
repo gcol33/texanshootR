@@ -21,5 +21,5 @@ as a multi-panel layout with conceptual arrows. Renders via ggplot2
 to PNG.
 }
 \details{
-Unlock requirement: \strong{Senior Scientist}. See \code{\link[=progress]{progress()}} for live state.
+Chain stage: \strong{graphical_abstract} (length 5). See \code{\link[=progress]{progress()}}.
 }

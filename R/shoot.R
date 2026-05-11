@@ -5,15 +5,31 @@
 #' seeds. Returns a `tx_run` object summarising the search and the
 #' highlighted specification.
 #'
+#' Every shoot has a wall-clock budget (default 30s). Each modifier
+#' you pass extends the budget by 3 seconds and unlocks an extra
+#' search behaviour. Without `"derived_metrics"`, runs that fail to
+#' clear `p <= 0.05` simply lose — the highlighted spec stays above
+#' threshold and the output gauntlet does not open.
+#'
 #' @param df A data frame.
 #' @param formula Optional formula. When `NULL`, the first numeric
 #'   column is used as the outcome and all other columns as predictors.
+#' @param modifiers Character vector of modifier names. Each adds 3s
+#'   to the budget and steers the search. Supported:
+#'   \describe{
+#'     \item{`"derived_metrics"`}{Allow the desperation phase to
+#'       manufacture a composite response when the regular search has
+#'       not cleared `p <= 0.05`.}
+#'     \item{`"subgroup"`}{Bias the perturbation queue toward subgroup
+#'       splits.}
+#'     \item{`"outliers"`}{Bias the perturbation queue toward
+#'       outlier-exclusion seeds.}
+#'     \item{`"gam"`, `"glm"`, `"wls"`, `"cor"`, `"glmm"`, `"sem"`}{
+#'       Insist the family selector consider this family for the run,
+#'       provided the player has unlocked it.}
+#'   }
 #' @param seed Integer seed. When `NULL`, a random seed is generated
 #'   and stored on the returned run.
-#' @param escalate Logical. Allow the derived-metric escalation phase
-#'   when the main search produces no spec with p <= 0.05. Defaults to
-#'   `TRUE`; set to `FALSE` to stop the search at the predictor-level
-#'   budget.
 #' @param depth `"default"` for the full search; `"demo"` for a
 #'   single-fit smoke test used in CRAN-safe examples.
 #' @param ... Reserved for future arguments.
@@ -22,12 +38,15 @@
 #' @export
 shoot <- function(df,
                   formula    = NULL,
+                  modifiers  = character(),
                   seed       = NULL,
-                  escalate   = TRUE,
                   depth      = c("default", "demo"),
                   ...) {
   depth <- match.arg(depth)
   if (!is.data.frame(df)) stop("`df` must be a data frame.", call. = FALSE)
+
+  modifiers <- normalise_modifiers(modifiers)
+  use_derived <- "derived_metrics" %in% modifiers
 
   if (is.null(seed)) seed <- sample.int(.Machine$integer.max - 1L, 1L)
   seed <- as.integer(seed)
@@ -49,12 +68,12 @@ shoot <- function(df,
   open_tui <- interactive() && depth != "demo"
   if (open_tui) ui <- ui_session_open()
 
-  # Internal pacing. Both runs are deadline-bounded — the shooter is
-  # always on a clock. Theatrical runs are paced so the show has room
-  # to breathe; silent runs are just faster about it.
-  # `texanshootR.budget` is an undocumented escape hatch for tests.
-  budget <- getOption("texanshootR.budget",
-                      if (open_tui) 40L else 60L)
+  # Wall-clock budget. Base is 30s; each modifier extends by 3s.
+  # `texanshootR.budget` overrides the base entirely (used by tests
+  # to keep the suite fast).
+  base_budget <- getOption("texanshootR.budget", 30L)
+  budget <- as.integer(base_budget) +
+            MODIFIER_BUDGET_BONUS * length(modifiers)
 
   state <- list(
     seed              = seed,
@@ -93,7 +112,8 @@ shoot <- function(df,
     state$spec_count <- 1L
     return(invisible(finalize_run(state, df, outcome, predictors,
                                    results = list(one), trace = list(spec),
-                                   ui = NULL, open_tui = FALSE)))
+                                   ui = NULL, open_tui = FALSE,
+                                   modifiers_used = modifiers)))
   }
 
   cap <- spec_cap_for_budget(budget)
@@ -187,7 +207,7 @@ shoot <- function(df,
   } else NA_real_
   if (!is.finite(best_p)) best_p <- NA_real_
 
-  if (isTRUE(escalate) && (is.na(best_p) || best_p > 0.05) &&
+  if (isTRUE(use_derived) && (is.na(best_p) || best_p > 0.05) &&
       Sys.time() < end_time) {
     derived <- apply_derived(df, outcome, predictors)
     if (!is.null(derived)) {
@@ -236,7 +256,32 @@ shoot <- function(df,
     }
   }
 
-  finalize_run(state, df, outcome, predictors, results, trace, ui, open_tui)
+  finalize_run(state, df, outcome, predictors, results, trace, ui,
+               open_tui, modifiers_used = modifiers)
+}
+
+# Modifier vocabulary. Validating up front so a typo doesn't silently
+# do nothing. Each modifier costs MODIFIER_BUDGET_BONUS seconds.
+SUPPORTED_MODIFIERS <- c(
+  "derived_metrics", "subgroup", "outliers",
+  "gam", "glm", "wls", "cor", "glmm", "sem"
+)
+MODIFIER_BUDGET_BONUS <- 3L
+
+normalise_modifiers <- function(mods) {
+  if (is.null(mods)) return(character())
+  mods <- as.character(mods)
+  mods <- mods[nzchar(mods)]
+  if (!length(mods)) return(character())
+  unknown <- setdiff(mods, SUPPORTED_MODIFIERS)
+  if (length(unknown)) {
+    stop(sprintf(
+      "Unknown modifier(s): %s.\nSupported: %s",
+      paste(unknown, collapse = ", "),
+      paste(SUPPORTED_MODIFIERS, collapse = ", ")
+    ), call. = FALSE)
+  }
+  unique(mods)
 }
 
 # Heuristic: about 100 specs per second on a modern CPU for small df.
@@ -359,7 +404,7 @@ maybe_animate <- function(state, ui, progress, results, outcome) {
 }
 
 finalize_run <- function(state, df, outcome, predictors, results, trace,
-                          ui, open_tui) {
+                          ui, open_tui, modifiers_used = character()) {
   highlight <- choose_highlight(results)
 
   rev <- reviewer_roll(reviewer_resistance =
@@ -369,6 +414,9 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
 
   run_id <- format(state$started, "%Y%m%d-%H%M%S")
   search_summary <- summarise_trace(trace)
+  shippable <- !is.null(highlight) &&
+               is.finite(highlight$p_value %||% NA_real_) &&
+               (highlight$p_value %||% 1) <= 0.05
 
   df_meta <- list(
     nrow    = nrow(df),
@@ -392,6 +440,8 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
     reviewer_outcome  = rev$outcome,
     events            = state$events,
     modifiers         = state$modifiers,
+    modifiers_used    = modifiers_used,
+    shippable         = shippable,
     displayed_message_ids = state$displayed_messages,
     grid_hash         = digest_grid(trace),
     search            = search_summary,
@@ -409,6 +459,11 @@ finalize_run <- function(state, df, outcome, predictors, results, trace,
   if (length(state$events)) {
     meta$events_witnessed <- c(meta$events_witnessed %||% list(),
                                 lapply(state$events, `[[`, "id"))
+  }
+  # If the run cleared p <= 0.05, open the publication chain. This
+  # aborts any prior chain the player left dangling.
+  if (isTRUE(shippable)) {
+    meta <- open_chain(meta, run$run_id)
   }
   write_meta(meta)
   write_run_record(run)

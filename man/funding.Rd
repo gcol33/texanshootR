@@ -19,5 +19,5 @@ funding(run, output_dir = NULL, file = NULL, force = FALSE)
 One-page Letter of Intent with a costed budget table.
 }
 \details{
-Unlock requirement: \strong{PI}. See \code{\link[=progress]{progress()}} for live state.
+Chain stage: \strong{funding} (length 6). See \code{\link[=progress]{progress()}}.
 }

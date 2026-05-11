@@ -78,50 +78,61 @@ after all, is earned.
 * **Single result contract**: every fitter returns the same shape so the
   selector, the highlight chooser, and the run record never branch on family.
 
-### The output generators
+### The publication chain
 
-A finished run is a `tx_run`. Five generators turn it into something
-shippable, each gated to a career tier:
+A finished run is a `tx_run`. When `shoot()` lands a result that clears
+`p <= 0.05`, it opens a *publication chain* — six ordered output stages,
+each gated by its own wall-clock window:
 
 ```r
-manuscript(run)         # IMRaD draft, Methods that match the *winning* spec
-presentation(run)       # 8-slide deck; the residual plot sits on slide 7
-graphical_abstract(run) # the figure your PI will retweet
-reviewer_response(run)  # opens with "we thank the reviewer for their thoughtful comments"
-funding(run)            # the next grant, citing the just-shipped finding
+abstract(run)            # one-paragraph deadpan summary
+manuscript(run)          # IMRaD draft; Methods match the *winning* spec
+presentation(run)        # 8-slide deck; residual plot on slide 7
+reviewer_response(run)   # opens "we thank the reviewer for their thoughtful comments"
+graphical_abstract(run)  # the figure your PI will retweet
+funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-Each writes to `tempdir()` by default and returns the file path invisibly.
-Override with `output_dir =` or `options(texanshootR.output_dir = ...)`.
+The stages must be redeemed in that order. You have 30 seconds per stage
+by default (`options(texanshootR.chain_window = N)` to change it). Land
+every stage in your currently-unlocked prefix and the chain pays out a
+length-bonus on top of the per-stage XP. Miss the window, call the wrong
+stage, or fire a fresh `shoot()` before finishing — the chain breaks,
+the bonus is forfeited, and the partial XP is what you keep.
+
+Each generator writes to `tempdir()` by default and returns the file path
+invisibly. Override with `output_dir =` or
+`options(texanshootR.output_dir = ...)`.
 
 ### Career, achievements, cosmetics
 
-Every run contributes to your persistent researcher profile. Progression
-*gates the API*: output generators unlock at the appropriate tier and model
-families enter the search pool as your career advances. Dedication is
-rewarded.
+Every redeemed stage awards XP. Cumulative XP grows the chain — same
+thing as unlocking deeper stages of the publication lifecycle. Your
+career tier is a label derived from your unlocked chain length, and it
+governs which model families enter the search pool:
+
+| Chain length | New stage              | XP needed | Career tier        | Families added       |
+|--------------|------------------------|-----------|--------------------|----------------------|
+| 1            | `abstract()`           | 0         | Junior Researcher  | `lm`                 |
+| 2            | `manuscript()`         | 5         | Postdoc            | `cor`, `glm`         |
+| 3            | `presentation()`       | 15        | Postdoc            | —                    |
+| 4            | `reviewer_response()`  | 30        | Senior Scientist   | `wls`, `gam`         |
+| 5            | `graphical_abstract()` | 55        | Senior Scientist   | —                    |
+| 6            | `funding()`            | 90        | PI                 | `glmm`, `sem`        |
+
+Locked stages, expired windows, the wrong run, and out-of-order calls
+all signal a structured `tx_chain_error` so your test suite can branch
+on `reason`. Locked families simply never appear in the search trace.
+Your earned chain length is permanent; you just can't shortcut into a
+stage you haven't earned.
 
 ```r
-career()        # level, runs, favourite method, opaque scores
+career()        # tier, runs, favourite method, opaque scores
 achievements()  # 20 unlockable badges; hidden ones show as ???
 wardrobe()      # equipped cosmetic slots (hat, badge, cloak, poncho, lanyard)
-progress()      # HUD: which functions are unlocked, what the next unlock requires
+progress()      # HUD: chain length, XP, next unlock, live chain window
 run_log()       # tibble of every run on this profile
 ```
-
-Tiers and what they unlock:
-
-| Career tier        | Unlocks                                              |
-|--------------------|------------------------------------------------------|
-| Junior Researcher  | `shoot()`, `career()`, `achievements()`, `wardrobe()`, `run_log()`, `progress()`, resets — and only the `lm` family |
-| Postdoc            | `manuscript()`; `cor` and `glm` families enter the search pool |
-| Senior Scientist   | `reviewer_response()`, `graphical_abstract()`, `presentation()`; `wls` and `gam` families |
-| PI                 | `funding()`; `glmm` and `sem` families                |
-
-Locked output generators do not error: they print a status block listing
-the tier you need to reach. Locked families simply never appear in the
-search trace. Both unlock in place — your earned tier is permanent and your
-toolkit grows accordingly.
 
 ### Persistent state and saves
 

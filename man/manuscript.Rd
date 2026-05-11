@@ -25,5 +25,5 @@ only \code{rmarkdown} is available, produces a DOCX. The package never
 installs LaTeX on its own.
 }
 \details{
-Unlock requirement: \strong{Postdoc}. See \code{\link[=progress]{progress()}} for live state.
+Chain stage: \strong{manuscript} (length 2). See \code{\link[=progress]{progress()}}.
 }

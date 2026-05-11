@@ -10,7 +10,7 @@
 # `options(texanshootR.save_dir)` (test override) and
 # `options(texanshootR.save_enabled)` (global opt-out).
 
-SAVE_VERSION <- 1L
+SAVE_VERSION <- 2L
 
 # Resolved save directory. NULL = persistence disabled.
 save_dir <- function() {
@@ -49,7 +49,18 @@ default_meta <- function(d) {
     last_seen    = format(Sys.time(), "%Y-%m-%dT%H:%M:%S%z"),
     career_level = "Junior Researcher",
     runs_count   = 0L,
-    # Hidden score components - never exposed in print methods.
+    # Publication-chain progression. XP buys chain length; tier is
+    # derived from length, not from the legacy multiplicative score.
+    progression = list(
+      xp                = 0L,
+      length_unlocked   = 1L,
+      chains_completed  = 0L,
+      chains_broken     = 0L
+    ),
+    # NULL except while a chain is mid-redemption.
+    active_chain = NULL,
+    # Hidden side-channel components, kept for achievement triggers.
+    # Career level no longer reads from these.
     hidden = list(
       models_fit            = 0,
       output_complexity     = 0,
@@ -131,6 +142,8 @@ run_to_record <- function(run) {
     reviewer_outcome  = run$reviewer_outcome,
     events            = run$events,
     modifiers         = run$modifiers,
+    modifiers_used    = run$modifiers_used %||% character(),
+    shippable         = isTRUE(run$shippable),
     displayed_message_ids = run$displayed_message_ids,
     grid_hash         = run$grid_hash,
     search            = run$search,

@@ -2,13 +2,13 @@
 #'
 #' Polite, point-by-point response to imagined reviewer comments.
 #'
-#' Unlock requirement: \strong{Senior Scientist}. See [progress()] for live state.
+#' Chain stage: \strong{reviewer_response} (length 4). See [progress()].
 #'
 #' @inheritParams manuscript
 #' @export
 reviewer_response <- function(run, output_dir = NULL, file = NULL,
                               force = FALSE) {
-  require_unlocked("reviewer_response")
+  require_chain_stage("reviewer_response", run)
   require_pkg("officer", "reviewer_response")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "response_to_reviewers_FINAL"
@@ -45,5 +45,6 @@ reviewer_response <- function(run, output_dir = NULL, file = NULL,
   print(doc, target = out)
   status_close()
   record_output(run, "reviewer_response", out)
+  advance_chain_after_stage("reviewer_response")
   invisible(out)
 }

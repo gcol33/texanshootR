@@ -22,5 +22,5 @@ shape collisions); slide-transition and per-element animation XML
 injection lands in a follow-up.
 }
 \details{
-Unlock requirement: \strong{Senior Scientist}. See \code{\link[=progress]{progress()}} for live state.
+Chain stage: \strong{presentation} (length 3). See \code{\link[=progress]{progress()}}.
 }

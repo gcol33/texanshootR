@@ -22,17 +22,9 @@ achievements. Reads live save state.
 Three call modes:
 \itemize{
 \item \code{progress()} -- overview: career tier, gated-function lock
-map, achievement / wardrobe counts, and in-flight progress for
-achievements with public thresholds.
-\item \code{progress("manuscript")} -- per-function card for a gated
-function.
+map, achievement / wardrobe counts, and in-flight progress.
+\item \code{progress("manuscript")} -- per-function card.
 \item \code{progress("ach_multiple_comparisons")} -- per-achievement
 card.
 }
-
-Pairs with the static unlock requirement printed in each gated
-function's help page (e.g. \code{?presentation}). The help page documents
-the requirement; \code{progress()} reports the live state. Career-tier
-distance stays opaque by design -- only qualitative tier names are
-surfaced, never the underlying score.
 }

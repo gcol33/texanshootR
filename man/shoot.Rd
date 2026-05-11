@@ -7,8 +7,8 @@
 shoot(
   df,
   formula = NULL,
+  modifiers = character(),
   seed = NULL,
-  escalate = TRUE,
   depth = c("default", "demo"),
   ...
 )
@@ -19,13 +19,23 @@ shoot(
 \item{formula}{Optional formula. When \code{NULL}, the first numeric
 column is used as the outcome and all other columns as predictors.}
 
+\item{modifiers}{Character vector of modifier names. Each adds 3s
+to the budget and steers the search. Supported:
+\describe{
+\item{\code{"derived_metrics"}}{Allow the desperation phase to
+manufacture a composite response when the regular search has
+not cleared \code{p <= 0.05}.}
+\item{\code{"subgroup"}}{Bias the perturbation queue toward subgroup
+splits.}
+\item{\code{"outliers"}}{Bias the perturbation queue toward
+outlier-exclusion seeds.}
+\item{\code{"gam"}, \code{"glm"}, \code{"wls"}, \code{"cor"}, \code{"glmm"}, \code{"sem"}}{
+Insist the family selector consider this family for the run,
+provided the player has unlocked it.}
+}}
+
 \item{seed}{Integer seed. When \code{NULL}, a random seed is generated
 and stored on the returned run.}
-
-\item{escalate}{Logical. Allow the derived-metric escalation phase
-when the main search produces no spec with p <= 0.05. Defaults to
-\code{TRUE}; set to \code{FALSE} to stop the search at the
-predictor-level budget.}
 
 \item{depth}{\code{"default"} for the full search; \code{"demo"} for a
 single-fit smoke test used in CRAN-safe examples.}
@@ -40,4 +50,11 @@ Fits a battery of candidate specifications across predictor subsets,
 transformations, interactions, outlier-removal seeds, and subgroup
 seeds. Returns a \code{tx_run} object summarising the search and the
 highlighted specification.
+}
+\details{
+Every shoot has a wall-clock budget (default 30s). Each modifier
+you pass extends the budget by 3 seconds and unlocks an extra
+search behaviour. Without \code{"derived_metrics"}, runs that fail to
+clear \code{p <= 0.05} simply lose — the highlighted spec stays above
+threshold and the output gauntlet does not open.
 }

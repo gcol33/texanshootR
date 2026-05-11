@@ -12,5 +12,7 @@ A \code{tx_career} object.
 \description{
 Returns a \code{tx_career} object describing the persistent career, or a
 fresh default if no save exists. The object's \code{print} method shows
-a compact dashboard card; \code{summary} adds aggregate counts.
+a compact dashboard card; \code{summary} adds aggregate counts. Career
+tier is derived from the publication-chain length you've unlocked
+(see \code{\link[=progress]{progress()}}); XP comes from completed chain stages.
 }

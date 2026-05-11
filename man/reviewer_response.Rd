@@ -19,5 +19,5 @@ reviewer_response(run, output_dir = NULL, file = NULL, force = FALSE)
 Polite, point-by-point response to imagined reviewer comments.
 }
 \details{
-Unlock requirement: \strong{Senior Scientist}. See \code{\link[=progress]{progress()}} for live state.
+Chain stage: \strong{reviewer_response} (length 4). See \code{\link[=progress]{progress()}}.
 }

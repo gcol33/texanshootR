@@ -5,7 +5,7 @@
 #' only `rmarkdown` is available, produces a DOCX. The package never
 #' installs LaTeX on its own.
 #'
-#' Unlock requirement: \strong{Postdoc}. See [progress()] for live state.
+#' Chain stage: \strong{manuscript} (length 2). See [progress()].
 #'
 #' @param run A `tx_run` object returned by [shoot()].
 #' @param output_dir Optional output directory.
@@ -15,7 +15,7 @@
 #' @export
 manuscript <- function(run, output_dir = NULL, file = NULL,
                        force = FALSE) {
-  require_unlocked("manuscript")
+  require_chain_stage("manuscript", run)
   require_pkg("rmarkdown", "manuscript")
   d <- resolve_output_dir(output_dir)
   stem <- file %||% "manuscript_clean"
@@ -48,6 +48,7 @@ manuscript <- function(run, output_dir = NULL, file = NULL,
 
   run$harked <- TRUE
   record_output(run, "manuscript", out_files[1])
+  advance_chain_after_stage("manuscript")
   invisible(out_files)
 }
 
