@@ -11,7 +11,8 @@
 ^MESSAGE_SCHEMA\.md$
 ^CONTRIBUTING\.md$
 ^CODE_OF_CONDUCT\.md$
-^dev_smoke\.R$
+^dev_.*\.R$
 ^build_site\.R$
+^CLAUDE\.md$
 ^texanshootR_.*\.tar\.gz$
 ^.*\.Rcheck$

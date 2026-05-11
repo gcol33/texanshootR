@@ -23,3 +23,7 @@ src/*.dylib
 
 # Local scratch scripts
 dev_notes/
+dev_*.R
+
+# AI collaboration notes
+CLAUDE.md
