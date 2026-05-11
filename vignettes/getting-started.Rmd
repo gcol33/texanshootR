@@ -15,8 +15,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-`texanshootR` provides a structured, terminal-first interface for
-exploratory linear-model search. The main entry point is `shoot()`.
+`texanshootR` is a terminal-first specification-search engine. The main
+entry point is `shoot()`. It opens a wall-clock budget, fires at the
+specification space, and returns a `tx_run` carrying the highlighted
+result and the audit trail.
 
 ## A first run
 
@@ -28,91 +30,157 @@ print(run)
 summary(run)
 ```
 
-The returned `tx_run` object stores the highlighted specification, the
-search summary, and any life events that fired during the run.
+`shoot()` flails opportunistically across predictor subsets,
+transformations, interactions, outlier exclusions, subgroup splits, and
+— as the career advances — alternative model families. The print method
+leads with the shooter's face and the emotional arc the run followed
+(`composed -> resolved`, `panicked -> resolved (last-minute)`,
+`escalated to derived metrics`) before the formula and the p-value.
 
-## The career
+Every run is deterministic given a seed. The seed, R version, package
+version, and a hash of the search trace are recorded on the returned
+object so the full search can be replayed.
 
-The package keeps a persistent career across runs in
-`tools::R_user_dir("texanshootR", "data")`. Use `career()` to see your
-current state:
+## The publication chain
 
-```{r}
-career()
+A finished `tx_run` that clears `p <= 0.05` is *shippable*. The first
+shippable run opens a **publication chain** — six ordered output stages
+that must be redeemed in order, each gated by its own wall-clock window
+(default 30 seconds, override with `options(texanshootR.chain_window =
+N)`):
+
+```r
+abstract(run)            # one-paragraph deadpan summary
+manuscript(run)          # IMRaD draft; Methods match the winning spec
+presentation(run)        # 8-slide deck; residual plot on slide 7
+reviewer_response(run)   # opens "we thank the reviewer..."
+graphical_abstract(run)  # the figure your PI will retweet
+funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-The first time you save, you'll be prompted to confirm the path. Set
-`options(texanshootR.save_enabled = FALSE)` to opt out entirely.
+Land every stage in the currently-unlocked prefix and the chain pays
+out a length-bonus on top of the per-stage XP. Miss the window, call
+the wrong stage, or fire a fresh `shoot()` before finishing — the
+chain breaks, the bonus is forfeited, and the partial XP is what
+remains.
 
-## Unlocks
+Aliases are accepted: `powerpoint` (= `presentation`), `reviewer` (=
+`reviewer_response`), `graphical` (= `graphical_abstract`).
 
-Only `shoot()` and the inspection helpers are callable from session
-one. The six output generators are gated by career tier and unlock as
-the career advances. `progress()` prints the live lock map:
+### XP, chain length, career tier
+
+The chain prefix you can redeem grows with cumulative XP. Career tier
+is a label derived from that prefix:
+
+| Chain length | New stage              | XP needed | Career tier        |
+|:------------:|------------------------|:---------:|--------------------|
+| 1            | `abstract()`           | 0         | Junior Researcher  |
+| 2            | `manuscript()`         | 5         | Postdoc            |
+| 3            | `presentation()`       | 15        | Postdoc            |
+| 4            | `reviewer_response()`  | 30        | Senior Scientist   |
+| 5            | `graphical_abstract()` | 55        | Senior Scientist   |
+| 6            | `funding()`            | 90        | PI                 |
+
+The tier label is cosmetic. The chain length is the real gate.
+
+## Auto-generating the chain
+
+Output flags on `shoot()` auto-generate the chain prefix needed to
+reach the highest enabled flag, in order. So a shippable run with
+`presentation = TRUE` produces `abstract`, `manuscript`, and
+`presentation` in one go — provided each one is unlocked and the
+window allows:
+
+```{r}
+run <- shoot(mtcars, presentation = TRUE)
+```
+
+Files land in `tempdir()` by default. Override with `output_dir =` or
+`options(texanshootR.output_dir = ...)`. Each generator returns the
+file path invisibly.
+
+## Locked stages and broken chains
+
+Locked calls, expired windows, the wrong run, and out-of-order calls
+all signal a structured `tx_chain_error`. A locked stage in a fresh
+profile looks like this:
+
+```
+manuscript() requires:
+5 XP (chain length 2)
+
+Current XP:
+0
+```
+
+Scripts can branch on the `reason` field:
+
+```{r}
+res <- tryCatch(manuscript(run), tx_chain_error = function(e) e)
+if (inherits(res, "tx_chain_error")) {
+  res$reason   # one of: not_unlocked, no_active_chain, window_expired,
+               #         wrong_run, wrong_stage
+}
+```
+
+Inspect the live HUD with `progress()`:
 
 ```{r}
 progress()
 ```
 
-The tier-to-function mapping:
+It prints chain length, current XP, next unlock, what's still locked,
+and the active chain window if one is open.
 
-| Tier              | Unlocks                                                    |
-|-------------------|------------------------------------------------------------|
-| Junior Researcher | `shoot()`, `career()`, `achievements()`, `wardrobe()`, `run_log()`, `progress()`, resets |
-| Postdoc           | `manuscript()`                                             |
-| Senior Scientist  | `reviewer_response()`, `graphical_abstract()`, `presentation()` |
-| PI                | `funding()`                                                |
-
-A locked call signals a `tx_locked` condition with a two-block status
-message. From a fresh save:
-
-```
-manuscript() requires:
-Postdoc
-
-Current career:
-Junior Researcher
-```
-
-Scripts can intercept the signal with
-`tryCatch(manuscript(run), tx_locked = function(c) NULL)`. Inspect a
-single function's status with `progress("manuscript")`. Tier
-thresholds are not documented; the path is more runs.
-
-## Output generators
-
-Each output function takes a `tx_run` and writes to `tempdir()` by
-default. Override with `output_dir` or
-`options(texanshootR.output_dir = ...)`. Once the relevant tier is
-reached, the call works the same way for every generator:
+## Career, achievements, cosmetics
 
 ```{r}
-manuscript(run)
-reviewer_response(run)
-graphical_abstract(run)
-presentation(run)
-funding(run)
-```
-
-Output functions return the file path invisibly and print a short
-status line.
-
-## Achievements and cosmetics
-
-```{r}
-achievements()
-wardrobe()
+career()        # tier, runs, favourite method, opaque scores
+achievements()  # 20 unlockable badges; hidden ones show as ???
+wardrobe()      # equipped cosmetic slots (hat, badge, cloak, poncho, lanyard)
+run_log()       # tibble of every run on this profile
 ```
 
 Hidden achievements appear as `???` until unlocked. New cosmetics
 auto-equip when their unlocking achievement fires; override the
 selection with `wardrobe(slot, id)`.
 
+## Persistent state
+
+The researcher profile persists under
+`tools::R_user_dir("texanshootR", "data")` as flat YAML. The first
+interactive save prompts before writing anything to disk. Decline the
+prompt, or opt out entirely with:
+
+```{r}
+options(texanshootR.save_enabled = FALSE)
+```
+
+and the package becomes stateless: every call is independent,
+progression sits inert at Junior Researcher, and the chain never
+opens beyond `abstract()`.
+
+To pre-consent (CI, scripts, the impatient):
+
+```{r}
+options(texanshootR.consent = TRUE)
+```
+
 ## Resetting
 
-If you want to start over:
+Should circumstances call for a fresh start — a new institution, a
+co-author dispute, an opportune hard-drive failure:
 
 ```{r}
 reset_career(force = TRUE)
+reset_achievements(force = TRUE)
+reset_wardrobe(force = TRUE)
 reset_all(force = TRUE)
 ```
+
+## Next steps
+
+The [README](https://gillescolling.com/texanshootR/) covers the seven
+model families, the message-pack schema, and the design philosophy.
+The [reference index](https://gillescolling.com/texanshootR/reference/)
+lists every exported function with examples.
