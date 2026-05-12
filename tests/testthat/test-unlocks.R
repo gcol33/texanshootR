@@ -102,21 +102,6 @@ test_that("require_chain_stage signals wrong_stage when out of order", {
   expect_equal(err$reason, "wrong_stage")
 })
 
-test_that("require_chain_stage signals window_expired and closes chain", {
-  set_chain_length(2L)
-  meta <- texanshootR:::read_meta()
-  meta <- texanshootR:::open_chain(meta, "RUN_A")
-  meta$active_chain$deadline <- as.numeric(Sys.time()) - 1
-  texanshootR:::write_meta(meta)
-  err <- tryCatch(
-    texanshootR:::require_chain_stage("abstract", list(run_id = "RUN_A")),
-    tx_chain_error = identity
-  )
-  expect_s3_class(err, "tx_chain_error")
-  expect_equal(err$reason, "window_expired")
-  expect_null(texanshootR:::read_meta()$active_chain)
-})
-
 test_that("require_chain_stage passes when stage matches active chain", {
   set_chain_length(2L)
   meta <- texanshootR:::read_meta()

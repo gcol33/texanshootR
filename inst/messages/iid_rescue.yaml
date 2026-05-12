@@ -1,0 +1,41 @@
+# IID-rescue messages — fired when +iid_rescue is active, or when the
+# search reassigns an inconvenient fixed effect to an iid random effect
+# to smooth away the pattern without changing the interpretation.
+
+- id: iid_reassigning_to_random
+  text: "Reassigning offending variable to iid random effect..."
+  tags: [researcher_dof, model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: iid_smoothing_applied
+  text: "Variance smoothed; coefficient of interest retained..."
+  tags: [researcher_dof, model_shopping]
+  rarity: common
+  trigger_phase: loading
+
+- id: iid_absorbs_pattern
+  text: "Random effect absorbs the inconvenient pattern..."
+  tags: [researcher_dof, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: iid_main_result_candidate
+  text: "Result now stable -- candidate for main figure..."
+  tags: [model_shopping, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [polishing, resolved]
+
+- id: iid_imbalance_handled
+  text: "Sample-size imbalance handled by random intercept..."
+  tags: [researcher_dof, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: iid_structural_ignored
+  text: "Structural issue ignored; smoothing accepted..."
+  tags: [researcher_dof, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]

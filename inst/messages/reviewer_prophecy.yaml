@@ -1,0 +1,39 @@
+# Reviewer-prophecy messages — fired during the reviewer phase, or when
+# +counter_argument is active. The author inscribes the reviewer's
+# challenges and verdicts directly into the manuscript.
+
+- id: revp_counter_argument
+  text: "Section 4.3: 'The Counter-Argument and Its Complete Answer.'"
+  tags: [reviewer, narrative, story_first]
+  rarity: common
+  trigger_phase: reviewer
+
+- id: revp_most_likely
+  text: "'Prof. ___'s Most Likely Response: submission-ready.'"
+  tags: [reviewer, narrative, story_first]
+  rarity: common
+  trigger_phase: reviewer
+
+- id: revp_required_actions
+  text: "Required Actions for Reviewer 2 -- these are not optional."
+  tags: [reviewer, presentation]
+  rarity: uncommon
+  trigger_phase: reviewer
+
+- id: revp_three_questions
+  text: "Reviewer's three yes/no questions: predicted in advance."
+  tags: [reviewer, narrative]
+  rarity: uncommon
+  trigger_phase: reviewer
+
+- id: revp_on_behalf
+  text: "Manuscript performs the evaluation on the reviewer's behalf."
+  tags: [reviewer, narrative, story_first]
+  rarity: rare
+  trigger_phase: reviewer
+
+- id: revp_limitations_refuted
+  text: "Limitations section reads as a list of refutations."
+  tags: [reviewer, presentation, story_first]
+  rarity: rare
+  trigger_phase: reviewer

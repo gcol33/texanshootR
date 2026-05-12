@@ -36,6 +36,8 @@ vocab_tags <- c(
   "model_shopping",
   "causal_overreach",
   "validation_leakage",
+  "aggregation_artifact",
+  "deflection",
   # Thematic tags
   "ecology",
   "ml",

@@ -12,13 +12,17 @@ fit_spec <- function(df, outcome, spec) {
   fitter(df, outcome, spec)
 }
 
-# Batch dispatcher: fits a list of specs in one pass. lm-family specs go
-# through the C++ batch kernel (one R/C++ crossing for the whole group);
-# every other family falls back to fit_spec(). Returns results in the
-# same order as `specs`, with NULLs preserved for fits that fail to
-# materialise. The shoot() loop calls this in mini-batches so the search
-# state still gets per-fit feedback inside record_result(), just at
-# coarser cadence than one-spec-at-a-time.
+# Batch dispatcher: fits a list of specs in one pass. Groups specs by
+# family, then delegates each group to the family's batch_fitter from
+# the FAMILIES registry (see R/families.R). lm goes through the C++
+# kernel today; every other family currently loops the single-spec
+# fitter under the same scaffold, so a future *_fit_batch_cpp() drops
+# in by rewriting one fit_*_batch wrapper -- no change here.
+#
+# Returns results in the same order as `specs`, with NULLs preserved
+# for fits that fail to materialise. The shoot() loop calls this in
+# mini-batches so the search state still gets per-fit feedback inside
+# record_result(), just at coarser cadence than one-spec-at-a-time.
 fit_specs_batch <- function(df, outcome, specs) {
   if (!length(specs)) return(list())
   fam <- vapply(specs,
@@ -26,18 +30,21 @@ fit_specs_batch <- function(df, outcome, specs) {
                 character(1))
   out <- vector("list", length(specs))
 
-  is_lm <- fam == "lm"
-  if (any(is_lm)) {
-    lm_idx <- which(is_lm)
-    lm_results <- fit_lm_batch(df, outcome, specs[lm_idx])
-    out[lm_idx] <- lm_results
-  }
-
-  for (i in which(!is_lm)) {
-    # `[<-` with list(NULL) preserves the slot; `[[<-` with NULL would
-    # delete it, shrinking the result list below length(specs) and
-    # desynchronising the caller's per-spec index.
-    out[i] <- list(fit_spec(df, outcome, specs[[i]]))
+  for (this_fam in unique(fam)) {
+    idx <- which(fam == this_fam)
+    batch_fn <- tryCatch(family_batch_fitter(this_fam),
+                         error = function(e) NULL)
+    # Unknown / unregistered families fall back to per-spec fit_spec()
+    # rather than aborting the whole batch, matching the prior
+    # behaviour of the non-lm leg.
+    if (is.null(batch_fn)) {
+      for (i in idx) out[i] <- list(fit_spec(df, outcome, specs[[i]]))
+    } else {
+      # `[<-` with list(...) preserves NULL slots so the result list
+      # stays length(specs); `[[<-` with NULL would delete the slot
+      # and desynchronise the caller's per-spec index.
+      out[idx] <- batch_fn(df, outcome, specs[idx])
+    }
   }
   out
 }

@@ -1,0 +1,40 @@
+# Pseudo-spatial messages — fired when +pseudo_spatial is active, or
+# when the search adds geographic coordinates as fixed effects and
+# treats that as having handled spatial autocorrelation.
+
+- id: pseudo_coords_added
+  text: "Coordinates added as fixed effects..."
+  tags: [omitted_variable, spatial]
+  rarity: common
+  trigger_phase: loading
+
+- id: pseudo_spatial_aware
+  text: "Model now spatially aware (it contains latitude)..."
+  tags: [omitted_variable, spatial, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: pseudo_gradients_absorbed
+  text: "Broad gradients absorbed by linear coefficients..."
+  tags: [omitted_variable, spatial]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: pseudo_morans_deferred
+  text: "Moran's I deferred to the revision round..."
+  tags: [validation_leakage, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: pseudo_residual_clusters
+  text: "Residuals cluster spatially -- structure declared exogenous..."
+  tags: [omitted_variable, spatial, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious, desperate]
+
+- id: pseudo_neighbors_unmodelled
+  text: "Nearby cases more similar -- correlation absorbed by intercept..."
+  tags: [omitted_variable, spatial]
+  rarity: rare
+  trigger_phase: loading

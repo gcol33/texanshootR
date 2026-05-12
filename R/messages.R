@@ -155,7 +155,7 @@ validate_registry <- function(reg) {
   # fallacy-tag requirement.
   fallacy_phases <- c("blip", "loading", "derived_escalation",
                        "ultra_rare", "event", "event_consequence")
-  fallacy_tags <- vocab_tags[seq_len(23)]
+  fallacy_tags <- vocab_tags[seq_len(25)]
   fallacy_rows <- reg$trigger_phase %in% fallacy_phases
   has_fallacy <- vapply(reg$tags, function(t) any(t %in% fallacy_tags), logical(1))
   bad <- fallacy_rows & !has_fallacy

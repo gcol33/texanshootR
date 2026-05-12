@@ -95,6 +95,142 @@ LIVE_MODIFIERS <- list(
     time_bonus  = 5L,
     bias        = list(family = "sem"),
     description = "Force the family selector toward mediation SEM picks."
+  ),
+  aggregate = list(
+    token       = "aggregate",
+    aliases     = c("agg"),
+    display     = "+aggregate",
+    time_bonus  = 3L,
+    bias        = list(perturb_tag = "aggregate"),
+    description = "Collapse records to group means before fit."
+  ),
+  compilation = list(
+    token       = "compilation",
+    aliases     = c("comp"),
+    display     = "+compilation",
+    time_bonus  = 4L,
+    bias        = list(perturb_tag = "compilation"),
+    description = "Treat a literature compilation as ground-truth response."
+  ),
+  gapfill = list(
+    token       = "gapfill",
+    aliases     = c("gap"),
+    display     = "+gapfill",
+    time_bonus  = 3L,
+    bias        = list(perturb_tag = "validate_on_fit"),
+    description = "Validate the gap-fill on the cases that aren't gaps."
+  ),
+  tier2 = list(
+    token       = "tier2",
+    aliases     = c("relax", "downweight"),
+    display     = "+tier2",
+    time_bonus  = 3L,
+    bias        = list(perturb_tag = "threshold_relax"),
+    description = "Add a downweighted second tier when the cutoff is empty."
+  ),
+  counter_argument = list(
+    token       = "counter_argument",
+    aliases     = c("counter", "preempt"),
+    display     = "+counter_argument",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "preempt"),
+    description = "Address the reviewer's likely objections in the manuscript."
+  ),
+  pseudo_spatial = list(
+    token       = "pseudo_spatial",
+    aliases     = c("coords"),
+    display     = "+pseudo_spatial",
+    time_bonus  = 3L,
+    bias        = list(perturb_tag = "pseudo_spatial"),
+    description = "Add geographic coordinates as fixed effects and call it spatial."
+  ),
+  omit_control = list(
+    token       = "omit_control",
+    aliases     = c("omit"),
+    display     = "+omit_control",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "omit_control"),
+    description = "Drop a covariate because you don't want to interpret it."
+  ),
+  knife_edge = list(
+    token       = "knife_edge",
+    aliases     = c("labeling"),
+    display     = "+knife_edge",
+    time_bonus  = 3L,
+    bias        = list(perturb_tag = "knife_edge"),
+    description = "Define groups by a knife-edge presence rule on a continuous variable."
+  ),
+  iid_rescue = list(
+    token       = "iid_rescue",
+    aliases     = c("iid"),
+    display     = "+iid_rescue",
+    time_bonus  = 3L,
+    bias        = list(perturb_tag = "iid_rescue"),
+    description = "Reassign an inconvenient fixed effect to an iid random effect."
+  ),
+  defer_fix = list(
+    token       = "defer_fix",
+    aliases     = c("defer", "next_step"),
+    display     = "+defer_fix",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "defer"),
+    description = "Acknowledge a methodological correction; defer it to a future paper."
+  ),
+  coffee_break = list(
+    token       = "coffee_break",
+    aliases     = c("side_meeting", "offline"),
+    display     = "+coffee_break",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "offline"),
+    description = "Move methodological disagreement off the written record."
+  ),
+  mechanism_rebuttal = list(
+    token       = "mechanism_rebuttal",
+    aliases     = c("intuition", "but_biologically"),
+    display     = "+mechanism_rebuttal",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "intuition"),
+    description = "Dismiss a statistical concern with domain-mechanism intuition."
+  ),
+  misunderstanding = list(
+    token       = "misunderstanding",
+    aliases     = c("you_misread"),
+    display     = "+misunderstanding",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "deflect_misread"),
+    description = "Relocate the methodological problem from the analysis to the reader."
+  ),
+  narrow_answer = list(
+    token       = "narrow_answer",
+    aliases     = c("strawman"),
+    display     = "+narrow_answer",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "deflect_narrow"),
+    description = "Answer a weaker version of the concern at the wrong level."
+  ),
+  complexity_shield = list(
+    token       = "complexity_shield",
+    aliases     = c("its_complex"),
+    display     = "+complexity_shield",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "deflect_complexity"),
+    description = "Invoke unspecified complexity to dismiss a specific concern."
+  ),
+  frame_shift = list(
+    token       = "frame_shift",
+    aliases     = c("oscillate"),
+    display     = "+frame_shift",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "deflect_frame"),
+    description = "Oscillate between descriptive and causal framing without flagging."
+  ),
+  matter_of_taste = list(
+    token       = "matter_of_taste",
+    aliases     = c("just_one_way"),
+    display     = "+matter_of_taste",
+    time_bonus  = 2L,
+    bias        = list(perturb_tag = "deflect_taste"),
+    description = "Soften a falsifiable concern into a matter of perspective."
   )
 )
 

@@ -1,0 +1,48 @@
+# Complexity-shield messages -- fired when +complexity_shield is
+# active, or when the search invokes the complexity of the system to
+# dismiss a specific, narrow concern, without naming a mechanism that
+# would resolve it.
+#
+# Rhetorical forms (general):
+#   "the system is complex"
+#   "many processes are at play"
+#   "real-world cases involve many factors"
+# Common signature: the response sounds modest and worldly, but no
+# concrete mechanism is offered against the specific concern.
+
+- id: complex_invoked
+  text: "Complexity invoked; specific mechanism unnamed..."
+  tags: [deflection, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: complex_many_processes
+  text: "Many processes mentioned; none of them the issue..."
+  tags: [deflection, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: complex_artifact_moot
+  text: "The system is complex (so the artifact is moot)..."
+  tags: [deflection, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: complex_against_null
+  text: "Complexity defence raised against a null simulation..."
+  tags: [deflection, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: complex_too_rich
+  text: "Phenomenon declared too rich for the criticism..."
+  tags: [deflection, story_first, narrative]
+  rarity: rare
+  trigger_phase: loading
+
+- id: complex_variation_offered
+  text: "Variation in the data offered against a null pattern..."
+  tags: [deflection, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]

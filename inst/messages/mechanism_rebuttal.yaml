@@ -1,0 +1,59 @@
+# Mechanism-rebuttal messages -- fired when +mechanism_rebuttal is
+# active, or when the search responds to a statistical concern
+# (artifact, null-model demonstration, simulation) by appealing to
+# domain mechanism rather than engaging with the statistical content.
+#
+# The cursed-practice pattern: instead of "we ran the simulation and
+# found X", the response is "we don't need the simulation because the
+# mechanism is obvious." Domain plausibility is offered as a defense
+# without engaging with the statistical artifact.
+#
+# Rhetorical forms (general, not from any specific exchange):
+#   "but mechanistically, this should not happen"
+#   "the pattern is real because it is [domain-]meaningful"
+#   "the null model lacks plausibility"
+#   "[domain] reasoning takes precedence over the simulation"
+
+- id: mech_concern_intuited
+  text: "Concern answered with mechanistic intuition..."
+  tags: [causal_overreach, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: mech_should_not_happen
+  text: "But mechanistically, this should not happen..."
+  tags: [causal_overreach, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: mech_domain_takes_precedence
+  text: "Domain knowledge takes precedence over the simulation..."
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: mech_meaningful_pattern
+  text: "Pattern declared real -- mechanistically meaningful..."
+  tags: [causal_overreach, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: mech_null_implausible
+  text: "Null model dismissed: mechanism is implausible..."
+  tags: [causal_overreach, post_hoc]
+  rarity: rare
+  trigger_phase: loading
+
+- id: mech_artifact_implausible
+  text: "Statistical artifact deemed mechanistically implausible..."
+  tags: [causal_overreach, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved, polishing]
+
+- id: mech_narrative_reasserted
+  text: "Causal narrative re-asserted over statistical artifact..."
+  tags: [causal_overreach, story_first, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]

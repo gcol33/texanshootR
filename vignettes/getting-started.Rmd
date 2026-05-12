@@ -44,10 +44,8 @@ object so the full search can be replayed.
 ## The publication chain
 
 A finished `tx_run` that clears `p <= 0.05` is *shippable*. The first
-shippable run opens a **publication chain** — six ordered output stages
-that must be redeemed in order, each gated by its own wall-clock window
-(default 30 seconds, override with `options(texanshootR.chain_window =
-N)`):
+shippable run opens a **publication chain** — six output stages,
+redeemed in order:
 
 ```r
 abstract(run)            # one-paragraph deadpan summary
@@ -58,11 +56,13 @@ graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-Land every stage in the currently-unlocked prefix and the chain pays
-out a length-bonus on top of the per-stage XP. Miss the window, call
-the wrong stage, or fire a fresh `shoot()` before finishing — the
-chain breaks, the bonus is forfeited, and the partial XP is what
-remains.
+Finish the chain through your currently-unlocked prefix and you
+collect a length-bonus on top of the per-stage XP.
+
+The chain breaks — bonus forfeit, partial XP kept — if you fire a
+fresh `shoot()` before finishing. Calling the wrong stage (or the
+wrong run) signals a `tx_chain_error` but leaves the chain open so
+you can retry the correct stage.
 
 Aliases are accepted: `powerpoint` (= `presentation`), `reviewer` (=
 `reviewer_response`), `graphical` (= `graphical_abstract`).
@@ -88,8 +88,7 @@ The tier label is cosmetic. The chain length is the real gate.
 Output flags on `shoot()` auto-generate the chain prefix needed to
 reach the highest enabled flag, in order. So a shippable run with
 `presentation = TRUE` produces `abstract`, `manuscript`, and
-`presentation` in one go — provided each one is unlocked and the
-window allows:
+`presentation` in one go — provided each one is unlocked:
 
 ```{r}
 run <- shoot(mtcars, presentation = TRUE)
@@ -101,9 +100,9 @@ file path invisibly.
 
 ## Locked stages and broken chains
 
-Locked calls, expired windows, the wrong run, and out-of-order calls
-all signal a structured `tx_chain_error`. A locked stage in a fresh
-profile looks like this:
+Locked calls, the wrong run, and out-of-order calls all signal a
+structured `tx_chain_error`. A locked stage in a fresh profile
+looks like this:
 
 ```
 manuscript() requires:
@@ -118,7 +117,7 @@ Scripts can branch on the `reason` field:
 ```{r}
 res <- tryCatch(manuscript(run), tx_chain_error = function(e) e)
 if (inherits(res, "tx_chain_error")) {
-  res$reason   # one of: not_unlocked, no_active_chain, window_expired,
+  res$reason   # one of: not_unlocked, no_active_chain,
                #         wrong_run, wrong_stage
 }
 ```
@@ -169,7 +168,8 @@ options(texanshootR.consent = TRUE)
 ## Resetting
 
 Should circumstances call for a fresh start — a new institution, a
-co-author dispute, an opportune hard-drive failure:
+co-author dispute, an opportune hard-drive failure, or because some of
+you just want to see the world burn:
 
 ```{r}
 reset_career(force = TRUE)

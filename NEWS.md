@@ -16,6 +16,77 @@
   reads as a normal methods paragraph.
 * `summary(run)` reports counts for each axis.
 
+## Live modifiers — new sins
+
+Five new modifiers expanding the cursed bestiary:
+
+* `+aggregate` (alias `+agg`): collapse records to country / group means
+  before fit. Hides within-group variance when within-group variance
+  exceeds between-group variance.
+* `+compilation` (alias `+comp`): treat a literature
+  compilation of reported values as ground-truth response. Reporting
+  bias gets re-emitted as ecological signal.
+* `+gapfill` (alias `+gap`): validate predictions for unobserved cases
+  using fit metrics on the observed cases. The reported metric is silent
+  precisely where the question lives.
+* `+tier2` (alias `+relax`, `+downweight`): when the pre-registered
+  quality filter yields too few cases, introduce a downweighted second
+  tier and backdate the threshold to Methods.
+* `+counter_argument` (alias `+counter`, `+preempt`): inscribe the
+  reviewer's likely objections and their rebuttals into the manuscript.
+  Closes off review by performing it on the reviewer's behalf.
+* `+pseudo_spatial` (alias `+coords`): add geographic coordinates as
+  fixed effects and treat that as having handled spatial
+  autocorrelation. Residuals still cluster.
+* `+omit_control` (alias `+omit`): drop a covariate because you don't
+  want to interpret it. Variance reassigns to the predictors of
+  interest and strengthens their apparent effects.
+* `+knife_edge` (alias `+labeling`): define group membership by a
+  knife-edge presence rule on a continuous variable. The comparison
+  effect emerges from the labelling rule, not the underlying process.
+* `+iid_rescue` (alias `+iid`): reassign an inconvenient fixed effect
+  to an iid random effect when the result is otherwise unwelcome.
+* `+defer_fix` (alias `+defer`, `+next_step`): acknowledge a
+  methodological correction; defer it to the next paper / first step /
+  future analysis while the broken analysis proceeds unchanged.
+* `+coffee_break` (alias `+side_meeting`, `+offline`): move
+  methodological disagreement off the written record. A six-paragraph
+  objection is answered with a one-line proposal to "discuss it
+  informally" at the retreat.
+* `+mechanism_rebuttal` (alias `+intuition`, `+but_biologically`):
+  dismiss a statistical concern by appealing to domain mechanism
+  rather than engaging with the statistical content. The null
+  simulation is set aside because the mechanism is "obvious".
+
+### Deflection family
+
+Five modifiers covering distinct rhetorical moves that redirect
+attention away from a methodological concern rather than engaging
+with it. All share the new `deflection` fallacy tag.
+
+* `+misunderstanding` (alias `+you_misread`): relocate the
+  methodological problem from the analysis to the reader.
+* `+narrow_answer` (alias `+strawman`): answer a weaker version of
+  the concern at the wrong level of analysis.
+* `+complexity_shield` (alias `+its_complex`): invoke unspecified
+  complexity to dismiss a specific narrow concern.
+* `+frame_shift` (alias `+oscillate`): oscillate between descriptive
+  and causal framing depending on which is being challenged.
+* `+matter_of_taste` (alias `+just_one_way`): soften a falsifiable
+  concern into a matter of perspective.
+
+* `vocab_tags` gains `aggregation_artifact` and `deflection`
+  (fallacy tags).
+* New message banks: `aggregation_artifact.yaml`,
+  `compilation_as_truth.yaml`, `gapfill_validation.yaml`,
+  `threshold_relax.yaml`, `reviewer_prophecy.yaml`,
+  `pseudo_spatial.yaml`, `omit_control.yaml`, `knife_edge.yaml`,
+  `iid_rescue.yaml`, `defer_fix.yaml`, `coffee_break.yaml`,
+  `mechanism_rebuttal.yaml`, `misunderstanding.yaml`,
+  `narrow_answer.yaml`, `complexity_shield.yaml`, `frame_shift.yaml`,
+  `matter_of_taste.yaml`. Yaml headers document the cursed-practice
+  language tells observed in field-report sightings.
+
 ## Breaking changes
 
 * `preprint()` removed. The canonical output set is `manuscript()`,
