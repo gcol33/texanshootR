@@ -1,5 +1,197 @@
 # Helpers shared across all output_*.R files.
 
+# ---- Methods-paragraph rendering ----------------------------------
+#
+# The search attaches structured `restriction` and `outcome_construction`
+# records to each fit's result row (see R/families.R spec_metadata).
+# describe_spec() turns those records plus the formula into a single
+# methods-paragraph sentence that every output generator and the print
+# banner share. This is the single source of truth for "what did the
+# shooter actually do to get this result" -- glyph/labels stay aligned
+# across the abstract, manuscript, presentation, reviewer response,
+# and DATA USED block by routing through here.
+
+render_restriction_phrase <- function(restriction) {
+  if (is.null(restriction)) return(NA_character_)
+  switch(restriction$kind,
+    complete_cases = "restricting to complete cases",
+    outcome_iqr    = "winsorising extreme observations on the outcome",
+    predictor_iqr  = sprintf(
+      "restricting to observations within the typical range of %s",
+      restriction$var %||% "the predictor"),
+    cooks_d        = "excluding observations with disproportionate leverage",
+    factor_level   = sprintf("restricting to the %s subgroup of %s",
+                              restriction$level %||% "selected",
+                              restriction$var   %||% "the grouping variable"),
+    NA_character_
+  )
+}
+
+render_outcome_phrase <- function(construction, outcome) {
+  if (is.null(construction)) return(NA_character_)
+  switch(construction$kind,
+    residualise = sprintf("partialling out variation due to %s",
+                           construction$covariate %||% "the covariate"),
+    ratio       = sprintf("expressing the outcome as a rate per unit of %s",
+                           construction$baseline %||% "the baseline"),
+    z_within    = sprintf("z-scoring the outcome within each %s",
+                           construction$factor %||% "subgroup"),
+    NA_character_  # composite_index handled as a lead sentence in describe_spec()
+  )
+}
+
+# Model-form phrase. Renders as the model-clause tail of the methods
+# sentence, e.g. "we fit a robust M-estimator of y on x". polynomial /
+# spline produce predictor-wrap phrases that compose into the same
+# clause; robust / family_swap / random_effect rewrite the fitter and
+# produce the full model-tail.
+render_model_form_phrase <- function(model_form) {
+  if (is.null(model_form)) return(NA_character_)
+  switch(model_form$kind,
+    polynomial = sprintf("allowing for a %s trend in %s",
+                          degree_word(model_form$degree %||% 2L),
+                          model_form$var %||% "the predictor"),
+    spline     = sprintf("modelling %s flexibly via natural splines",
+                          model_form$var %||% "the predictor"),
+    robust     = "using a robust M-estimator",
+    family_swap = render_family_swap(model_form),
+    random_effect = sprintf("with a random intercept for %s",
+                              model_form$group %||% "the grouping factor"),
+    NA_character_
+  )
+}
+
+degree_word <- function(d) {
+  switch(as.character(as.integer(d)),
+    "2" = "quadratic",
+    "3" = "cubic",
+    sprintf("degree-%d", as.integer(d)))
+}
+
+render_family_swap <- function(mf) {
+  fam_label <- switch(mf$family %||% "",
+    binomial = "logistic",
+    poisson  = "Poisson",
+    Gamma    = "Gamma",
+    mf$family %||% "GLM")
+  base <- sprintf("modelled with a %s GLM", fam_label)
+  coerce <- mf$outcome_coerce
+  if (is.null(coerce) || !nzchar(coerce)) return(base)
+  tail <- switch(coerce,
+    median_dichotomize = " after dichotomising the outcome at the median",
+    round_clip         = " after rounding the outcome to non-negative integers",
+    "")
+  paste0(base, tail)
+}
+
+# Methods-paragraph sentence for the highlighted spec. Composes the
+# spec's restriction + outcome-construction + model_form records into a
+# single sentence:
+#   "[We constructed ...] After X and Y, we fit FORMULA, M."
+# The polynomial / spline wraps are stripped from FORMULA before
+# rendering so the prose clause M carries the description -- a
+# methods paragraph reads "we fit weight ~ age + sex, allowing for a
+# quadratic trend in age", not "we fit weight ~ poly(age, 2) + sex".
+describe_spec <- function(spec) {
+  if (is.null(spec)) return("We fit y ~ x.")
+  formula <- strip_model_form_wraps(spec$formula %||% "y ~ x",
+                                     spec$model_form)
+
+  prefix_clauses <- character()
+  lead <- NULL
+
+  r_phrase <- render_restriction_phrase(spec$restriction)
+  if (!is.na(r_phrase)) prefix_clauses <- c(prefix_clauses, r_phrase)
+
+  oc <- spec$outcome_construction
+  if (!is.null(oc)) {
+    if (identical(oc$kind, "composite_index")) {
+      vars <- oc$vars %||% character()
+      if (length(vars)) {
+        lead <- sprintf("We constructed a composite outcome from %s.",
+                        oxford_join(vars))
+      }
+    } else {
+      o_phrase <- render_outcome_phrase(oc, formula)
+      if (!is.na(o_phrase)) prefix_clauses <- c(prefix_clauses, o_phrase)
+    }
+  }
+
+  main <- if (length(prefix_clauses)) {
+    joined <- oxford_join(prefix_clauses)
+    sprintf("After %s, we fit %s", joined, formula)
+  } else {
+    sprintf("We fit %s", formula)
+  }
+
+  mf_phrase <- render_model_form_phrase(spec$model_form)
+  main <- if (!is.na(mf_phrase)) sprintf("%s, %s.", main, mf_phrase)
+          else                    paste0(main, ".")
+
+  if (is.null(lead)) main else paste(lead, main)
+}
+
+# Rewrite poly(var, k) and splines::ns(var, df = k) terms back to bare
+# `var` for the methods-paragraph rendering. The formula was built by
+# materialise_spec via string concatenation -- it was never deparsed
+# user code -- so a structural string substitution is safe here.
+strip_model_form_wraps <- function(f, model_form) {
+  if (is.null(model_form) || is.null(model_form$var)) return(f)
+  var <- model_form$var
+  if (identical(model_form$kind, "polynomial")) {
+    pat <- sprintf("poly\\(\\Q%s\\E,\\s*\\d+\\)", var)
+    return(sub(pat, var, f))
+  }
+  if (identical(model_form$kind, "spline")) {
+    pat <- sprintf("splines::ns\\(\\Q%s\\E,\\s*df\\s*=\\s*\\d+\\)", var)
+    return(sub(pat, var, f))
+  }
+  f
+}
+
+oxford_join <- function(x) {
+  x <- as.character(x)
+  if (length(x) == 0L) return("")
+  if (length(x) == 1L) return(x)
+  if (length(x) == 2L) return(paste(x, collapse = " and "))
+  paste0(paste(x[-length(x)], collapse = ", "), ", and ", x[length(x)])
+}
+
+capitalize_first <- function(s) {
+  if (!nzchar(s)) return(s)
+  paste0(toupper(substr(s, 1L, 1L)), substr(s, 2L, nchar(s)))
+}
+
+# Compact methods summary for the print banner FINDING line. Returns a
+# semicolon-joined list of perturbation phrases, or "none" when no
+# restriction / outcome construction was applied. Distinct from
+# describe_spec(): no leading capital, no "we fit FORMULA" tail.
+methods_summary <- function(spec) {
+  if (is.null(spec)) return("none")
+  parts <- character()
+  r <- render_restriction_phrase(spec$restriction)
+  if (!is.na(r)) parts <- c(parts, r)
+  oc <- spec$outcome_construction
+  if (!is.null(oc)) {
+    if (identical(oc$kind, "composite_index")) {
+      vars <- oc$vars %||% character()
+      if (length(vars)) {
+        parts <- c(parts,
+                   sprintf("composite outcome from %s", oxford_join(vars)))
+      }
+    } else {
+      o <- render_outcome_phrase(oc, "")
+      if (!is.na(o)) parts <- c(parts, o)
+    }
+  }
+  mf <- render_model_form_phrase(spec$model_form)
+  if (!is.na(mf)) parts <- c(parts, mf)
+  if (!length(parts)) return("none")
+  paste(parts, collapse = "; ")
+}
+
+# ---- File-output helpers ------------------------------------------
+
 resolve_output_dir <- function(output_dir = NULL) {
   d <- output_dir %||% getOption("texanshootR.output_dir") %||% tempdir()
   if (!dir.exists(d)) dir.create(d, recursive = TRUE, showWarnings = FALSE)

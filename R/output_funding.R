@@ -17,12 +17,11 @@ funding <- function(run, output_dir = NULL, file = NULL, force = FALSE) {
 
   doc <- officer::read_docx()
   doc <- officer::body_add_par(doc, "Letter of Intent", style = "heading 1")
-  doc <- officer::body_add_par(doc, sprintf(
-    "We propose a research programme building directly on the relationship %s, ",
-    hs$formula %||% "y ~ x"
-  ))
   doc <- officer::body_add_par(doc, paste0(
-    "which our preliminary analysis has identified with R-squared ",
+    "We propose a research programme building directly on the analysis ",
+    "summarised below. ", describe_spec(hs)))
+  doc <- officer::body_add_par(doc, paste0(
+    "The preliminary analysis recovered R-squared ",
     sprintf("%.3f", hs$r_squared %||% 0),
     " (p = ",
     sprintf("%.4f", hs$p_value %||% 1),

@@ -37,16 +37,16 @@ LIVE_MODIFIERS <- list(
     aliases     = c("sub", "sg"),
     display     = "+subgroup",
     time_bonus  = 2L,
-    bias        = list(perturb_tag = "subgroup"),
-    description = "Bias the perturbation queue toward subgroup splits."
+    bias        = list(perturb_tag = "restriction"),
+    description = "Bias toward analytic-sample restrictions (factor-level, Cook's D, complete cases)."
   ),
   outliers = list(
     token       = "outliers",
     aliases     = c("out"),
     display     = "+outliers",
     time_bonus  = 2L,
-    bias        = list(perturb_tag = "outlier"),
-    description = "Bias the perturbation queue toward outlier exclusion."
+    bias        = list(perturb_tag = "restriction"),
+    description = "Bias toward principled-sounding sample exclusions."
   ),
   gam = list(
     token       = "gam",

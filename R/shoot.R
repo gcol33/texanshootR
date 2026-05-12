@@ -1,9 +1,11 @@
 #' Run an exploratory model search
 #'
 #' Fits a battery of candidate specifications across predictor subsets,
-#' transformations, interactions, outlier-removal seeds, and subgroup
-#' seeds. Returns a `tx_run` object summarising the search and the
-#' highlighted specification.
+#' transformations, interactions, principled-sounding sample
+#' restrictions (complete cases, IQR fences, Cook's D, factor-level
+#' restrictions), and outcome-engineering moves (composite indices,
+#' residualisation, ratios, within-group z-scoring). Returns a `tx_run`
+#' object summarising the search and the highlighted specification.
 #'
 #' Every shoot has a wall-clock budget (default 30s). Modifiers are
 #' pre-rolled at run start by default: shoot() picks a random per-
@@ -265,6 +267,7 @@ shoot <- function(df,
         spec$subset_full <- paste(predictors, collapse = ",")
         spec$family <- pick_spec_family(state, career_level, outcome_vec,
                                          family_pool, escalating = FALSE)
+        spec <- apply_model_form(spec)
         n_picked <- n_picked + 1L
         batch_specs[[n_picked]] <- spec
         iter <- iter + 1L
@@ -412,6 +415,7 @@ shoot <- function(df,
           spec$family <- pick_spec_family(state, career_level,
                                            derived_outcome_vec, family_pool,
                                            escalating = TRUE)
+          spec <- apply_model_form(spec)
           n_picked <- n_picked + 1L
           batch_specs[[n_picked]] <- spec
         }
@@ -719,15 +723,20 @@ summarise_trace <- function(trace) {
   fams_seen <- unique(vapply(trace,
                               function(s) s$family$fitter %||% "lm",
                               character(1)))
-  fams_sorted <- intersect(c("lm", "glm", "gam", "wls", "cor", "glmm", "sem"),
+  fams_sorted <- intersect(c("lm", "glm", "gam", "wls", "rlm", "cor",
+                              "glmm", "sem"),
                             fams_seen)
 
   list(
     subset_count      = length(unique(vapply(trace, function(s) paste(s$subset, collapse = ","), ""))),
     transform_count   = length(unique(vapply(trace, function(s) paste(names(s$transforms), s$transforms, sep = ":", collapse = ","), ""))),
     interaction_count = length(unique(unlist(lapply(trace, function(s) s$interactions)))),
-    outlier_count     = length(unique(vapply(trace, function(s) s$outlier_seed, ""))),
-    subgroup_count    = length(unique(vapply(trace, function(s) s$subgroup_seed, ""))),
+    restriction_count = length(unique(vapply(trace,
+                          function(s) restriction_digest(s$restriction), ""))),
+    outcome_count     = length(unique(vapply(trace,
+                          function(s) outcome_construction_digest(s$outcome_construction), ""))),
+    model_form_count  = length(unique(vapply(trace,
+                          function(s) model_form_digest(s$model_form), ""))),
     families_explored = fams_sorted
   )
 }
@@ -740,8 +749,9 @@ digest_grid <- function(trace) {
     paste(c(paste(g$subset, collapse = ","),
             paste(names(g$transforms), g$transforms, sep = ":", collapse = ","),
             paste(g$interactions, collapse = ","),
-            g$outlier_seed,
-            g$subgroup_seed),
+            restriction_digest(g$restriction),
+            outcome_construction_digest(g$outcome_construction),
+            model_form_digest(g$model_form)),
           collapse = "|")
   }, "")
   paste(length(trace), substr(rlang_md5(paste(s, collapse = "\n")), 1, 12),

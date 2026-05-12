@@ -77,9 +77,9 @@ test_that("available_families gates families by career tier", {
   expect_setequal(texanshootR:::available_families("Postdoc"),
                    c("lm", "glm", "cor"))
   expect_setequal(texanshootR:::available_families("Senior Scientist"),
-                   c("lm", "glm", "cor", "wls", "gam"))
+                   c("lm", "glm", "cor", "wls", "gam", "rlm"))
   expect_setequal(texanshootR:::available_families("PI"),
-                   c("lm", "glm", "cor", "wls", "gam", "glmm", "sem"))
+                   c("lm", "glm", "cor", "wls", "gam", "rlm", "glmm", "sem"))
 })
 
 test_that("select_family at Junior is always lm", {

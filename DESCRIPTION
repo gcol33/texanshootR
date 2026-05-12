@@ -6,10 +6,12 @@ Authors@R: person("Gilles", "Colling", email = "gilles.colling051@gmail.com",
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0003-3070-6066"))
 Description: Provides a structured, terminal-first interface for
-    exploratory linear-model search, including transformation grids,
-    predictor-subset enumeration, interaction screening, and
-    outlier-removal seeding. Persistent run history, achievement
-    tracking, and reportable output generators (manuscript,
+    exploratory model search, including transformation grids,
+    predictor-subset enumeration, interaction screening, principled-
+    sounding sample restrictions, outcome engineering, and model-form
+    escalation (polynomial / spline wraps, robust M-estimation, GLM
+    family swaps, random-intercept lifts). Persistent run history,
+    achievement tracking, and reportable output generators (manuscript,
     presentation, funding letter, graphical abstract, reviewer
     response) are included.
 License: MIT + file LICENSE

@@ -8,8 +8,15 @@
 #
 # Result contract (all fitters):
 #   list(formula, n, n_terms, r_squared, aic, p_value,
-#        dropped, n_dropped, outliers_dropped, subgroup,
+#        dropped, n_dropped, rows_excluded,
+#        restriction, outcome_construction,
 #        family, family_meta = list())
+#
+# - restriction / outcome_construction carry the structured perturbation
+#   record from the search spec (or NULL when none was applied). The
+#   print banner and output generators render these via
+#   render_restriction_phrase() / render_outcome_phrase() in
+#   output_helpers.R.
 #
 # - r_squared is McFadden-style pseudo-R^2 for glm (1 - dev/null_dev).
 # - p_value is the F-test against intercept for lm and the LRT against
@@ -19,11 +26,19 @@
 #   favorite_method() in career.R can tabulate it directly.
 
 # Shared materialisation: returns mf/X/y/formula or NULL if the spec
-# cannot be fit (degenerate after transforms / outlier drop / subgroup).
+# cannot be fit (degenerate after transforms / restriction / outcome
+# construction).
 build_model_frame <- function(df, outcome, spec, y_override = NULL) {
+  # y_override (when supplied by fit_glm for a coerce-mode family) must
+  # be applied to the FULL df before materialise_spec runs, so the
+  # subsequent restriction step trims the coerced outcome alongside the
+  # rest of the row. Applying after materialise would desync row counts.
+  if (!is.null(y_override) && length(y_override) == nrow(df) &&
+      outcome %in% names(df)) {
+    df[[outcome]] <- y_override
+  }
   mat <- materialise_spec(df, outcome, spec)
   d <- mat$df
-  if (!is.null(y_override)) d[[outcome]] <- y_override
   if (nrow(d) < length(spec$subset) + 5L) return(NULL)
   f <- tryCatch(stats::as.formula(mat$formula), error = function(e) NULL)
   if (is.null(f)) return(NULL)
@@ -41,22 +56,23 @@ build_model_frame <- function(df, outcome, spec, y_override = NULL) {
 }
 
 # Family-independent metadata block, attached after the numeric fit.
+# `restriction` / `outcome_construction` are carried as structured lists
+# so render_*_phrase() can produce the methods-paragraph fragment at
+# print/output time without re-deriving the sub-kind from a token.
+# `rows_excluded` collapses every row-dropping reason (restriction +
+# NA propagation) into a single banner number.
 spec_metadata <- function(df, spec, n_used) {
+  used <- if (is.null(n_used)) nrow(df) else as.integer(n_used)
   list(
-    dropped          = setdiff(unlist(strsplit(
+    dropped              = setdiff(unlist(strsplit(
       spec$subset_full %||% paste(spec$subset, collapse = ","), ",")),
       spec$subset),
-    n_dropped        = length(spec$subset_full %||% character()) -
-                          length(spec$subset),
-    outliers_dropped = if (spec$outlier_seed == "none") 0L
-                       else as.integer(round(0.05 * nrow(df))),
-    # Carry the outlier seed token (e.g. "leverage_top_5pct", "random_5pct")
-    # so the print banner's DATA USED section can label the rule, not just
-    # report the count. NA when no outlier perturbation was applied.
-    outlier_rule     = if (spec$outlier_seed == "none") NA_character_
-                       else spec$outlier_seed,
-    subgroup         = if (spec$subgroup_seed == "none") NA_character_
-                       else spec$subgroup_seed
+    n_dropped            = length(spec$subset_full %||% character()) -
+                            length(spec$subset),
+    rows_excluded        = max(0L, as.integer(nrow(df) - used)),
+    restriction          = spec$restriction,
+    outcome_construction = spec$outcome_construction,
+    model_form           = spec$model_form
   )
 }
 
@@ -871,7 +887,17 @@ fit_wls <- function(df, outcome, spec) {
 # Pick a column suitable as a random-intercept grouping factor: outside
 # the spec's fixed-effect subset, with a small-but-not-trivial number of
 # distinct levels. Returns the column name or NULL.
+#
+# When the spec carries a model_form override naming a specific group,
+# that takes priority -- the perturbation chose the group and we honor
+# it as long as it's actually a viable column.
 find_glmm_group <- function(df, outcome, spec) {
+  forced <- spec$family$group %||% spec$model_form$group %||% NULL
+  if (!is.null(forced) && forced %in% names(df) && forced != outcome) {
+    x <- df[[forced]]
+    levs <- unique(x[!is.na(x)])
+    if (length(levs) >= 3L) return(forced)
+  }
   cand <- setdiff(names(df), c(outcome, spec$subset))
   if (length(cand) == 0L) return(NULL)
   n <- nrow(df)
@@ -888,6 +914,105 @@ find_glmm_group <- function(df, outcome, spec) {
   NULL
 }
 
+# ---- rlm fitter (native Huber M-estimator) -------------------------
+#
+# Iteratively reweighted least squares with Huber's psi as the
+# influence function. Mirrors the high-level behaviour of MASS::rlm
+# (Huber proposal 2 scale, c = 1.345) but stays inside the package's
+# .lm.fit() / chol primitives so MASS / lme4 do not become hard deps.
+#
+# Scale is updated alongside the coefficients via the median-absolute-
+# deviation of the current residuals: s = 1.4826 * MAD. The weight at
+# step t is w_i = psi(r_i / s) / (r_i / s), so leverage points whose
+# scaled residual exceeds c get downweighted by c / |r/s|.
+#
+# Reported p_value is a weighted F-test against the weighted intercept-
+# only model -- the same shape fit_wls reports, so choose_highlight() can
+# put rlm rows next to lm/glm rows in the just-cleared band.
+
+fit_rlm <- function(df, outcome, spec) {
+  mb <- build_model_frame(df, outcome, spec)
+  if (is.null(mb)) return(NULL)
+  X <- mb$X; y <- mb$y
+  if (!all(is.finite(y))) {
+    keep <- is.finite(y)
+    X <- X[keep, , drop = FALSE]; y <- y[keep]
+  }
+  n <- length(y); p <- ncol(X)
+  if (n < p + 5L) return(NULL)
+
+  fit0 <- tryCatch(stats::.lm.fit(X, y), error = function(e) NULL)
+  if (is.null(fit0)) return(NULL)
+  beta <- fit0$coefficients
+  if (any(!is.finite(beta))) return(NULL)
+  resid <- fit0$residuals
+
+  c_huber <- 1.345
+  maxit   <- 25L
+  tol     <- 1e-6
+
+  for (it in seq_len(maxit)) {
+    mad_s <- stats::median(abs(resid - stats::median(resid, na.rm = TRUE)),
+                            na.rm = TRUE) * 1.4826
+    if (!is.finite(mad_s) || mad_s <= .Machine$double.eps)
+      mad_s <- max(1e-6, stats::sd(resid, na.rm = TRUE))
+    if (!is.finite(mad_s) || mad_s <= 0) return(NULL)
+
+    r_scaled <- resid / mad_s
+    w        <- ifelse(abs(r_scaled) <= c_huber, 1, c_huber / abs(r_scaled))
+    w[!is.finite(w) | w < 0] <- 0
+    if (sum(w) <= .Machine$double.eps) return(NULL)
+
+    sw <- sqrt(w)
+    fit_w <- tryCatch(stats::.lm.fit(X * sw, y * sw), error = function(e) NULL)
+    if (is.null(fit_w)) return(NULL)
+    new_beta <- fit_w$coefficients
+    if (any(!is.finite(new_beta))) return(NULL)
+    delta <- max(abs(new_beta - beta))
+    beta <- new_beta
+    resid <- as.numeric(y - X %*% beta)
+    if (is.finite(delta) && delta < tol) break
+  }
+
+  # Weighted RSS / TSS for the F-test. Using the final weights so the
+  # significance reading reflects the iterated estimate, not the OLS pilot.
+  mad_s <- stats::median(abs(resid - stats::median(resid, na.rm = TRUE)),
+                          na.rm = TRUE) * 1.4826
+  if (!is.finite(mad_s) || mad_s <= 0) mad_s <- max(1e-6, stats::sd(resid))
+  r_scaled <- resid / mad_s
+  w_final  <- ifelse(abs(r_scaled) <= c_huber, 1, c_huber / abs(r_scaled))
+  w_final[!is.finite(w_final) | w_final < 0] <- 0
+
+  rss_w <- sum(w_final * resid * resid)
+  y_w_mean <- sum(w_final * y) / max(sum(w_final), .Machine$double.eps)
+  tss_w <- sum(w_final * (y - y_w_mean)^2)
+  r2    <- if (tss_w > 0) max(0, 1 - rss_w / tss_w) else 0
+
+  df1 <- max(1L, p - 1L)
+  df2 <- n - p
+  p_value <- if (df2 < 1L || tss_w <= 0 || rss_w <= 0) NA_real_
+             else {
+               f_stat <- ((tss_w - rss_w) / df1) / (rss_w / df2)
+               stats::pf(f_stat, df1, df2, lower.tail = FALSE)
+             }
+
+  # AIC analogue: Gaussian-form on the weighted residuals. Keeps rlm
+  # rows comparable in scale to fit_lm / fit_wls.
+  aic_val <- n * (log(2 * pi) + log(rss_w / n) + 1) + 2 * p
+
+  c(list(
+    formula     = mb$formula,
+    n           = n,
+    n_terms     = p,
+    r_squared   = r2,
+    aic         = aic_val,
+    p_value     = p_value,
+    family      = "rlm:huber",
+    family_meta = list(family = "rlm", psi = "huber", c = c_huber,
+                        scale = mad_s, iterations = it)
+  ), spec_metadata(df, spec, n))
+}
+
 # ---- registry ------------------------------------------------------
 
 FAMILIES <- list(
@@ -900,6 +1025,8 @@ FAMILIES <- list(
   wls  = list(fitter = fit_wls,  available = function() TRUE,
               min_career = "Senior Scientist"),
   gam  = list(fitter = fit_gam,  available = function() TRUE,
+              min_career = "Senior Scientist"),
+  rlm  = list(fitter = fit_rlm,  available = function() TRUE,
               min_career = "Senior Scientist"),
   glmm = list(fitter = fit_glmm, available = function() TRUE,
               min_career = "PI"),

@@ -49,13 +49,13 @@ test_that("OUTPUTS section uses `fn(run)` for unlocked, bare for locked", {
   expect_true(any(grepl("\\(\\) +requires (Postdoc|Senior Scientist|PI)$", out)))
 })
 
-test_that("DATA USED always reports the seven labeled fields", {
+test_that("DATA USED always reports the six labeled fields", {
   withr::local_options(texanshootR.budget = 1)
   withr::local_seed(13)
   run <- shoot(mtcars)
   out <- capture_banner(run)
-  for (label in c("subset applied:", "rows excluded by subset:",
-                  "outliers removed:", "outlier rule:",
+  for (label in c("exclusion rule:", "rows excluded:",
+                  "outcome construction:",
                   "derived metrics:", "search seed:", "run stored:")) {
     expect_true(any(grepl(label, out, fixed = TRUE)),
                 info = sprintf("missing DATA USED label: %s", label))

@@ -33,20 +33,20 @@ abstract <- function(run, output_dir = NULL, file = NULL,
 
 build_abstract_text <- function(run) {
   hs <- run$highlighted_spec %||% list()
-  formula  <- hs$formula  %||% "y ~ x"
   rsq      <- hs$r_squared %||% 0
   pval     <- hs$p_value  %||% 1
   n_specs  <- run$spec_count %||% 0L
+  methods  <- describe_spec(hs)
 
   paste(
     "Abstract",
     "",
     paste0(
-      "We examined the relationship described by ",
-      formula, ". A targeted specification search across ",
-      n_specs, " candidate models identified a configuration ",
-      "consistent with prior expectations. The reported model ",
-      sprintf("recovered an R-squared of %.3f with a p-value of %.4f. ",
+      "We examined the relationship between the response and its ",
+      "predictors across a targeted specification search of ",
+      n_specs, " candidate models. ",
+      methods, " ",
+      sprintf("The reported model recovered an R-squared of %.3f with a p-value of %.4f. ",
               rsq, pval),
       "These results inform a coherent picture of the underlying ",
       "process and warrant further investigation."

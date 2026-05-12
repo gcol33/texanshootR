@@ -28,8 +28,7 @@ graphical_abstract <- function(run, output_dir = NULL, file = NULL,
     ggplot2::geom_point(size = 2) +
     ggplot2::labs(
       title    = "Conceptual relationship",
-      subtitle = sprintf("Highlighted specification: %s",
-                          hs$formula %||% "y ~ x"),
+      subtitle = describe_spec(hs),
       caption  = sprintf("R^2 = %.3f, p = %.4f",
                           hs$r_squared %||% 0,
                           hs$p_value %||% 1),

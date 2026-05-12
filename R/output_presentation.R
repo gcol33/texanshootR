@@ -42,8 +42,8 @@ presentation <- function(run, output_dir = NULL, file = NULL,
   pp <- officer::ph_with(pp, "Methods",
                          location = officer::ph_location_type(type = "title"))
   pp <- officer::ph_with(pp, sprintf(
-    "%d candidate specifications. Reported model: %s.",
-    run$spec_count %||% 0L, hs$formula %||% "y ~ x"
+    "%d candidate specifications. %s",
+    run$spec_count %||% 0L, describe_spec(hs)
   ), location = officer::ph_location_type(type = "body"))
 
   pp <- officer::add_slide(pp, layout = "Title and Content", master = "Office Theme")

@@ -22,9 +22,15 @@ reviewer_response <- function(run, output_dir = NULL, file = NULL,
   stem <- file %||% "response_to_reviewers_FINAL"
   out  <- versioned_filename(d, stem, "docx", force)
 
+  hs <- run$highlighted_spec %||% list()
+  methods <- describe_spec(hs)
+
   doc <- officer::read_docx()
   doc <- officer::body_add_par(doc, "Response to Reviewers", style = "heading 1")
   doc <- officer::body_add_par(doc, "We thank the reviewers for their thorough engagement with the manuscript.")
+  doc <- officer::body_add_par(doc, paste0(
+    "For reference, the analysis presented in the manuscript is summarised as: ",
+    methods))
   doc <- officer::body_add_par(doc, "")
 
   comments <- list(

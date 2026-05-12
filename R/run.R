@@ -106,7 +106,7 @@ format_finding_block <- function(x) {
   if (isTRUE(x$shippable) && !is.null(hs)) {
     c(
       hs$formula %||% "",
-      sprintf("subset: %s", hs$subgroup %||% "none"),
+      sprintf("methods: %s", methods_summary(hs)),
       sprintf("p: %s",
               if (is.finite(hs$p_value %||% NA_real_))
                 format.pval(hs$p_value, digits = 3)
@@ -201,24 +201,27 @@ format_pipeline_block <- function(meta) {
 
 format_data_used_block <- function(x) {
   hs        <- x$highlighted_spec
-  subgroup  <- hs$subgroup %||% NA_character_
-  out_rule  <- hs$outlier_rule %||% NA_character_
-  n_used    <- hs$n %||% NA_integer_
-  n_total   <- x$df_meta$nrow %||% NA_integer_
-  excluded  <- if (is.finite(n_total) && is.finite(n_used))
-                 as.integer(n_total - n_used) else NA_integer_
+  excl_rule <- render_restriction_phrase(hs$restriction)
+  if (is.na(excl_rule)) excl_rule <- "none"
+  outcome_phrase <- if (is.null(hs$outcome_construction)) "none"
+                    else if (identical(hs$outcome_construction$kind,
+                                        "composite_index")) {
+                      vars <- hs$outcome_construction$vars %||% character()
+                      if (length(vars)) sprintf("composite outcome from %s",
+                                                 oxford_join(vars))
+                      else "none"
+                    } else {
+                      o <- render_outcome_phrase(hs$outcome_construction, "")
+                      if (is.na(o)) "none" else o
+                    }
+  rows_excluded <- as.integer(hs$rows_excluded %||% 0L)
 
   stored <- !is.null(save_dir()) && isTRUE(opt("texanshootR.save_enabled"))
 
   c(
-    sprintf("subset applied: %s",
-            if (!is.na(subgroup)) subgroup else "none"),
-    sprintf("rows excluded by subset: %s",
-            if (is.finite(excluded)) format(excluded, big.mark = ",")
-            else "0"),
-    sprintf("outliers removed: %d", as.integer(hs$outliers_dropped %||% 0L)),
-    sprintf("outlier rule: %s",
-            if (!is.na(out_rule)) out_rule else "none"),
+    sprintf("exclusion rule: %s", excl_rule),
+    sprintf("rows excluded: %s", format(rows_excluded, big.mark = ",")),
+    sprintf("outcome construction: %s", outcome_phrase),
     sprintf("derived metrics: %s",
             if (isTRUE(x$derived_used)) "enabled" else "disabled"),
     sprintf("search seed: %s",
@@ -252,8 +255,9 @@ summary.tx_run <- function(object, ...) {
     cat(sprintf("  Predictor subsets:     %d\n",  s$subset_count %||% 0))
     cat(sprintf("  Transformations:       %d\n",  s$transform_count %||% 0))
     cat(sprintf("  Interactions:          %d\n",  s$interaction_count %||% 0))
-    cat(sprintf("  Outlier seeds:         %d\n",  s$outlier_count %||% 0))
-    cat(sprintf("  Subgroup seeds:        %d\n",  s$subgroup_count %||% 0))
+    cat(sprintf("  Restrictions:          %d\n",  s$restriction_count %||% 0))
+    cat(sprintf("  Outcome constructions: %d\n",  s$outcome_count %||% 0))
+    cat(sprintf("  Model forms:           %d\n",  s$model_form_count %||% 0))
     if (isTRUE(object$derived_used)) {
       cat("  Derived metric:        active\n")
     }

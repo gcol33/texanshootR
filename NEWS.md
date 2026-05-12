@@ -1,5 +1,21 @@
 # texanshootR 0.2.0 (planned)
 
+## Search engine
+
+* New `restriction` axis replaces row-index-based outlier / subgroup
+  seeds. Sub-kinds: complete-cases pruning, Tukey IQR fence on the
+  outcome or a predictor, Cook's D leverage exclusion, and factor-level
+  restriction.
+* New `outcome_construction` axis: composite indices, residualisation,
+  ratio outcomes, within-group z-scoring.
+* New `model_form` axis: polynomial / spline predictor wraps, native
+  Huber M-estimator (`rlm`), GLM family swaps, random-intercept lifts.
+* Methods sentence rendered consistently across `print(run)`, the
+  abstract / manuscript / presentation / reviewer / graphical / funding
+  generators via a shared `describe_spec()` helper. The cursed sentence
+  reads as a normal methods paragraph.
+* `summary(run)` reports counts for each axis.
+
 ## Breaking changes
 
 * `preprint()` removed. The canonical output set is `manuscript()`,

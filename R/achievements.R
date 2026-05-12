@@ -130,8 +130,8 @@ trigger_multiple_comparisons <- function(run, meta) {
 }
 
 trigger_subgroup_fisher <- function(run, meta) {
-  (run$search$subgroup_count %||% 0L) >= 1L &&
-    !is.null(run$highlighted_spec$subgroup)
+  r <- run$highlighted_spec$restriction
+  !is.null(r) && identical(r$kind, "factor_level")
 }
 
 trigger_var_purge <- function(run, meta) {
@@ -139,7 +139,7 @@ trigger_var_purge <- function(run, meta) {
 }
 
 trigger_outlier_excluder <- function(run, meta) {
-  isTRUE(run$highlighted_spec$outliers_dropped > 0L)
+  isTRUE((run$highlighted_spec$rows_excluded %||% 0L) > 0L)
 }
 
 trigger_derived_insight <- function(run, meta) {
