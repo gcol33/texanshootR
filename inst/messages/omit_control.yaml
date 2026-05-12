@@ -1,0 +1,41 @@
+# Omit-control messages — fired when +omit_control is active, or when
+# the search drops a covariate because the player doesn't want to
+# interpret it. Variance reassigns to the predictors of interest.
+
+- id: omit_dropping_nuisance
+  text: "Dropping covariate of disinterested variance..."
+  tags: [omitted_variable, researcher_dof]
+  rarity: common
+  trigger_phase: loading
+
+- id: omit_variance_reassigns
+  text: "Variance reassigning to predictors of interest..."
+  tags: [omitted_variable, causal_overreach]
+  rarity: common
+  trigger_phase: loading
+
+- id: omit_cleaner_table
+  text: "Coefficient table now fits in two columns..."
+  tags: [omitted_variable, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: omit_effect_strengthens
+  text: "Effect of interest strengthens after control is removed..."
+  tags: [omitted_variable, cherry_picking]
+  rarity: uncommon
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]
+
+- id: omit_into_error
+  text: "Omitted variation absorbed by the error term..."
+  tags: [omitted_variable, causal_overreach]
+  rarity: rare
+  trigger_phase: loading
+
+- id: omit_interpretable
+  text: "Model now interpretable (fewer things to explain)..."
+  tags: [omitted_variable, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]

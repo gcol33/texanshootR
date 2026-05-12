@@ -1,0 +1,58 @@
+# Defer-fix messages -- fired when +defer_fix is active, or when the
+# search responds to a methodological critique by acknowledging it and
+# postponing the correction to "the next paper" while the broken
+# analysis proceeds unchanged.
+#
+# Cursed-practice language tells (sighted in field reports 2025-2026):
+#   "do you think this is for next step?"
+#   "In the first step, we explore X, then we can explore why."
+#   "we can compare [the broken comparison] in the final step."
+#   "I will try it, once i have a new result, i will tell you."
+#   "Estimated time: 1-2 days." (for tasks that never get done)
+# Common pattern: the deferral is sincere, but the broken analysis is
+# what gets submitted; the fix is reserved for a future paper that
+# never arrives.
+
+- id: defer_correction_noted
+  text: "Methodological correction noted; reserved for next paper..."
+  tags: [researcher_dof, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: defer_first_step
+  text: "In the first step we compare; we explain in a future step..."
+  tags: [story_first, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: defer_continuous_covariate
+  text: "Continuous covariate noted; not in current scope..."
+  tags: [researcher_dof, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: defer_revision_round
+  text: "Reviewer concern logged for the revision round..."
+  tags: [researcher_dof, story_first, reviewer]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: defer_more_data
+  text: "We can explore this further once we have more data..."
+  tags: [story_first, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]
+
+- id: defer_earmarked
+  text: "Better method earmarked for the next paper..."
+  tags: [story_first, salami_slicing]
+  rarity: rare
+  trigger_phase: loading
+
+- id: defer_analysis_proceeds
+  text: "Acknowledged; deferred; analysis proceeds unchanged..."
+  tags: [researcher_dof, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved, polishing]

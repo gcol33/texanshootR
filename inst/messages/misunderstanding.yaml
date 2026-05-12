@@ -1,0 +1,46 @@
+# Misunderstanding-recast messages -- fired when +misunderstanding is
+# active, or when the search responds to a concrete methodological
+# concern by reframing it as a comprehension problem on the reader's
+# side. The analysis is not defended; the critic is corrected.
+#
+# Rhetorical forms (general):
+#   "you misunderstood the method"
+#   "that is not what we are trying to show"
+#   "the critic appears unfamiliar with the framework"
+
+- id: misread_relocated
+  text: "Concern relocated from the analysis to the reader..."
+  tags: [deflection, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: misread_reading_problem
+  text: "Reframing the question as a reading problem..."
+  tags: [deflection, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: misread_not_what_shown
+  text: "That is not what the analysis is trying to show..."
+  tags: [deflection, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: misread_corrective
+  text: "Author offers a corrective tutorial..."
+  tags: [deflection, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: misread_unfamiliar
+  text: "Critic deemed unfamiliar with the framework..."
+  tags: [deflection, narrative]
+  rarity: rare
+  trigger_phase: loading
+
+- id: misread_objection_set_aside
+  text: "Original objection set aside as a comprehension issue..."
+  tags: [deflection, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved]

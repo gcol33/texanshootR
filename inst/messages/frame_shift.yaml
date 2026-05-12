@@ -1,0 +1,49 @@
+# Frame-shift messages -- fired when +frame_shift is active, or when
+# the search oscillates between descriptive and causal framings of the
+# same result depending on which is being challenged at the moment.
+# Descriptive when pressed on causation; causal when pressed on
+# relevance.
+#
+# Rhetorical forms (general):
+#   "we are only describing the patterns"
+#   "this shows the impact of X on Y"
+#   "the analysis was never about causation" (then: causal claim)
+# Common signature: the framing label is not chosen once and held;
+# it migrates depending on the question.
+
+- id: frame_descriptive_for_now
+  text: "Analysis is descriptive (for now)..."
+  tags: [deflection, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: frame_causal_reattached
+  text: "Causal interpretation re-attached to a descriptive method..."
+  tags: [deflection, causal_overreach]
+  rarity: common
+  trigger_phase: loading
+
+- id: frame_oscillates
+  text: "Framing oscillates between description and cause..."
+  tags: [deflection, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: frame_effect_word
+  text: "Effect language used; only patterns claimed..."
+  tags: [deflection, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: frame_commitment_deferred
+  text: "Patterns presented; impact claimed; commitment deferred..."
+  tags: [deflection, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: frame_label_migrates
+  text: "Framing label migrates with the question..."
+  tags: [deflection, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]

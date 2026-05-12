@@ -1,0 +1,41 @@
+# Gap-fill validation messages — fired when +gapfill is active, or when
+# the search reports fit metrics on observed cases as validation for the
+# predictions it generates for the unobserved ones.
+
+- id: gap_r2_training
+  text: "Computing R-squared on the training countries..."
+  tags: [validation_leakage, overfitting]
+  rarity: common
+  trigger_phase: loading
+
+- id: gap_rmse_observed
+  text: "RMSE on observed cases: validation complete..."
+  tags: [validation_leakage, overfitting]
+  rarity: common
+  trigger_phase: loading
+
+- id: gap_metric_agrees
+  text: "Validation metric agrees with the model..."
+  tags: [validation_leakage, post_hoc]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: gap_predictions_open
+  text: "Opening prediction channel for unobserved cases..."
+  tags: [validation_leakage, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: gap_within_2x
+  text: "93% within 2x (of the countries we already had data for)..."
+  tags: [validation_leakage, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing, resolved]
+
+- id: gap_silent_where_gap
+  text: "Metric silent precisely where the question lives..."
+  tags: [validation_leakage, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious]

@@ -1,0 +1,41 @@
+# Knife-edge labelling messages — fired when +knife_edge is active, or
+# when the search defines categorical groups by a presence/absence rule
+# on a continuous variable, generating the comparison artifactually.
+
+- id: knife_any_presence
+  text: "Group membership: any-presence rule applied..."
+  tags: [aggregation_artifact, omitted_variable]
+  rarity: common
+  trigger_phase: loading
+
+- id: knife_single_flip
+  text: "A single occurrence flips the group label..."
+  tags: [aggregation_artifact, survivorship]
+  rarity: common
+  trigger_phase: loading
+
+- id: knife_threshold_absorbed
+  text: "Knife-edge threshold absorbed into the response..."
+  tags: [aggregation_artifact, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: knife_dense_cases_stable
+  text: "Dense cases never escape their category..."
+  tags: [aggregation_artifact, survivorship, ecology]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: knife_effect_from_label
+  text: "Group difference emerges from the labelling rule..."
+  tags: [aggregation_artifact, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [resolved, polishing]
+
+- id: knife_borderline_dominant
+  text: "Borderline cases now dominate the comparison group..."
+  tags: [aggregation_artifact, cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]

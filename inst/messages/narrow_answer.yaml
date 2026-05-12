@@ -1,0 +1,48 @@
+# Narrow-answer messages -- fired when +narrow_answer is active, or
+# when the search responds to a group-level / structural concern with
+# an individual-level or weaker rebuttal that does not engage the
+# original claim.
+#
+# Rhetorical forms (general):
+#   "but case X can still take the opposite value"
+#   "this individual exception shows the rule does not hold"
+#   "you are overstating it -- look at this counterexample"
+# Common signature: a true statement that operates one level below
+# the level of the original concern.
+
+- id: narrow_weakest_version
+  text: "Concern reframed to its weakest version..."
+  tags: [deflection, story_first]
+  rarity: common
+  trigger_phase: loading
+
+- id: narrow_single_case
+  text: "Group-level claim answered with a single-case rebuttal..."
+  tags: [deflection, narrative]
+  rarity: common
+  trigger_phase: loading
+
+- id: narrow_individual_exception
+  text: "Individual exception offered as general response..."
+  tags: [deflection, story_first]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: narrow_true_irrelevant
+  text: "True-but-irrelevant statement deployed as reply..."
+  tags: [deflection, narrative]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: narrow_question_substituted
+  text: "Narrower question answered; broader one untouched..."
+  tags: [deflection, story_first]
+  rarity: rare
+  trigger_phase: loading
+
+- id: narrow_wrong_level
+  text: "Rebuttal lands one level below the original claim..."
+  tags: [deflection, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]

@@ -1,0 +1,41 @@
+# Aggregation-artifact messages — fired when the player has injected
+# +aggregate, or when the search collapses raw records into group means
+# and pretends within-group variance was never there.
+
+- id: agg_collapsing
+  text: "Collapsing records to group mean..."
+  tags: [aggregation_artifact, omitted_variable]
+  rarity: common
+  trigger_phase: loading
+
+- id: agg_within_variance
+  text: "Within-group variance discarded for clarity..."
+  tags: [aggregation_artifact, omitted_variable]
+  rarity: common
+  trigger_phase: loading
+
+- id: agg_three_records
+  text: "Group mean stabilises after three observations..."
+  tags: [aggregation_artifact, researcher_dof]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: agg_subunit_folded
+  text: "Within-group identity folded into the group effect..."
+  tags: [aggregation_artifact, omitted_variable]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: agg_unit_change
+  text: "Group re-declared as the unit of analysis..."
+  tags: [aggregation_artifact, story_first]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [anxious, desperate]
+
+- id: agg_dominant_subgroup
+  text: "Dominant subgroup now represents the group signal..."
+  tags: [aggregation_artifact, cherry_picking]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]

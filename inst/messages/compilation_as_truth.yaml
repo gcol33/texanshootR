@@ -1,0 +1,41 @@
+# Compilation-as-truth messages — fired when +compilation is active or
+# when the search treats a literature compilation of reported values as
+# ground truth for the latent quantity it samples from.
+
+- id: comp_assumed_complete
+  text: "Reported records assumed complete..."
+  tags: [target_leakage, publication_bias]
+  rarity: common
+  trigger_phase: loading
+
+- id: comp_literature_anchor
+  text: "Anchoring predictions on a literature compilation..."
+  tags: [target_leakage, publication_bias]
+  rarity: common
+  trigger_phase: loading
+
+- id: comp_reporting_absorbed
+  text: "Reporting bias absorbed into model coefficients..."
+  tags: [target_leakage, publication_bias]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: comp_predict_unreported
+  text: "Predicting unreported cases from reported cases..."
+  tags: [target_leakage, causal_overreach]
+  rarity: uncommon
+  trigger_phase: loading
+
+- id: comp_response_relabel
+  text: "Response variable label updated in Discussion..."
+  tags: [target_leakage, story_first, narrative]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [polishing]
+
+- id: comp_reporting_proxy
+  text: "Model recovers reporting effort and re-emits it as signal..."
+  tags: [target_leakage, omitted_variable]
+  rarity: rare
+  trigger_phase: loading
+  mascot_state_affinity: [desperate]
