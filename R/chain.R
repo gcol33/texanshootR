@@ -1,10 +1,10 @@
 # Publication-chain state machine.
 #
 # A shippable run (one that cleared p <= 0.05) opens a *chain*. The
-# chain is a sequence of output stages that must be redeemed in order,
-# each within its own wall-clock window. Hitting every stage in the
-# currently-unlocked prefix awards full XP; running out of time or
-# calling an out-of-order stage breaks the chain and stops further XP.
+# chain is a sequence of output stages that must be redeemed in order.
+# Hitting every stage in the currently-unlocked prefix awards full XP;
+# starting a new shoot() before finishing breaks the chain and forfeits
+# the length-bonus (per-stage XP already banked is kept).
 #
 # The chain length you may attempt grows with cumulative XP. At day 0
 # only `abstract` is in the chain. As XP accrues, the chain grows
@@ -17,13 +17,8 @@
 #   meta$active_chain                   NULL or live-chain state
 #     $run_id            which run is being published
 #     $stage_idx         1-based index of the NEXT-due stage
-#     $deadline          POSIXct, current window expiry
 #     $completed_stages  character vector of stages landed so far
 #     $opened_at         POSIXct, when shoot() opened this chain
-#
-# The active chain persists across R commands because meta is on disk.
-# When the next call comes in we recompute window state from
-# Sys.time() vs $deadline; an expired chain is treated as broken.
 
 CHAIN_STAGES <- c(
   "abstract",
@@ -54,15 +49,6 @@ CHAIN_TIER_BY_LENGTH <- c(
   "Senior Scientist",    # length 5
   "PI"                   # length 6
 )
-
-# Default per-stage window (seconds). Override with
-# `options(texanshootR.chain_window = N)`.
-CHAIN_WINDOW_DEFAULT <- 30
-
-chain_window_seconds <- function() {
-  as.numeric(getOption("texanshootR.chain_window",
-                        CHAIN_WINDOW_DEFAULT))
-}
 
 stage_index <- function(stage) {
   match(stage, CHAIN_STAGES)
@@ -119,7 +105,7 @@ award_xp <- function(meta, n) {
 
 # Open a new chain on a shippable run. Aborts any existing chain
 # (the player committed to a fresh run before redeeming the previous
-# one). The first window starts now.
+# one).
 open_chain <- function(meta, run_id) {
   prog <- progression_of(meta)
   if (!is.null(meta$active_chain)) {
@@ -129,7 +115,6 @@ open_chain <- function(meta, run_id) {
   meta$active_chain <- list(
     run_id            = run_id,
     stage_idx         = 1L,
-    deadline          = as.numeric(Sys.time()) + chain_window_seconds(),
     completed_stages  = character(),
     opened_at         = as.numeric(Sys.time())
   )
@@ -151,15 +136,13 @@ close_chain <- function(meta, reason = c("complete", "broken")) {
 
 # Advance the chain past `stage` (the just-landed stage). If we've
 # reached the end of the unlocked prefix, close the chain as
-# complete and award the chain-bonus XP. Otherwise, push the deadline
-# out one window and move on.
+# complete and award the chain-bonus XP.
 advance_chain <- function(meta, stage) {
   ac <- meta$active_chain
   if (is.null(ac)) return(meta)
   prog <- progression_of(meta)
   ac$completed_stages <- c(ac$completed_stages, stage)
   ac$stage_idx <- ac$stage_idx + 1L
-  ac$deadline  <- as.numeric(Sys.time()) + chain_window_seconds()
   meta$active_chain <- ac
   meta <- award_xp(meta, 1L)
 
@@ -172,14 +155,6 @@ advance_chain <- function(meta, stage) {
     attr(meta, "chain_completed") <- TRUE
   }
   meta
-}
-
-# Window-remaining helper. Returns NA if no active chain, else
-# seconds remaining (may be negative if expired).
-chain_seconds_remaining <- function(meta) {
-  ac <- meta$active_chain
-  if (is.null(ac)) return(NA_real_)
-  as.numeric(ac$deadline) - as.numeric(Sys.time())
 }
 
 # Reasons a stage call can fail. Each returns a structured condition
@@ -220,23 +195,6 @@ require_chain_stage <- function(stage, run) {
                   "none. Run shoot() and clear p <= 0.05 first.")
     stop(tx_chain_error("no_active_chain", msg,
                         list(stage = stage)))
-  }
-
-  remaining <- as.numeric(ac$deadline) - as.numeric(Sys.time())
-  if (remaining < 0) {
-    completed <- ac$completed_stages
-    completed_str <- if (length(completed))
-                       paste(completed, collapse = ", ") else "none"
-    meta <- close_chain(meta, "broken")
-    write_meta(meta)
-    say_chain_broken("window_expired", completed)
-    msg <- paste0(stage, "() failed:\n",
-                  "window expired\n\n",
-                  "Completed before timeout:\n",
-                  completed_str)
-    stop(tx_chain_error("window_expired", msg,
-                        list(stage = stage,
-                             completed = completed)))
   }
 
   if (!identical(run$run_id, ac$run_id)) {
@@ -303,10 +261,8 @@ say_chain_opened <- function(meta) {
   ac <- meta$active_chain
   if (is.null(ac)) return(invisible())
   due <- CHAIN_STAGES[[ac$stage_idx]]
-  remaining <- chain_seconds_remaining(meta)
   say_chain_flavor("chain_opened", "polishing")
-  say(sprintf("Publication chain opened. %s() due in %.0fs.",
-              due, max(0, remaining)))
+  say(sprintf("Publication chain opened. Next: %s().", due))
   invisible()
 }
 
@@ -325,9 +281,8 @@ say_stage_landed <- function(meta, stage) {
   say_chain_flavor("stage_advanced", state_pick)
   prog <- progression_of(meta)
   due  <- CHAIN_STAGES[[ac$stage_idx]]
-  remaining <- chain_seconds_remaining(meta)
-  say(sprintf("Stage %s landed (+1 XP, total %d). Next: %s() in %.0fs.",
-              stage, prog$xp, due, max(0, remaining)))
+  say(sprintf("Stage %s landed (+1 XP, total %d). Next: %s().",
+              stage, prog$xp, due))
   invisible()
 }
 
@@ -335,12 +290,8 @@ say_chain_broken <- function(reason, completed = character()) {
   say_chain_flavor("chain_broken", "rejected")
   completed_str <- if (length(completed))
                      paste(completed, collapse = ", ") else "none"
-  msg <- switch(reason,
-    window_expired = sprintf("Publication window closed. Chain broken; landed before timeout: %s.",
-                              completed_str),
-    "Publication chain broken."
-  )
-  say(msg)
+  say(sprintf("Publication chain broken; landed before abandon: %s.",
+              completed_str))
   invisible()
 }
 
@@ -358,13 +309,9 @@ format_chain_hud <- function(meta) {
   if (is.null(ac)) return(NULL)
   prog <- progression_of(meta)
   due <- CHAIN_STAGES[[ac$stage_idx]]
-  remaining <- as.numeric(ac$deadline) - as.numeric(Sys.time())
-  if (remaining < 0) {
-    return(sprintf("Active chain: window expired on %s.", due))
-  }
   sprintf(
-    "Active chain: next %s() in %.0fs   [%d / %d done]",
-    due, remaining,
+    "Active chain: next %s()   [%d / %d done]",
+    due,
     length(ac$completed_stages),
     prog$length_unlocked
   )

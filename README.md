@@ -96,16 +96,13 @@ graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-Stages must be redeemed in order, each within a 30-second window
-(`options(texanshootR.chain_window = N)` to change it). Finish the chain
-through your currently-unlocked prefix and you collect a length-bonus on
-top of the per-stage XP.
+Stages must be redeemed in order. Finish the chain through your
+currently-unlocked prefix and you collect a length-bonus on top of the
+per-stage XP.
 
-The chain breaks — bonus forfeit, partial XP kept — if you:
-
-* miss the window,
-* call the wrong stage, or
-* fire a fresh `shoot()` before finishing.
+The chain breaks — bonus forfeit, partial XP kept — if you fire a fresh
+`shoot()` before finishing. Calling the wrong stage (or the wrong run)
+signals a `tx_chain_error` but leaves the chain open so you can retry.
 
 Each generator writes to `tempdir()` by default and returns the file path
 invisibly. Override with `output_dir =` or
