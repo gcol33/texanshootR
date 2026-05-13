@@ -57,15 +57,17 @@ input non-interactively (tests).}
 }
 \value{
 A \code{tx_run} object. Returned visibly so the
-\code{\link[=print.tx_run]{print.tx_run()}} banner fires at the prompt; the demo path
+\code{print()} banner fires at the prompt; the demo path
 (\code{depth = "demo"}) returns invisibly because there is no banner
 worth showing for a one-fit smoke test.
 }
 \description{
 Fits a battery of candidate specifications across predictor subsets,
-transformations, interactions, outlier-removal seeds, and subgroup
-seeds. Returns a \code{tx_run} object summarising the search and the
-highlighted specification.
+transformations, interactions, principled-sounding sample
+restrictions (complete cases, IQR fences, Cook's D, factor-level
+restrictions), and outcome-engineering moves (composite indices,
+residualisation, ratios, within-group z-scoring). Returns a \code{tx_run}
+object summarising the search and the highlighted specification.
 }
 \details{
 Every shoot has a wall-clock budget (default 30s). Modifiers are

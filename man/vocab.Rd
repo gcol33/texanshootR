@@ -11,7 +11,7 @@
 \alias{career_levels}
 \title{Controlled vocabularies for the message and event registries}
 \format{
-An object of class \code{character} of length 37.
+An object of class \code{character} of length 39.
 
 An object of class \code{character} of length 16.
 

@@ -14,5 +14,6 @@
 ^dev_.*\.R$
 ^build_site\.R$
 ^CLAUDE\.md$
+^plan\.md$
 ^texanshootR_.*\.tar\.gz$
 ^.*\.Rcheck$

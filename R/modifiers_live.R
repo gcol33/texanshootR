@@ -292,7 +292,7 @@ modifier_available_for_career <- function(token, career_level) {
 # render in place.
 pre_roll_modifiers <- function(career_level) {
   states <- c("uncertain", "worried", "anxious", "panicked", "desperate")
-  out    <- as.list(setNames(rep(NA_character_, length(states)), states))
+  out    <- as.list(stats::setNames(rep(NA_character_, length(states)), states))
   available <- available_modifiers(consumed = character(),
                                    career_level = career_level)
   if (!length(available)) return(out)

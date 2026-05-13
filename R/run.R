@@ -10,7 +10,7 @@ new_tx_run <- function(...) {
 #' @export
 #' @method print tx_run
 print.tx_run <- function(x, ...) {
-  # Single read of meta — every section that needs it (career impact,
+  # Single read of meta -- every section that needs it (career impact,
   # OUTPUTS, PUBLICATION PIPELINE) shares this snapshot. Reading it
   # once also means the banner reflects the state at print time, not
   # the state from when the run finalized (the player may have called
@@ -62,7 +62,7 @@ print.tx_run <- function(x, ...) {
 banner_header <- function(x, final_state) {
   rule <- strrep("=", 64)
   face <- tryCatch(read_face(final_state), error = function(e) "( o_o)")
-  gun  <- "︻デ═一  ·"  # canonical frame from inst/ascii/heartbeat.txt
+  gun  <- "\ufe3b\u30c7\u2550\u4e00  \u00b7"  # canonical frame from inst/ascii/heartbeat.txt
   idx  <- as.integer(x$run_index %||% 0L)
   title <- sprintf("texanshootR :: run %04d", idx)
   paste(rule, paste(face, gun), title, rule, sep = "\n")
@@ -89,16 +89,16 @@ format_career_impact <- function(x) {
   "advanced"
 }
 
-# `peak_pre_resolve → final` arc. Tells the actual emotional shape of
-# the run: composed→resolved is a glide, desperate→resolved is a save,
-# *→desperate is a defeat. The arc reports the RUN's outcome, not the
+# `peak_pre_resolve -> final` arc. Tells the actual emotional shape of
+# the run: composed->resolved is a glide, desperate->resolved is a save,
+# *->desperate is a defeat. The arc reports the RUN's outcome, not the
 # player's current stance -- so "polishing" (which is the resting face
 # shown atop the banner when the run owns an active chain) maps back
 # to "resolved" here. The top-line face still shows polishing.
 format_mascot_arc <- function(x, final_state) {
   arc_end <- if (identical(final_state, "polishing")) "resolved" else final_state
   pre <- x$peak_mascot_before_resolve %||% x$peak_mascot %||% "composed"
-  sprintf("%s → %s", pre, arc_end)
+  sprintf("%s \u2192 %s", pre, arc_end)
 }
 
 format_finding_block <- function(x) {
@@ -110,7 +110,7 @@ format_finding_block <- function(x) {
       sprintf("p: %s",
               if (is.finite(hs$p_value %||% NA_real_))
                 format.pval(hs$p_value, digits = 3)
-              else "—")
+              else "\u2014")
     )
   } else if (!is.null(hs)) {
     c(
@@ -118,7 +118,7 @@ format_finding_block <- function(x) {
       sprintf("best p seen: %s",
               if (is.finite(hs$p_value %||% NA_real_))
                 format.pval(hs$p_value, digits = 3)
-              else "—"),
+              else "\u2014"),
       sprintf("searched: %s specs",
               format(x$spec_count %||% 0L, big.mark = ","))
     )

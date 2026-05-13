@@ -54,7 +54,7 @@
 #'   input non-interactively (tests).
 #'
 #' @return A `tx_run` object. Returned visibly so the
-#'   [print.tx_run()] banner fires at the prompt; the demo path
+#'   `print()` banner fires at the prompt; the demo path
 #'   (`depth = "demo"`) returns invisibly because there is no banner
 #'   worth showing for a one-fit smoke test.
 #' @export

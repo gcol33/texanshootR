@@ -1,4 +1,4 @@
-# The shooter — the package's protagonist.
+# The shooter -- the package's protagonist.
 #
 # Every `shoot()` call is one of his runs. His emotional state is the
 # spine the rest of the system hangs off: it drives the TUI face, the
@@ -89,49 +89,50 @@ heartbeat_frame <- function(tick) {
 }
 
 # 2-frame heartbeat used by the dynamic single-line TUI. RStudio Console
-# renders `一` (U+4E00) at a different cell width than `cli::ansi_nchar`
+# renders U+4E00 (CJK ONE) at a different cell width than `cli::ansi_nchar`
 # claims (likely 1 cell because the default RStudio font lacks the glyph
 # and falls back). The original 8-frame heartbeat cycles between frames
-# that include `一` (6 frames) and frames that don't (`-`, `—` substitutes
-# in frames 3 and 6). Each transition between those two compositions
-# shifted the mascot slot by 1 cell in RStudio, jittering the `|`
-# separators tick-over-tick.
+# that include U+4E00 (6 frames) and frames that don't (`-`, U+2014 em-dash
+# substitutes in frames 3 and 6). Each transition between those two
+# compositions shifted the mascot slot by 1 cell in RStudio, jittering
+# the `|` separators tick-over-tick.
 #
-# The fix: in dynamic mode, keep the wide-char prefix (`︻デ═一`)
-# IDENTICAL on every tick, and animate only the muzzle dot (`·` ↔ space)
-# at the end. Whatever cell width RStudio renders the prefix at, it
-# renders it the same on every tick, so the slot stays anchored. `·`
-# and space are both 1 cell in every terminal we have seen, so the dot
-# blinking does not change the slot width either.
+# The fix: in dynamic mode, keep the wide-char prefix (gun barrel glyphs
+# U+FE3B U+30C7 U+2550 U+4E00) IDENTICAL on every tick, and animate only
+# the muzzle dot (U+00B7 toggled with space) at the end. Whatever cell
+# width RStudio renders the prefix at, it renders it the same on every
+# tick, so the slot stays anchored. U+00B7 and space are both 1 cell in
+# every terminal we have seen, so the dot blinking does not change the
+# slot width either.
 heartbeat_frame_dyn <- function(tick) {
   fs <- read_heartbeat_frames()
   base <- fs[1L]
   if ((as.integer(tick) %% 2L) == 0L) {
     base
   } else {
-    sub("·$", " ", base)  # trailing `·` -> space
+    sub("\u00b7$", " ", base)  # trailing U+00B7 -> space
   }
 }
 
 # Terminal cell widths for the mascot face glyphs and the dynamic-mode
 # gun frame. R's `nchar(type = "width")` returns inconsistent values
-# for box-drawing (`═`, `—`), CJK (`一`, `︻`, `デ`), and Devanagari /
-# Kannada (`ಠ`) glyphs on Windows, so we use a hand-verified lookup
-# instead. The dynamic-mode mascot slot pads to DYN_MASCOT_WIDTH cells
-# using these tables.
+# for box-drawing (U+2550, U+2014), CJK (U+4E00, U+FE3B, U+30C7), and
+# Devanagari / Kannada (U+0CA0) glyphs on Windows, so we use a
+# hand-verified lookup instead. The dynamic-mode mascot slot pads to
+# DYN_MASCOT_WIDTH cells using these tables.
 FACE_CELL_WIDTH <- c(
   composed   = 6L,   # ( o_o)
   uncertain  = 7L,   # ( -_- )
   worried    = 7L,   # ( o_o;)
-  anxious    = 7L,   # ( •_•;)  - bullet renders 1 cell
+  anxious    = 7L,   # ( U+2022 _ U+2022 ;)  - bullet renders 1 cell
   panicked   = 6L,   # (>_<;)
-  desperate  = 5L,   # (ಠ_ಠ)
+  desperate  = 5L,   # (U+0CA0 _ U+0CA0)
   resolved   = 6L    # ( -_-)
 )
 
-# Constant width: in dynamic mode the gun is always `︻デ═一` + 2 spaces
-# + (`·` or space) = 10 cells. Tick is ignored on this signature so
-# callers don't need to special-case across modes.
+# Constant width: in dynamic mode the gun is always U+FE3B U+30C7 U+2550
+# U+4E00 + 2 spaces + (U+00B7 or space) = 10 cells. Tick is ignored on
+# this signature so callers don't need to special-case across modes.
 gun_frame_cell_width <- function(tick) 10L
 
 face_cell_width <- function(state) {
