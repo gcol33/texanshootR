@@ -1,7 +1,7 @@
 Package: texanshootR
 Type: Package
 Title: Reproducible Audit Trails for Indefensible Research
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: person("Gilles", "Colling", email = "gilles.colling051@gmail.com",
                   role = c("aut", "cre"),
                   comment = c(ORCID = "0000-0003-3070-6066"))

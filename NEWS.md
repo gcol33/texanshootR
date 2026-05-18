@@ -1,4 +1,4 @@
-# texanshootR 0.2.0 (planned)
+# texanshootR 0.2.0
 
 ## Search engine
 

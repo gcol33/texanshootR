@@ -12,8 +12,11 @@
 ^CONTRIBUTING\.md$
 ^CODE_OF_CONDUCT\.md$
 ^dev_.*\.R$
+^dev_notes$
 ^build_site\.R$
 ^CLAUDE\.md$
 ^plan\.md$
 ^texanshootR_.*\.tar\.gz$
 ^.*\.Rcheck$
+^\.RData$
+^\.Rhistory$
