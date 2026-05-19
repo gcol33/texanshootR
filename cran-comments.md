@@ -5,9 +5,9 @@ First submission of texanshootR to CRAN.
 ## Test environments
 
 * Local: Windows 11 x64, R 4.6.0 (release) -- `R CMD check --as-cran`, 1 NOTE (New submission)
-* win-builder: R-devel -- pending
-* win-builder: R-release -- pending
-* R-hub: ubuntu-latest, macos-latest, windows-latest -- pending
+* win-builder: R-devel -- 1 NOTE (New submission)
+* win-builder: R-release (R 4.6.0) -- 1 NOTE (New submission)
+* win-builder: R-oldrelease (R 4.5.3) -- 1 NOTE (New submission; see below)
 
 ## R CMD check results
 
@@ -15,6 +15,12 @@ First submission of texanshootR to CRAN.
 
 The single NOTE is the expected "New submission" flag for a first CRAN
 upload.
+
+On the R-oldrelease win-builder run, the URL check additionally returned
+a transient HTTP 429 ("Too Many Requests") from
+`https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy` (the
+package's namesake article). The URL is valid; subsequent runs and the
+R-devel / R-release checks returned 200.
 
 ## Notes for the reviewer
 
