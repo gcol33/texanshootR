@@ -4,14 +4,17 @@ First submission of texanshootR to CRAN.
 
 ## Test environments
 
-* Local: Windows 11 x64, R 4.6.0 (release) -- `R CMD check --as-cran`, Status: OK
+* Local: Windows 11 x64, R 4.6.0 (release) -- `R CMD check --as-cran`, 1 NOTE (New submission)
 * win-builder: R-devel -- pending
 * win-builder: R-release -- pending
 * R-hub: ubuntu-latest, macos-latest, windows-latest -- pending
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 1 note
+
+The single NOTE is the expected "New submission" flag for a first CRAN
+upload.
 
 ## Notes for the reviewer
 

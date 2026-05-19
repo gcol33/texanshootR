@@ -177,7 +177,7 @@ vocab_mascot_states    # composed / uncertain / anxious / desperate / resolved
 vocab_careers          # tier ladder
 ```
 
-The schema lives at [`MESSAGE_SCHEMA.md`](MESSAGE_SCHEMA.md). Adding a new
+The schema lives at [`MESSAGE_SCHEMA.md`](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md). Adding a new
 message is a YAML edit and a re-run of `validate_messages()`.
 
 ## Reset
@@ -208,8 +208,8 @@ solver dependencies, no proprietary licences — onboarding is frictionless.
 
 * [Getting Started](https://gillescolling.com/texanshootR/articles/getting-started.html)
 * [Full Reference](https://gillescolling.com/texanshootR/reference/)
-* [Message Pack Schema](MESSAGE_SCHEMA.md)
-* [Contributing](CONTRIBUTING.md)
+* [Message Pack Schema](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md)
+* [Contributing](https://github.com/gcol33/texanshootR/blob/main/CONTRIBUTING.md)
 
 ## Further reading
 
