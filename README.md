@@ -16,14 +16,18 @@
 > shooter](https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy) helps
 > you out in your predicament.
 
-The shooter starts composed. He fires at the side of a barn, then walks over
-and paints the target around the densest cluster of bullet holes. By attempt
-fifty he is uncertain. By two hundred he is worried. By the time the budget
-is almost out he is desperate, and he has just enough breath left to escalate
-to a derived metric. Either `p ≤ 0.05` lands somewhere on the wall or it does
-not. There is a banner about it either way.
+A shooter starts composed. Drunk, confident, and determined to convince
+everyone of his amazing aim, he fires at the side of a barn through most of
+the night. In the morning he walks over, studies the damage, and paints a
+target around the densest cluster of bullet holes.
 
-`texanshootR` is that loop; every `shoot()` call is one of his runs.
+Then he points at the wall and says, "See?"
+
+`texanshootR` is that loop, and every `shoot()` call is one of his runs.
+He starts composed. By attempt fifty he is uncertain. By two hundred he is
+worried. By the time the budget is almost out he is desperate enough to
+escalate to a derived metric. Either `p <= 0.05` lands somewhere on the wall
+or it does not. There is a banner about it either way.
 
 ## Quick start
 
