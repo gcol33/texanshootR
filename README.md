@@ -32,7 +32,7 @@ or it does not.
 ## Installation
 
 ```r
-# install.packages("pak")
+install.packages("pak")
 pak::pak("gcol33/texanshootR")
 ```
 
