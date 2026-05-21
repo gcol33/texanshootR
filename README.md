@@ -27,7 +27,7 @@ Then he points at the wall and says, "See?"
 He starts composed. By attempt fifty he is uncertain. By two hundred he is
 worried. By the time the budget is almost out he is desperate enough to
 escalate to a derived metric. Either `p <= 0.05` lands somewhere on the wall
-or it does not. There is a banner about it either way.
+or it does not.
 
 ## Installation
 
