@@ -29,6 +29,17 @@ worried. By the time the budget is almost out he is desperate enough to
 escalate to a derived metric. Either `p <= 0.05` lands somewhere on the wall
 or it does not. There is a banner about it either way.
 
+## Installation
+
+```r
+# install.packages("pak")
+pak::pak("gcol33/texanshootR")
+```
+
+The package compiles a small C++ backend (penalised least squares for `gam`,
+profile-likelihood mixed model for `glmm`) on first install. No external
+solver dependencies, no proprietary licences — onboarding is frictionless.
+
 ## Quick start
 
 ```r
@@ -197,17 +208,6 @@ reset_wardrobe(force = TRUE)
 reset_all(force = TRUE)
 ```
 
-## Installation
-
-```r
-# install.packages("pak")
-pak::pak("gcol33/texanshootR")
-```
-
-The package compiles a small C++ backend (penalised least squares for `gam`,
-profile-likelihood mixed model for `glmm`) on first install. No external
-solver dependencies, no proprietary licences — onboarding is frictionless.
-
 ## Documentation
 
 * [Getting Started](https://gillescolling.com/texanshootR/articles/getting-started.html)
@@ -227,6 +227,7 @@ Economics.* **American Economic Review** 110(11): 3634–60.
 ## Support
 
 > "Where is the money, Lebowski?"
+>
 > &mdash; The Big Lebowski
 
 I'm a PhD student who builds R packages in my free time, on the principle
