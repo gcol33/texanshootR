@@ -88,7 +88,7 @@ reset_all(force = TRUE)
 
 ``` r
 
-# install.packages("pak")
+install.packages("pak")
 pak::pak("gcol33/texanshootR")
 ```
 
