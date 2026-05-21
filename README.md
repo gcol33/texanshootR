@@ -37,8 +37,7 @@ pak::pak("gcol33/texanshootR")
 ```
 
 The package compiles a small C++ backend (penalised least squares for `gam`,
-profile-likelihood mixed model for `glmm`) on first install. No external
-solver dependencies, no proprietary licences — onboarding is frictionless.
+profile-likelihood mixed model for `glmm`) on first install.
 
 ## Quick start
 
