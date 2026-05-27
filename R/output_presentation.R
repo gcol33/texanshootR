@@ -8,6 +8,10 @@
 #' Chain stage: \strong{presentation} (length 3). See [progress()].
 #'
 #' @inheritParams manuscript
+#' @return A length-one character vector giving the path to the written
+#'   PPTX file, returned invisibly. Called for its side effect of
+#'   generating the slide deck in `output_dir` and advancing the
+#'   publication chain.
 #' @export
 presentation <- function(run, output_dir = NULL, file = NULL,
                          force = FALSE) {

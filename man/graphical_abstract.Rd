@@ -15,6 +15,12 @@ graphical_abstract(run, output_dir = NULL, file = NULL, force = FALSE)
 
 \item{force}{Overwrite an existing file.}
 }
+\value{
+A length-one character vector giving the path to the written
+PNG file, returned invisibly. Called for its side effect of
+generating the graphical abstract in \code{output_dir} and advancing the
+publication chain.
+}
 \description{
 A single-figure summary of the highlighted specification, composed
 as a multi-panel layout with conceptual arrows. Renders via ggplot2

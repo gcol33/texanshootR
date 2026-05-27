@@ -7,6 +7,10 @@
 #' Chain stage: \strong{graphical_abstract} (length 5). See [progress()].
 #'
 #' @inheritParams manuscript
+#' @return A length-one character vector giving the path to the written
+#'   PNG file, returned invisibly. Called for its side effect of
+#'   generating the graphical abstract in `output_dir` and advancing the
+#'   publication chain.
 #' @export
 graphical_abstract <- function(run, output_dir = NULL, file = NULL,
                                force = FALSE) {

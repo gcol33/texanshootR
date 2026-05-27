@@ -9,8 +9,9 @@ Description: Provides a structured, terminal-first interface for
     exploratory model search, including transformation grids,
     predictor-subset enumeration, interaction screening, principled-
     sounding sample restrictions, outcome engineering, and model-form
-    escalation (polynomial / spline wraps, robust M-estimation, GLM
-    family swaps, random-intercept lifts). Persistent run history,
+    escalation (polynomial / spline wraps, robust M-estimation,
+    generalized linear model (GLM) family swaps, random-intercept
+    lifts). Persistent run history,
     achievement tracking, and reportable output generators (manuscript,
     presentation, funding letter, graphical abstract, reviewer
     response) are included.

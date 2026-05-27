@@ -5,6 +5,10 @@
 #' Chain stage: \strong{funding} (length 6). See [progress()].
 #'
 #' @inheritParams manuscript
+#' @return A length-one character vector giving the path to the written
+#'   DOCX file, returned invisibly. Called for its side effect of
+#'   generating the funding letter in `output_dir` and advancing the
+#'   publication chain.
 #' @export
 funding <- function(run, output_dir = NULL, file = NULL, force = FALSE) {
   require_chain_stage("funding", run)

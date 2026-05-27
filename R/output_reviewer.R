@@ -5,6 +5,10 @@
 #' Chain stage: \strong{reviewer_response} (length 4). See [progress()].
 #'
 #' @inheritParams manuscript
+#' @return A length-one character vector giving the path to the written
+#'   DOCX file, returned invisibly. Called for its side effect of
+#'   generating the response-to-reviewers document in `output_dir` and
+#'   advancing the publication chain.
 #' @export
 reviewer_response <- function(run, output_dir = NULL, file = NULL,
                               force = FALSE) {

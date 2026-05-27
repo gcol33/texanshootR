@@ -1,3 +1,21 @@
+## Resubmission
+
+This is a resubmission of the first submission, addressing CRAN review
+feedback (Konstanze Lauseker, 2026-05-27):
+
+* Explained the acronym in the Description field: "GLM" is now written
+  as "generalized linear model (GLM)".
+* Added `\value` tags to the four exported generators that were missing
+  them -- `funding()`, `graphical_abstract()`, `presentation()`, and
+  `reviewer_response()`. Each documents the structure (a length-one
+  character vector) and meaning (the path to the generated file,
+  returned invisibly) of the return value. (Root cause: these used
+  `@inheritParams manuscript`, which inherits parameter docs but not
+  `@return`.)
+
+No code, dependency, or version changes; the package remains at 0.1.0
+as it is still in its first review cycle.
+
 ## Submission
 
 First submission of texanshootR to CRAN.

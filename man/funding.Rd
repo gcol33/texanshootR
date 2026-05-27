@@ -15,6 +15,12 @@ funding(run, output_dir = NULL, file = NULL, force = FALSE)
 
 \item{force}{Overwrite an existing file.}
 }
+\value{
+A length-one character vector giving the path to the written
+DOCX file, returned invisibly. Called for its side effect of
+generating the funding letter in \code{output_dir} and advancing the
+publication chain.
+}
 \description{
 One-page Letter of Intent with a costed budget table.
 }

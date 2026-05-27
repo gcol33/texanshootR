@@ -15,6 +15,12 @@ reviewer_response(run, output_dir = NULL, file = NULL, force = FALSE)
 
 \item{force}{Overwrite an existing file.}
 }
+\value{
+A length-one character vector giving the path to the written
+DOCX file, returned invisibly. Called for its side effect of
+generating the response-to-reviewers document in \code{output_dir} and
+advancing the publication chain.
+}
 \description{
 Polite, point-by-point response to imagined reviewer comments.
 }

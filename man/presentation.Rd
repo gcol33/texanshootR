@@ -15,6 +15,12 @@ presentation(run, output_dir = NULL, file = NULL, force = FALSE)
 
 \item{force}{Overwrite an existing file.}
 }
+\value{
+A length-one character vector giving the path to the written
+PPTX file, returned invisibly. Called for its side effect of
+generating the slide deck in \code{output_dir} and advancing the
+publication chain.
+}
 \description{
 Builds a multi-slide PowerPoint via \code{officer}. v1 produces the
 structural chaos (rotated text, gradient fills, irrelevant clipart,
