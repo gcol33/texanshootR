@@ -30,8 +30,13 @@ presentation(run, output_dir = NULL, file = NULL, force = FALSE)
 
   Overwrite an existing file.
 
+## Value
+
+A length-one character vector giving the path to the written PPTX file,
+returned invisibly. Called for its side effect of generating the slide
+deck in `output_dir` and advancing the publication chain.
+
 ## Details
 
-Unlock requirement: **Senior Scientist**. See
-[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
-for live state.
+Chain stage: **presentation** (length 3). See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md).

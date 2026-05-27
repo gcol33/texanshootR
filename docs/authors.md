@@ -10,12 +10,12 @@
 Source:
 [`inst/CITATION`](https://github.com/gcol33/texanshootR/blob/HEAD/inst/CITATION)
 
-Colling G (2026). *texanshootR: Roguelike-Themed Framework for
-Exploratory Model Search*. R package version 0.1.0,
+Colling G (2026). *texanshootR: Reproducible Audit Trails for
+Indefensible Research*. R package version 0.1.0,
 <https://github.com/gcol33/texanshootR>.
 
     @Manual{,
-      title = {texanshootR: Roguelike-Themed Framework for Exploratory Model Search},
+      title = {texanshootR: Reproducible Audit Trails for Indefensible Research},
       author = {Gilles Colling},
       year = {2026},
       note = {R package version 0.1.0},

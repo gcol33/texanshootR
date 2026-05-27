@@ -36,6 +36,5 @@ Character vector of file paths (invisible).
 
 ## Details
 
-Unlock requirement: **Postdoc**. See
-[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
-for live state.
+Chain stage: **manuscript** (length 2). See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md).

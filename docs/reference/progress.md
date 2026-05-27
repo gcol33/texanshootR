@@ -26,16 +26,8 @@ A `tx_progress` object (invisible).
 Three call modes:
 
 - `progress()` – overview: career tier, gated-function lock map,
-  achievement / wardrobe counts, and in-flight progress for achievements
-  with public thresholds.
+  achievement / wardrobe counts, and in-flight progress.
 
-- `progress("manuscript")` – per-function card for a gated function.
+- `progress("manuscript")` – per-function card.
 
 - `progress("ach_multiple_comparisons")` – per-achievement card.
-
-Pairs with the static unlock requirement printed in each gated
-function's help page (e.g.
-[`?presentation`](https://gillescolling.com/texanshootR/reference/presentation.md)).
-The help page documents the requirement; `progress()` reports the live
-state. Career-tier distance stays opaque by design – only qualitative
-tier names are surfaced, never the underlying score.

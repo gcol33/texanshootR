@@ -20,12 +20,15 @@ navbar:
     left:
     - intro
     - reference
-    - articles
     - news
     right:
     - search
     - github
     - lightswitch
+  components:
+    intro:
+      text: Get started
+      href: articles/getting-started.html
 reference:
 - title: Run a search
   desc: Fit a battery of candidate specifications and inspect the result.
@@ -42,6 +45,7 @@ reference:
 - title: Output generators
   desc: Turn a run into a manuscript, presentation, or other artefact.
   contents:
+  - abstract
   - manuscript
   - presentation
   - reviewer_response

@@ -27,3 +27,8 @@ dev_*.R
 
 # AI collaboration notes
 CLAUDE.md
+
+# pkgdown renders every root .md (incl. CLAUDE.md, plan.md) into docs/;
+# keep the internal ones out of the published site
+docs/CLAUDE.html
+docs/plan.html

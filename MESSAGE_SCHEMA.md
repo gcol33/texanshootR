@@ -1,12 +1,14 @@
 # Message Schema
 
-The texanshootR message engine is designed to scale to **5,000–10,000
-entries** without a code change. New messages are added by dropping
-YAML into `inst/messages/<category>.yaml` (or, for life-events,
-`inst/events/<category>.yaml`). The package validates every entry
-against this schema at load time via `validate_messages()`.
+Every line the TUI prints comes from a YAML entry: loading text, blips,
+state transitions, promotions, reviewer encounters, and the startup
+banner live under `inst/messages/`; life events live under
+`inst/events/`. Messages are data, not code — adding one is a YAML edit
+plus a re-run of `validate_messages()`, with no change to R source.
 
-This document is the canonical contract for contributors.
+`validate_messages()` loads every file and checks it against the schema
+below. The test suite runs it on every build, so a malformed entry fails
+CI. This document is the field reference.
 
 ---
 
@@ -15,7 +17,7 @@ This document is the canonical contract for contributors.
 ```
 inst/messages/
 ├── blip.yaml                 # 1-3 word blip-stream filler
-├── loading_general.yaml      # full sentence loading messages
+├── loading_general.yaml      # full-sentence loading messages
 ├── derived_metrics.yaml      # desperation-escalation phase only
 ├── promotion.yaml            # promotion committee + advancement
 ├── reviewer.yaml             # Reviewer 2 encounters
@@ -26,76 +28,90 @@ inst/events/
 └── life.yaml                 # random life-event encounters
 ```
 
-One file per category keeps PR diffs readable. Files inside
-`inst/messages/` share the schema below; `inst/events/` files use the
-**Event schema** (separate, also below).
+One file per category keeps PR diffs readable. Files under
+`inst/messages/` use the message schema; files under `inst/events/` use
+the event schema. Both are below.
 
 ---
 
-## Message schema (inst/messages/)
+## Message schema (`inst/messages/`)
 
 ```yaml
 - id: <unique_snake_case_id>          # required
-  text: "string"                       # required, dead-serious
-  tags: [tag1, tag2, ...]              # required, ≥ 1 fallacy tag
+  text: "string"                       # required
   rarity: common | uncommon | rare | legendary   # required
   trigger_phase: <vocab_phases entry>  # required
+  tags: [tag1, tag2, ...]              # see "Tags" below
   career_min: ~ | "Junior Researcher" | "Postdoc" | "Senior Scientist" | "PI"
   model_family_affinity: [glm, mixed, gam, ...]  # optional
   mascot_state_affinity: [composed, uncertain, anxious, desperate, resolved]
   combo_chain:
-    start: <chain_id> | ~              # this message *opens* a chain
-    next:  <chain_id> | ~              # this message *follows* a chain
-  requires: [pkg1, pkg2]               # optional; suppressed if any pkg missing
+    start: <chain_id> | ~              # this message opens a chain
+    next:  <chain_id> | ~              # this message follows a chain
+  requires: [pkg1, pkg2]               # optional; entry dropped if any pkg missing
 ```
 
 ### Required fields
 
-* **id** — unique across the entire registry. Convention:
-  `<phase>_<topic>_<NNN>` or a meaningful slug. Validator rejects
-  duplicates.
-* **text** — the line shown to the user. Must read as professional,
-  dead-serious output. No "lol", no emoji, no scare quotes that wink
-  at the joke.
-* **tags** — at least one **fallacy tag** from the first 23 entries of
-  `vocab_tags`. Thematic tags (ecology, ml, ...) may be added in
-  addition. Fallacy tags are how the run engine connects messages to
-  the methodological sin being modelled.
-* **rarity** — controls the base sampling weight. The relative scale
-  is `common = 1000`, `uncommon = 100`, `rare = 10`, `legendary = 1`.
-* **trigger_phase** — which `select_message()` phase will draw this
-  entry. See `vocab_phases`. A message only ever fires in its phase.
+The validator rejects an entry that omits any of these four.
+
+- **id** — unique across the entire registry. Convention:
+  `<phase>_<topic>_<NNN>` or a meaningful slug.
+- **text** — the line shown to the user. Written as statistical-software
+  status output: a complete clause, no emoji, no chat shorthand. For the
+  `loading` and `state_transition` phases it must fit the single-line
+  budget (see Validation).
+- **rarity** — the base sampling weight. The relative scale is
+  `common = 1000`, `uncommon = 100`, `rare = 10`, `legendary = 1`.
+- **trigger_phase** — which `select_message()` phase draws the entry. One
+  of `vocab_phases`. A message only ever fires in its phase.
+
+### Tags
+
+`tags` is a list of values drawn from `vocab_tags`. It splits into two
+kinds:
+
+- **Fallacy tags** — the first 25 entries of `vocab_tags`
+  (`texas_sharpshooter`, `p_hacking`, `harking`, ...). These connect a
+  message to the methodological sin it models.
+- **Thematic tags** — the remainder (`ecology`, `ml`, `reviewer`, ...),
+  added for topical filtering.
+
+Messages in a phase that *is* the methodological mechanic — `blip`,
+`loading`, `derived_escalation`, `ultra_rare`, `event`,
+`event_consequence` — must carry at least one fallacy tag. Ceremony
+phases (`banner`, `promotion`, `reviewer`, `state_transition`, `daily`,
+and the chain-transition phases) are exempt; `tags` may be omitted for
+them.
 
 ### Optional fields
 
-* **career_min** — minimum career level required to draw this
-  message. `~` (YAML null) means no minimum. Useful for unlocking
-  more sophisticated language at higher career tiers.
-* **model_family_affinity** — list of model families this message
-  pairs with (`glm`, `lm`, `mixed`, `gam`, `bayesian`, ...). When the
-  caller provides a context family, messages with non-empty affinities
-  must intersect it. Empty / missing means universal.
-* **mascot_state_affinity** — list of mascot states this message is
-  appropriate for. Used to gate desperate-feeling messages
-  (`mascot_state_affinity: [anxious, desperate]`) so they don't appear
-  in calm phases of the run.
-* **combo_chain** — two fields:
-  * `start: <id>` declares this message *opens* a chain named `<id>`.
-    When drawn, the engine remembers `<id>` as the `combo_state`.
-  * `next: <id>` declares this message *follows* a chain named
-    `<id>`. While `combo_state` matches, follow-ups receive a 10×
-    weight boost and are exempt from recency suppression.
-  Chains build sequences like `correlating → causating` or
-  `exploring → discovering → interpreting`.
-* **requires** — list of R packages that must be available. If any is
-  missing the message is dropped from the candidate pool.
+- **career_min** — minimum career level required to draw the message.
+  `~` (YAML null) means no minimum. One of `vocab_careers` otherwise.
+- **model_family_affinity** — model families the message pairs with
+  (`glm`, `lm`, `mixed`, `gam`, `bayesian`, ...). When the caller passes a
+  context family, a message with a non-empty affinity is drawn only if
+  its list intersects that family. Empty or missing means universal.
+- **mascot_state_affinity** — mascot states the message is appropriate
+  for, drawn from `vocab_mascot_states`. Gates state-specific lines so a
+  desperate line does not surface in a composed phase.
+- **combo_chain** — two sub-fields:
+  - `start: <id>` marks this message as opening a chain named `<id>`.
+    When drawn, the engine records `<id>` as the current `combo_state`.
+  - `next: <id>` marks this message as following chain `<id>`. While
+    `combo_state` matches, follow-ups get a 10x weight boost and skip
+    recency suppression.
+
+    Chains build sequences such as `correlating -> causating` or
+    `exploring -> discovering -> interpreting`.
+- **requires** — R packages that must be installed. If any is missing the
+  entry is dropped from the candidate pool at runtime.
 
 ---
 
-## Event schema (inst/events/)
+## Event schema (`inst/events/`)
 
-Life events are two-part roguelike encounters that fire ~1/6 of runs.
-They have their own schema:
+Life events are two-part encounters that fire in roughly one run in six.
 
 ```yaml
 - id: <unique_snake_case_id>          # required
@@ -110,10 +126,9 @@ They have their own schema:
     typo_probability: 0.10
 ```
 
-Effect keys must come from `vocab_effects`. Numeric magnitudes are
-interpreted as multiplicative for `throughput` / `search_budget` and
-additive otherwise. Validator caps each effect at `[-0.5, +0.5]` so a
-single event cannot dominate a run.
+Effect keys come from `vocab_effects`. Magnitudes are multiplicative for
+`throughput` and `search_budget`, additive otherwise. Each effect is
+capped to `[-0.5, +0.5]` on load so one event cannot dominate a run.
 
 ---
 
@@ -123,44 +138,35 @@ single event cannot dominate a run.
 texanshootR::validate_messages()
 ```
 
-Run this in tests / CI on any branch that touches the registry. The
-validator enforces:
+It loads the registry and enforces, in order:
 
-1. Required fields present.
-2. Vocabulary membership: `trigger_phase ∈ vocab_phases`,
-   `rarity ∈ {common, uncommon, rare, legendary}`,
-   `career_min ∈ vocab_careers ∪ {NA}`,
-   `tags ⊆ vocab_tags`,
-   `mascot_state_affinity ⊆ vocab_mascot_states`.
-3. Every message carries at least one fallacy tag.
-4. Unique ids across the entire registry.
-5. `combo_chain.next` only references known `combo_chain.start` ids.
+1. **Required fields** present on every message (`id`, `text`, `rarity`,
+   `trigger_phase`).
+2. **Unique ids** across the whole registry.
+3. **Vocabulary membership**: `trigger_phase` in `vocab_phases`; `rarity`
+   in `{common, uncommon, rare, legendary}`; `career_min` in
+   `vocab_careers` (when not null); every tag in `vocab_tags`; every
+   `mascot_state_affinity` in `vocab_mascot_states`.
+4. **Fallacy tag** present on every message in a mechanic phase (`blip`,
+   `loading`, `derived_escalation`, `ultra_rare`, `event`,
+   `event_consequence`).
+5. **Combo-chain integrity**: every `combo_chain.next` resolves to a
+   known `combo_chain.start`.
+6. **Single-line budget**: `text` in the `loading` and `state_transition`
+   phases is at most `DYN_LOADING_BUDGET` (70) characters. These phases
+   share one slot with the mascot and progress bar in the dynamic
+   single-line TUI; longer text would be ellipsised at the 120-column
+   target width.
 
----
-
-## Style guide
-
-* **Deadpan everywhere.** The text is funniest when it sounds like
-  output from a real piece of statistical software. Avoid "satire",
-  "lol", winks, scare quotes, and meta-commentary.
-* **Professional polish over absurdity.** Reject any draft that reads
-  as a meme. Reject any draft that reads as moralizing.
-* **Concrete over abstract.** "Subsampling environmentally noisy
-  observations..." beats "Doing some statistics..." — specificity
-  reads as serious software.
-* **Short sentences.** Loading lines should rarely exceed 80
-  characters. Blips should be 1–3 words.
-* **Tag everything.** A single fallacy tag is enough but more is
-  better. Tags are how the engine builds run coherence.
+Any failure stops with the offending file, entry, and value.
 
 ---
 
-## Adding a new category
+## Adding a category
 
 1. Drop a new YAML file into `inst/messages/<category>.yaml`.
-2. If you need a new `trigger_phase`, add it to `R/vocab.R`'s
-   `vocab_phases` first.
-3. Run `texanshootR::validate_messages()` locally — it returns the
-   parsed registry and surfaces any errors with file + entry index.
-4. Send a PR. Be ready to defend any entry that risks breaking
-   deadpan.
+2. If the messages need a new `trigger_phase`, add it to `vocab_phases`
+   in `R/vocab.R` first.
+3. Run `texanshootR::validate_messages()`. It returns the parsed registry
+   and reports the first error with its file and entry index.
+4. Open a PR.

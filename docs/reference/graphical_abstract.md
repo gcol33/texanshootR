@@ -1,8 +1,7 @@
 # Generate a graphical abstract PNG
 
 A single-figure summary of the highlighted specification, composed as a
-deadpan multi-panel layout with conceptual arrows. Renders via ggplot2
-to PNG.
+multi-panel layout with conceptual arrows. Renders via ggplot2 to PNG.
 
 ## Usage
 
@@ -29,8 +28,13 @@ graphical_abstract(run, output_dir = NULL, file = NULL, force = FALSE)
 
   Overwrite an existing file.
 
+## Value
+
+A length-one character vector giving the path to the written PNG file,
+returned invisibly. Called for its side effect of generating the
+graphical abstract in `output_dir` and advancing the publication chain.
+
 ## Details
 
-Unlock requirement: **Senior Scientist**. See
-[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
-for live state.
+Chain stage: **graphical_abstract** (length 5). See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md).

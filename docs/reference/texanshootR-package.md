@@ -1,4 +1,4 @@
-# texanshootR: Roguelike-Themed Framework for Exploratory Model Search
+# texanshootR: Reproducible Audit Trails for Indefensible Research
 
 A structured, terminal-first interface for exploratory linear-model
 search. The main entry point is
@@ -8,7 +8,6 @@ subsets, transformations, interactions, and outlier-removal seeds.
 Persistent career state tracks run history, awards achievements, and
 unlocks output generators
 ([`manuscript()`](https://gillescolling.com/texanshootR/reference/manuscript.md),
-[`preprint()`](https://gillescolling.com/texanshootR/reference/preprint.md),
 [`presentation()`](https://gillescolling.com/texanshootR/reference/presentation.md),
 [`reviewer_response()`](https://gillescolling.com/texanshootR/reference/reviewer_response.md),
 [`graphical_abstract()`](https://gillescolling.com/texanshootR/reference/graphical_abstract.md),

@@ -18,10 +18,9 @@ By participating in this project you agree to abide by its
    `event` phase. Phases like `banner`, `promotion`, `reviewer`,
    `daily`, and `state_transition` are exempt — they're institutional
    ceremony, not methodological mechanics.
-4. Tone: **deadpan everywhere**. The package never explains the joke
-   inside its own output. No "lol", no winks, no scare quotes, no
-   moral warnings. Reread your draft and reject anything that reads
-   as a meme.
+4. Write `text` as statistical-software status output: a complete
+   clause, no emoji, no chat shorthand, no commentary on the package
+   itself.
 5. Run the validator:
 
    ```r

@@ -24,12 +24,12 @@ Inspect career state, achievements, cosmetics, and unlock progress.
 
 ## Output generators
 
-Turn a run into a manuscript, preprint, presentation, or other artefact.
+Turn a run into a manuscript, presentation, or other artefact.
 
+- [`abstract()`](https://gillescolling.com/texanshootR/reference/abstract.md)
+  : Generate a one-paragraph deadpan abstract
 - [`manuscript()`](https://gillescolling.com/texanshootR/reference/manuscript.md)
   : Generate a manuscript from a run
-- [`preprint()`](https://gillescolling.com/texanshootR/reference/preprint.md)
-  : Generate a preprint HTML
 - [`presentation()`](https://gillescolling.com/texanshootR/reference/presentation.md)
   : Generate a chaotic conference-style PPTX
 - [`reviewer_response()`](https://gillescolling.com/texanshootR/reference/reviewer_response.md)

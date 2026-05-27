@@ -27,8 +27,14 @@ reviewer_response(run, output_dir = NULL, file = NULL, force = FALSE)
 
   Overwrite an existing file.
 
+## Value
+
+A length-one character vector giving the path to the written DOCX file,
+returned invisibly. Called for its side effect of generating the
+response-to-reviewers document in `output_dir` and advancing the
+publication chain.
+
 ## Details
 
-Unlock requirement: **Senior Scientist**. See
-[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md)
-for live state.
+Chain stage: **reviewer_response** (length 4). See
+[`progress()`](https://gillescolling.com/texanshootR/reference/progress.md).
