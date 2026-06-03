@@ -24,7 +24,7 @@ reset_all(force = FALSE)
 }
 \description{
 These functions remove pieces of the persistent save written under
-\code{\link[tools:userdir]{tools::R_user_dir()}}. They prompt for confirmation in interactive
+\code{\link[tools:R_user_dir]{tools::R_user_dir()}}. They prompt for confirmation in interactive
 sessions; pass \code{force = TRUE} to suppress the prompt. Non-interactive
 sessions require \code{force = TRUE}.
 }

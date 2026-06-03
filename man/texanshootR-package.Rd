@@ -17,7 +17,7 @@ generators (\code{\link[=manuscript]{manuscript()}}, \code{\link[=presentation]{
 \section{Persistence}{
 
 On the first interactive save, the package prompts before writing
-to \code{\link[tools:userdir]{tools::R_user_dir()}}. Set
+to \code{\link[tools:R_user_dir]{tools::R_user_dir()}}. Set
 \code{options(texanshootR.save_enabled = FALSE)} to opt out entirely.
 }
 
@@ -39,6 +39,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Gilles Colling \email{gilles.colling051@gmail.com} (\href{https://orcid.org/0000-0003-3070-6066}{ORCID})
+
+Authors:
+\itemize{
+  \item Gilles Colling \email{gilles.colling051@gmail.com} (\href{https://orcid.org/0000-0003-3070-6066}{ORCID})
+}
 
 }
 \keyword{internal}

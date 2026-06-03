@@ -242,7 +242,11 @@ shoot <- function(df,
   #       so the mascot + bar can fill the rest of the wall-clock
   #       budget. The user explicitly wants the visible run to last
   #       the full budget rather than truncate at the cap.
-  while (Sys.time() < end_time) {
+  # Loop predicate keeps fits running until cap is reached even if the
+  # host is slow enough that end_time has already passed -- otherwise
+  # the trace gets truncated and grid_hash stops being deterministic in
+  # `seed + budget`. CRAN's MKL builder is slow enough to hit this.
+  while (state$spec_count < cap || Sys.time() < end_time) {
     if (state$spec_count >= cap) {
       # Fitting done; just let the animation finish out the budget.
       # 50ms keeps CPU low and is well under the 300ms mascot tick.

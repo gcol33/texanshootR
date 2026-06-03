@@ -1,71 +1,33 @@
-## Resubmission
-
-This is a resubmission of the first submission, addressing CRAN review
-feedback (Konstanze Lauseker, 2026-05-27):
-
-* Explained the acronym in the Description field: "GLM" is now written
-  as "generalized linear model (GLM)".
-* Added `\value` tags to the four exported generators that were missing
-  them -- `funding()`, `graphical_abstract()`, `presentation()`, and
-  `reviewer_response()`. Each documents the structure (a length-one
-  character vector) and meaning (the path to the generated file,
-  returned invisibly) of the return value. (Root cause: these used
-  `@inheritParams manuscript`, which inherits parameter docs but not
-  `@return`.)
-
-No code, dependency, or version changes; the package remains at 0.1.0
-as it is still in its first review cycle.
-
 ## Submission
 
-First submission of texanshootR to CRAN.
+Patch release (0.1.0 -> 0.1.1) addressing the CRAN MKL builder
+"Additional issues" failure flagged in the maintainer email of
+2026-06-03 ("Please correct before 2026-06-17").
+
+## What changed
+
+* `shoot()`: the search loop now runs the fit phase to the seed-and-
+  budget-derived spec cap regardless of wall-clock, then enters the
+  animate-out phase. Previously the loop predicate (`Sys.time() <
+  end_time`) could truncate the fit phase on a slow host, producing
+  different trace lengths -- and therefore different `grid_hash`
+  values -- for two same-seed runs. This caused
+  `test-shoot.R:32:3` ("seed makes runs reproducible") to fail on the
+  CRAN MKL Fedora Clang builder (`100-26654af9` vs `80-46c81095`).
+  No user-visible API change; runs on slow hosts may now slightly
+  exceed the wall-clock budget to keep the documented "deterministic
+  in seed + budget" guarantee.
 
 ## Test environments
 
-* Local: Windows 11 x64, R 4.6.0 (release) -- `R CMD check --as-cran`, 1 NOTE (New submission)
-* win-builder: R-devel -- 1 NOTE (New submission)
-* win-builder: R-release (R 4.6.0) -- 1 NOTE (New submission)
-* win-builder: R-oldrelease (R 4.5.3) -- 1 NOTE (New submission; see below)
+* Local: Windows 11 x64, R 4.6.0 (release) -- `R CMD check --as-cran`, 0 NOTEs
+* win-builder: R-devel
+* win-builder: R-release
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
-
-The single NOTE is the expected "New submission" flag for a first CRAN
-upload.
-
-On the R-oldrelease win-builder run, the URL check additionally returned
-a transient HTTP 429 ("Too Many Requests") from
-`https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy` (the
-package's namesake article). The URL is valid; subsequent runs and the
-R-devel / R-release checks returned 200.
-
-## Notes for the reviewer
-
-* texanshootR is a didactic / parody package. The Title
-  ("Reproducible Audit Trails for Indefensible Research") and parts of
-  the Description ("principled-sounding sample restrictions", "outcome
-  engineering", "model-form escalation") use deliberate satirical
-  framing to characterise the questionable-research-practice taxonomy
-  the package encodes. The functionality itself is real: a budgeted
-  exploratory linear-model search across transformations, predictor
-  subsets, interactions, sample restrictions, outcome constructions,
-  and model-form lifts, with a terminal UI and a six-stage output
-  pipeline. Happy to adjust wording if the satirical framing is
-  unacceptable.
-
-* All persistent state is written under `tools::R_user_dir(...,
-  "data")` and only after the user sets `options(texanshootR.consent =
-  TRUE)`. Without consent, save I/O is restricted to `tempdir()`.
-  Default `output_dir` for generated artefacts is `tempdir()`.
-
-* No examples or tests write outside `tempdir()`. No examples or tests
-  modify the user's filespace, options, environment variables, or
-  working directory beyond `withr::local_*` scoping.
-
-* The package vendors a YAML message bank under `inst/messages/`
-  (~200 KB). Installed package size is well under 5 MB.
+0 errors | 0 warnings | 0 notes
 
 ## Reverse dependencies
 
-None (new submission).
+None.
