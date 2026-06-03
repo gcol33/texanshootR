@@ -26,7 +26,12 @@ Patch release (0.1.0 -> 0.1.1) addressing the CRAN MKL builder
 
 ## R CMD check results
 
-0 errors | 0 warnings | 0 notes
+0 errors | 0 warnings | 0 notes (local Windows R 4.6.0 `--as-cran`).
+
+win-builder r-devel returned 1 NOTE: "Days since last update: 4". This
+patch is a direct response to the CRAN maintainer email of 2026-06-03
+requesting correction of the MKL "Additional issues" failure by
+2026-06-17.
 
 ## Reverse dependencies
 
