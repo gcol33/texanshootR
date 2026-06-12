@@ -1,5 +1,7 @@
 # texanshootR
 
+> Small exact engines for scientific computing in R.
+
 *running tests until one comes back significant*
 
 <!-- badges: start -->
