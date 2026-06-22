@@ -3,8 +3,11 @@
 *running tests until one comes back significant*
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/texanshootR)](https://CRAN.R-project.org/package=texanshootR)
+[![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/texanshootR)](https://cran.r-project.org/package=texanshootR)
+[![Monthly downloads](https://cranlogs.r-pkg.org/badges/texanshootR)](https://cran.r-project.org/package=texanshootR)
 [![R-CMD-check](https://github.com/gcol33/texanshootR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/gcol33/texanshootR/actions/workflows/R-CMD-check.yaml)
-[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/gcol33/texanshootR/graph/badge.svg)](https://app.codecov.io/gh/gcol33/texanshootR)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
@@ -150,7 +153,9 @@ reset_all(force = TRUE)
 ## Installation
 
 ```r
-install.packages("pak")
+install.packages("texanshootR")           # CRAN
+
+install.packages("pak")                   # development version
 pak::pak("gcol33/texanshootR")
 ```
 
