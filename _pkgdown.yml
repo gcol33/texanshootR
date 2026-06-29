@@ -11,7 +11,18 @@ template:
     code_font:
       google: JetBrains Mono
   includes:
-    in_header: pkgdown/mathjax-config.html
+    in_header: |
+      <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [["$", "$"], ["\\(", "\\)"]],
+          displayMath: [["$$", "$$"], ["\\[", "\\]"]]
+        },
+        chtml: { linebreaks: { automatic: true, width: "90% container" } },
+        svg: { linebreaks: { automatic: true, width: "90% container" } },
+        options: { renderActions: { addMenu: [] } }
+      };
+      </script>
 home:
   title: texanshootR
   description: Reproducible audit trails for indefensible research.
