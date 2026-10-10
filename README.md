@@ -27,6 +27,20 @@ biasing toward whatever is *almost* significant and abandoning specs that go
 cold. Either a hit lands on the wall or it does not. When one does, the package
 writes the manuscript around it.
 
+## Installation
+
+```r
+install.packages("texanshootR")           # CRAN
+
+install.packages("pak")                   # development version
+pak::pak("gcol33/texanshootR")
+```
+
+The package compiles a small C++ backend (penalised least squares for `gam`,
+profile-likelihood mixed model for `glmm`) on first install.
+
+## Quick start
+
 ```r
 library(texanshootR)
 
@@ -149,18 +163,6 @@ reset_achievements(force = TRUE)
 reset_wardrobe(force = TRUE)
 reset_all(force = TRUE)
 ```
-
-## Installation
-
-```r
-install.packages("texanshootR")           # CRAN
-
-install.packages("pak")                   # development version
-pak::pak("gcol33/texanshootR")
-```
-
-The package compiles a small C++ backend (penalised least squares for `gam`,
-profile-likelihood mixed model for `glmm`) on first install.
 
 ## Documentation
 
