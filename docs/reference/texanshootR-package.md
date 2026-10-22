@@ -39,3 +39,8 @@ Useful links:
 
 **Maintainer**: Gilles Colling <gilles.colling051@gmail.com>
 ([ORCID](https://orcid.org/0000-0003-3070-6066))
+
+Authors:
+
+- Gilles Colling <gilles.colling051@gmail.com>
+  ([ORCID](https://orcid.org/0000-0003-3070-6066))

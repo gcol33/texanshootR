@@ -6,6 +6,19 @@ entry point is
 It opens a wall-clock budget, fires at the specification space, and
 returns a `tx_run` carrying the highlighted result and the audit trail.
 
+## Installation
+
+``` r
+
+install.packages("texanshootR")           # CRAN
+
+install.packages("pak")                   # development version
+pak::pak("gcol33/texanshootR")
+```
+
+The package compiles a small C++ backend (penalised least squares for
+`gam`, profile-likelihood mixed model for `glmm`) on first install.
+
 ## A first run
 
 ``` r

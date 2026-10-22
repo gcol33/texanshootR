@@ -32,3 +32,4 @@ CLAUDE.md
 # keep the internal ones out of the published site
 docs/CLAUDE.html
 docs/plan.html
+.run*

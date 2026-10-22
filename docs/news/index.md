@@ -1,6 +1,20 @@
 # Changelog
 
+## texanshootR 0.1.1
+
+CRAN release: 2026-06-03
+
+### Bug fixes
+
+- [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md):
+  the search loop now runs to the spec cap regardless of wall-clock, so
+  `grid_hash` is truly deterministic in `seed + budget`. Previously the
+  wall-clock check could truncate the fit phase on slow hosts, producing
+  different traces for the same seed (caught by the CRAN MKL builder).
+
 ## texanshootR 0.1.0
+
+CRAN release: 2026-05-30
 
 Initial release.
 

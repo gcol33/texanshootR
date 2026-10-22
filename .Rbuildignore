@@ -20,3 +20,6 @@
 ^.*\.Rcheck$
 ^\.RData$
 ^\.Rhistory$
+^sidecars$
+^\.run.*$
+^CITATION\.cff$

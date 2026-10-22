@@ -1,275 +1,326 @@
 # texanshootR
 
-![texanshootR mascot — a sad cowboy in a terminal cycling through
+*running tests until one comes back significant*
+
+![texanshootR mascot: a sad cowboy in a terminal cycling through
 emotional states as the p-value drops](reference/figures/mascot.svg)
 
-> **Mission.** To contribute to dubious research and questionable
-> p-values.
->
-> In this day and age where *publish or perish* reigns king, a [lone
-> shooter](https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy)
-> helps you out in your predicament.
+texanshootR runs a budgeted, seeded specification search over a data
+frame until some model reaches `p <= 0.05`, then writes the paper around
+it.
 
-A shooter starts composed. Drunk, confident, and determined to convince
-everyone of his amazing aim, he fires at the side of a barn through most
-of the night. In the morning he walks over, studies the damage, and
-paints a target around the densest cluster of bullet holes.
-
-Then he points at the wall and says, “See?”
-
-`texanshootR` is that loop, and every
+The name comes from the [Texas
+sharpshooter](https://en.wikipedia.org/wiki/Texas_sharpshooter_fallacy),
+who fires at the side of a barn all night and in the morning paints a
+target around the densest cluster of holes. Each
 [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
-call is one of his runs. He starts composed. By attempt fifty he is
-uncertain. By two hundred he is worried. By the time the budget is
-almost out he is desperate enough to escalate to a derived metric.
-Either `p <= 0.05` lands somewhere on the wall or it does not.
+call opens a wall-clock budget and searches predictor subsets,
+transformations, interactions, outlier exclusions and subgroup splits.
+As the budget runs low it moves on to other model families and derived
+metrics, favouring whatever is almost significant and abandoning
+specifications that go cold. The seed, R version, package version and a
+hash of the full search trace are stored on the returned run, so you can
+replay any saved run exactly and decide which finding to write up.
+
+texanshootR supports:
+
+- **Searching the model space.** Eight model families have native
+  fitters, with the heavier ones written in C++ through
+  [Rcpp](https://www.rcpp.org/), and a selector escalates from `lm` to
+  the others as the run comes under pressure ([The search
+  engine](#the-search-engine)).
+- **Writing it up.** A run that clears `p <= 0.05` opens a six-stage
+  publication chain: abstract, manuscript, presentation, reviewer
+  response, graphical abstract and funding letter.
+- **A research career.** Redeemed stages award XP, and the career tier
+  that follows from it decides which model families enter the search.
+  Achievements and a wardrobe of cosmetics come with it.
+- **Commentary in the terminal.** A YAML message registry, each message
+  tagged with the fallacy it commits, narrates the search.
 
 ## Installation
 
+The release on CRAN installs as a binary on Windows and macOS, so no
+build tools are needed:
+
 ``` r
 
-install.packages("pak")
+install.packages("texanshootR")
+```
+
+The development version compiles C++ code, so install the build tools
+for your operating system first:
+
+| Operating system | Build tools |
+|----|----|
+| Windows | [Rtools](https://cran.r-project.org/bin/windows/Rtools/), the version that matches your R version |
+| macOS | Run `xcode-select --install` in Terminal |
+| Debian / Ubuntu | Install `r-base-dev` |
+
+Check that R can find the compiler:
+
+``` r
+
+pkgbuild::has_build_tools(debug = TRUE)
+```
+
+Then install texanshootR:
+
+``` r
+
+# install.packages("pak")
 pak::pak("gcol33/texanshootR")
 ```
 
-The package compiles a small C++ backend (penalised least squares for
-`gam`, profile-likelihood mixed model for `glmm`) on first install.
+The C++ backend (penalised least squares for `gam`, a profile-likelihood
+mixed model for `glmm`) needs no system libraries; its only compiled
+dependency is Rcpp, which installs from CRAN with the package.
 
-## Quick start
+## Usage
+
+1.  Run the search on a data frame with
+    [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md).
+2.  Print the run to see the finding, the search behind it and the
+    outputs it unlocked.
+3.  Redeem the unlocked stages of the publication chain, starting with
+    [`abstract()`](https://gillescolling.com/texanshootR/reference/abstract.md).
 
 ``` r
 
 library(texanshootR)
 
 run <- shoot(mtcars)
-print(run)
-summary(run)
+#> A finding has cleared threshold. Pipeline armed.
+#> Publication chain opened. Next: abstract().
+run
+#> ================================================================
+#> ( -_-) ︻デ═一  ·
+#> texanshootR :: run 0001
+#> ================================================================
+#> 
+#> RUN
+#> status: publishable result identified
+#> career impact: advanced
+#> mascot state: composed → resolved
+#> 
+#> FINDING
+#> mpg ~ gear + drat
+#> methods: partialling out variation due to am
+#> p: 0.045
+#> 
+#> SEARCH
+#> candidate specifications: 3,000
+#> model families explored: lm glm rlm
+#> modifiers used: +compilation +complexity_shield
+#> 
+#> OUTPUTS
+#> available now: abstract(run)
+#> 
+#> locked:
+#> manuscript()         requires Postdoc
+#> presentation()       requires Postdoc
+#> reviewer_response()  requires Senior Scientist
+#> graphical_abstract() requires Senior Scientist
+#> funding()            requires PI
+#> 
+#> DATA USED
+#> exclusion rule: none
+#> rows excluded: 0
+#> outcome construction: partialling out variation due to am
+#> derived metrics: disabled
+#> search seed: 1140350788
+#> run stored: no
 ```
 
+Without a formula,
 [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
-flails opportunistically (not systematically) across predictor subsets,
-transformations, interactions, outlier exclusions, subgroup splits, and
-(at higher career tiers) model families, biasing toward whatever is
-*almost* significant and abandoning specs that go cold. The print method
-leads with the shooter’s face and the arc he followed
-(`composed -> resolved`, `panicked -> resolved (last-minute)`,
-`escalated to derived metrics`, etc.) before the formula and the
-p-value.
+takes the first numeric column as the outcome and every other column as
+a predictor. The default budget is 30 seconds of wall-clock time, so a
+run on another machine may land somewhere else; the stored seed replays
+it.
 
-Every run is deterministic given a seed. The seed, R version, package
-version, and a hash of the search trace are recorded on the returned
-object so the full search can be replayed from any saved run.
+``` r
 
-Unpublishable data is now the shooter’s problem, not yours.
+abstract(run)
+```
 
-## What’s in the box
+Each generator writes its file to
+[`tempdir()`](https://rdrr.io/r/base/tempfile.html) and returns the path
+invisibly. `output_dir =` or `options(texanshootR.output_dir = ...)`
+sends it elsewhere.
 
-`texanshootR` is a state-of-the-art specification-search engine,
-generously bundled with a career-progression system to recognise your
-dedication to the craft. Progression is not decoration: your tier
-governs which model families enter the search pool and which output
-generators you may deploy. Mastery, after all, is earned.
+## The search engine
 
-### The search engine
+The seven families of the career ladder each have their own fitter, with
+no soft dependency on mgcv, lme4 or lavaan:
 
-- **Seven model families**, each with a native fitter (no soft
-  dependencies on `mgcv`, `lme4`, or `lavaan` — the heavy ones are
-  implemented in C++ via `Rcpp`, by hand, for your shooting needs):
-  - `lm` — ordinary least squares via
-    [`.lm.fit()`](https://rdrr.io/r/stats/lmfit.html)
-  - `cor` — bivariate Pearson / Spearman / Kendall
-  - `glm` — Gaussian / binomial / Poisson / Gamma with link choices
-  - `wls` — two-stage feasible weighted least squares
-  - `gam` — penalised B-spline regression with GCV smoothing-parameter
-    selection
-  - `glmm` — Gaussian random-intercept LMM with profile-likelihood
-    estimation
-  - `sem` — single-mediator path model with Sobel test for the indirect
-    effect
-- **A family selector** that decides which fitter to attach to each spec
-  based on career tier, escalation state, and outcome shape. At low
-  tiers it sticks to `lm`. As tiers rise it leans on `glm`. Under
-  desperation it occasionally forces a coercion (binomial on a
-  continuous outcome, Poisson on a rounded one) — the shooter chasing
-  the next-decimal p-value.
-- **Search moves**: predictor-subset enumeration, transformation grids
-  (`log`, `sqrt`, `^2`, centring), interaction screening,
-  outlier-exclusion seeds, subgroup splits, and a derived-metrics
-  escalation arc when the budget is running out.
-- **Single result contract**: every fitter returns the same shape so the
-  selector, the highlight chooser, and the run record never branch on
-  family.
+- `lm`: ordinary least squares via
+  [`.lm.fit()`](https://rdrr.io/r/stats/lmfit.html)
+- `cor`: bivariate Pearson, Spearman or Kendall correlation
+- `glm`: Gaussian, binomial, Poisson or Gamma with a choice of links
+- `wls`: two-stage feasible weighted least squares
+- `gam`: penalised B-spline regression with smoothing chosen by GCV, in
+  C++
+- `glmm`: Gaussian random-intercept mixed model by profile likelihood,
+  in C++
+- `sem`: single-mediator path model with a Sobel test for the indirect
+  effect
 
-### The publication chain
+Model-form escalation can also refit a specification with `rlm`, robust
+M-estimation with Huber weights. A family selector attaches a fitter to
+each specification from the run’s escalation state and the shape of the
+outcome: `lm` early, `glm` under pressure, and an occasional forced
+coercion (binomial on a continuous outcome, Poisson on a rounded one)
+when the shooter is chasing the next decimal.
 
-A finished run is a `tx_run`. When
-[`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
-lands a result that clears `p <= 0.05`, it opens a *publication chain* —
-six ordered output stages, each gated by its own wall-clock window:
+## The publication chain
+
+A run that clears `p <= 0.05` is shippable, and the first shippable run
+opens the chain. The stages are redeemed in order:
 
 ``` r
 
 abstract(run)            # one-paragraph deadpan summary
-manuscript(run)          # IMRaD draft; Methods match the *winning* spec
+manuscript(run)          # IMRaD draft; Methods match the winning spec
 presentation(run)        # 8-slide deck; residual plot on slide 7
 reviewer_response(run)   # opens "we thank the reviewer for their thoughtful comments"
 graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-Stages must be redeemed in order. Finish the chain through your
-currently-unlocked prefix and you collect a length-bonus on top of the
-per-stage XP.
-
-The chain breaks — bonus forfeit, partial XP kept — if you fire a fresh
+Finishing the chain through your unlocked stages adds a length bonus to
+the XP of each stage. A fresh
 [`shoot()`](https://gillescolling.com/texanshootR/reference/shoot.md)
-before finishing. Calling the wrong stage (or the wrong run) signals a
-`tx_chain_error` but leaves the chain open so you can retry.
+mid-chain forfeits the bonus and keeps the partial XP. Locked stages,
+expired windows, the wrong run and out-of-order calls signal a
+`tx_chain_error` whose `reason` field your tests can branch on. [Getting
+started with
+texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html#the-publication-chain)
+walks through a chain.
 
-Each generator writes to
-[`tempdir()`](https://rdrr.io/r/base/tempfile.html) by default and
-returns the file path invisibly. Override with `output_dir =` or
-`options(texanshootR.output_dir = ...)`.
+## Career and unlocks
 
-### Career, achievements, cosmetics
-
-Every redeemed stage awards XP. Cumulative XP grows the chain — same
-thing as unlocking deeper stages of the publication lifecycle. Your
-career tier is a label derived from your unlocked chain length, and it
-governs which model families enter the search pool:
+Cumulative XP sets how many stages of the chain you can redeem, and your
+career tier is a label derived from that length. The tier gates which
+model families enter the search pool:
 
 | Chain length | New stage | XP needed | Career tier | Families added |
 |----|----|----|----|----|
 | 1 | [`abstract()`](https://gillescolling.com/texanshootR/reference/abstract.md) | 0 | Junior Researcher | `lm` |
 | 2 | [`manuscript()`](https://gillescolling.com/texanshootR/reference/manuscript.md) | 5 | Postdoc | `cor`, `glm` |
-| 3 | [`presentation()`](https://gillescolling.com/texanshootR/reference/presentation.md) | 15 | Postdoc | — |
+| 3 | [`presentation()`](https://gillescolling.com/texanshootR/reference/presentation.md) | 15 | Postdoc | none |
 | 4 | [`reviewer_response()`](https://gillescolling.com/texanshootR/reference/reviewer_response.md) | 30 | Senior Scientist | `wls`, `gam` |
-| 5 | [`graphical_abstract()`](https://gillescolling.com/texanshootR/reference/graphical_abstract.md) | 55 | Senior Scientist | — |
+| 5 | [`graphical_abstract()`](https://gillescolling.com/texanshootR/reference/graphical_abstract.md) | 55 | Senior Scientist | none |
 | 6 | [`funding()`](https://gillescolling.com/texanshootR/reference/funding.md) | 90 | PI | `glmm`, `sem` |
-
-As pressure in the research career increases, so does the need for
-`correlation = causation`…
-
-Locked stages, expired windows, the wrong run, and out-of-order calls
-all signal a structured `tx_chain_error` so your test suite can branch
-on `reason`. Locked families simply never appear in the search trace.
-Your earned chain length is permanent; you just can’t shortcut into a
-stage you haven’t earned.
 
 ``` r
 
 career()        # tier, runs, favourite method, opaque scores
 achievements()  # 20 unlockable badges; hidden ones show as ???
-wardrobe()      # equipped cosmetic slots (hat, badge, cloak, poncho, lanyard)
+wardrobe()      # cosmetic slots (hat, badge, cloak, poncho, lanyard)
 progress()      # HUD: chain length, XP, next unlock, live chain window
-run_log()       # tibble of every run on this profile
+run_log()       # every run on this profile
 ```
 
-### Persistent state and saves
+## The message pack
 
-Your researcher profile persists under
-`tools::R_user_dir("texanshootR", "data")` as flat YAML: human-readable,
-version-controllable, and yours to migrate between institutions. The
-first interactive save prompts before writing anything to disk. Opt out
-entirely with `options(texanshootR.save_enabled = FALSE)` and the
-package becomes pure-stateless: every call is independent, but
-progression remains inert at Junior Researcher — and there is no path
-forward from there.
+The terminal commentary comes from a YAML message registry under
+`inst/messages/`. Each message carries a trigger phase, a fallacy tag
+from `vocab_tags` (such as `p_hacking`, `harking`, `subgroup_fishing`
+and `causal_overreach`), a rarity weight, and optional affinities to a
+mascot state and a model family, so a line about GAMs only fires when
+the run picked a GAM.
+[`validate_messages()`](https://gillescolling.com/texanshootR/reference/validate_messages.md)
+checks the registry against the schema in
+[MESSAGE_SCHEMA.md](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md),
+so adding a message is a YAML edit and a call to it.
 
-### The message pack
+## Persistent state
 
-The TUI is driven by a YAML-backed message registry under
-`inst/messages/` with **1,257 entries** across phases (`blip`,
-`loading`, `promotion`, `reviewer`, `derived_escalation`,
-`state_transition`, `banner`, `event`/`event_consequence`). Every
-message carries:
-
-- a fallacy tag from `vocab_tags` (e.g. `p_hacking`, `harking`,
-  `subgroup_fishing`, `causal_overreach`),
-- a rarity weight,
-- an optional `mascot_state_affinity` so the right line lands at the
-  right emotional register,
-- an optional `model_family_affinity` so the GAM-specific blip only
-  fires when the run actually picked a GAM. Every family — `lm`, `cor`,
-  `glm`, `wls`, `gam`, `glmm`, `sem` — has dedicated coverage.
-
-You can audit the pack from R:
-
-``` r
-
-validate_messages()    # schema + tag-vocabulary check
-vocab_tags             # canonical fallacy + thematic tags
-vocab_phases           # canonical trigger phases
-vocab_mascot_states    # composed / uncertain / anxious / desperate / resolved
-vocab_careers          # tier ladder
-```
-
-The schema lives at
-[`MESSAGE_SCHEMA.md`](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md).
-Adding a new message is a YAML edit and a re-run of
-[`validate_messages()`](https://gillescolling.com/texanshootR/reference/validate_messages.md).
-
-## Reset
-
-Should circumstances call for a fresh start — a new institution, a
-co-author dispute, an opportune hard-drive failure, or because some of
-you just want to see the world burn — your progression can be retired:
-
-``` r
-
-reset_career(force = TRUE)
-reset_achievements(force = TRUE)
-reset_wardrobe(force = TRUE)
-reset_all(force = TRUE)
-```
-
-## Documentation
-
-- [Getting
-  Started](https://gillescolling.com/texanshootR/articles/getting-started.html)
-- [Full Reference](https://gillescolling.com/texanshootR/reference/)
-- [Message Pack
-  Schema](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md)
-- [Contributing](https://github.com/gcol33/texanshootR/blob/main/CONTRIBUTING.md)
+Your researcher profile is stored as flat YAML under
+`tools::R_user_dir("texanshootR", "data")`, readable and
+version-controllable. The first interactive save asks before writing
+anything to disk. With `options(texanshootR.save_enabled = FALSE)` the
+package runs without state: every call is independent, and progression
+stays at Junior Researcher.
+[`reset_career()`](https://gillescolling.com/texanshootR/reference/reset.md),
+[`reset_achievements()`](https://gillescolling.com/texanshootR/reference/reset.md),
+[`reset_wardrobe()`](https://gillescolling.com/texanshootR/reference/reset.md)
+and
+[`reset_all()`](https://gillescolling.com/texanshootR/reference/reset.md)
+start over
+([Resetting](https://gillescolling.com/texanshootR/articles/getting-started.html#resetting)).
 
 ## Further reading
 
 Brodeur, A., Cook, N. and Heyes, A. (2020). *Methods Matter: P-Hacking
-and Publication Bias in Causal Analysis in Economics.* **American
-Economic Review** 110(11): 3634–60.
-<https://doi.org/10.1257/aer.20190687>
+and Publication Bias in Causal Analysis in Economics.* American Economic
+Review 110(11): 3634-60. <https://doi.org/10.1257/aer.20190687>
 
-`texanshootR` is our humble contribution to a thriving field.
+## Documentation
+
+Start with [Getting started with
+texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html):
+a first run, the publication chain, the career and how to reset it.
+
+- [Message pack
+  schema](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md):
+  the fields of a message and the tag vocabulary.
+- [Full reference](https://gillescolling.com/texanshootR/reference/):
+  every function.
+
+## Getting help
+
+Questions and bug reports go to the [GitHub
+issues](https://github.com/gcol33/texanshootR/issues). A bug report is
+easiest to act on with a small reproducible example, for instance made
+with [reprex](https://reprex.tidyverse.org/).
+
+## Contributing
+
+Pull requests are welcome; see the [contributing
+guide](https://gillescolling.com/texanshootR/CONTRIBUTING.html).
 
 ## Support
 
-> “Where is the money, Lebowski?”
->
-> — The Big Lebowski
+> “Software is like sex: it’s better when it’s free.” — Linus Torvalds
 
-I’m a PhD student who builds R packages in my free time, on the
-principle that the tools of dubious research should be free and open. I
-started these for my own questionable p-values, and figured the field
-deserved the same head start.
+I’m a PhD student who builds R packages in my free time because I
+believe good tools should be free and open. I started these projects for
+my own work and figured others might find them useful too.
 
-If this package saved you some time (or pre-empted a fit of
-overfitting), buying me a coffee is a nice way to say thanks.
+If this package saved you some time, buying me a coffee is a nice way to
+say thanks. It helps with my coffee addiction.
 
 [![Buy Me A
 Coffee](https://img.shields.io/badge/-Buy%20me%20a%20coffee-FFDD00?logo=buymeacoffee&logoColor=black)](https://buymeacoffee.com/gcol33)
 
 ## License
 
-MIT © Gilles Colling. See
-[LICENSE](https://gillescolling.com/texanshootR/LICENSE).
+texanshootR is licensed under MIT.
 
 ## Citation
 
+``` text
+Colling G (2026). _texanshootR: Reproducible Audit Trails for
+Indefensible Research_. doi:10.32614/CRAN.package.texanshootR
+<https://doi.org/10.32614/CRAN.package.texanshootR>. R package version
+0.1.1, <https://gillescolling.com/texanshootR/>.
+```
+
+BibTeX:
+
 ``` bibtex
-@software{texanshootR,
-  author = {Colling, Gilles},
-  title  = {texanshootR: Reproducible Audit Trails for Indefensible Research},
-  year   = {2026},
-  url    = {https://github.com/gcol33/texanshootR}
+@Manual{colling2026texanshootr,
+  title = {texanshootR: Reproducible Audit Trails for Indefensible Research},
+  author = {Gilles Colling},
+  year = {2026},
+  note = {R package version 0.1.1},
+  url = {https://gillescolling.com/texanshootR/},
+  doi = {10.32614/CRAN.package.texanshootR},
 }
 ```
+
+Download the citation as
+[BibTeX](https://gillescolling.com/texanshootR/texanshootR.bib) or
+[RIS](https://gillescolling.com/texanshootR/texanshootR.ris).

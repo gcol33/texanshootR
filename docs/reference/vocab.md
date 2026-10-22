@@ -23,18 +23,6 @@ vocab_effects
 career_levels()
 ```
 
-## Format
-
-An object of class `character` of length 39.
-
-An object of class `character` of length 16.
-
-An object of class `character` of length 4.
-
-An object of class `character` of length 9.
-
-An object of class `character` of length 9.
-
 ## Functions
 
 - `vocab_tags`: Valid `tags` values. The lower-case fallacy names from

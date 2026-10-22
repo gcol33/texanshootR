@@ -11,7 +11,20 @@ candidate specifications across predictor subsets, transformations,
 interactions, and outlier-removal seeds. Persistent career state
 tracks run history, awards achievements, and unlocks output
 generators (manuscript(), presentation(),
-reviewer_response(), graphical_abstract(), funding())."></head><body>
+reviewer_response(), graphical_abstract(), funding())."><script>
+(function () {
+  var D = String.fromCharCode(36);
+  window.MathJax = {
+    tex: {
+      inlineMath: [[D, D], ["\\(", "\\)"]],
+      displayMath: [[D + D, D + D], ["\\[", "\\]"]]
+    },
+    chtml: { linebreaks: { automatic: true, width: "90% container" } },
+    svg: { linebreaks: { automatic: true, width: "90% container" } },
+    options: { renderActions: { addMenu: [] } }
+  };
+})();
+</script></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -19,7 +32,7 @@ reviewer_response(), graphical_abstract(), funding())."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">texanshootR</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +102,8 @@ be replayed.</p>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p><strong>Maintainer</strong>: Gilles Colling <a href="mailto:gilles.colling051@gmail.com">gilles.colling051@gmail.com</a> (<a href="https://orcid.org/0000-0003-3070-6066" class="external-link">ORCID</a>)</p>
-    </div>
+<p>Authors:</p><ul><li><p>Gilles Colling <a href="mailto:gilles.colling051@gmail.com">gilles.colling051@gmail.com</a> (<a href="https://orcid.org/0000-0003-3070-6066" class="external-link">ORCID</a>)</p></li>
+</ul></div>
 
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -100,7 +114,7 @@ be replayed.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>
@@ -109,6 +123,5 @@ be replayed.</p>
 
 
 
-  
-</body></html>
+  </body></html>
 

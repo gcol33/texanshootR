@@ -1,8 +1,11 @@
 bibentry(
-  bibtype = "Manual",
-  title   = "texanshootR: Reproducible Audit Trails for Indefensible Research",
-  author  = person("Gilles", "Colling"),
-  year    = "2026",
-  note    = sprintf("R package version %s", meta$Version),
-  url     = "https://github.com/gcol33/texanshootR"
+  "Manual",
+  key = "colling2026texanshootr",
+  title = "texanshootR: Reproducible Audit Trails for Indefensible Research",
+  author = person("Gilles", "Colling", comment = c(ORCID = "0000-0003-3070-6066")),
+  year = "2026",
+  note = paste("R package version", meta$Version),
+  url = "https://gillescolling.com/texanshootR/",
+  doi = "10.32614/CRAN.package.texanshootR",
+  header = "If you use texanshootR, please cite it:"
 )
