@@ -82,9 +82,9 @@ reference:
   - vocab_phases
   - vocab_tags
 articles:
-- title: Articles
-  navbar: ~
-  contents: getting-started
+- title: Get started
+  contents:
+  - getting-started
 figures:
   dev: svglite
   fig.ext: svg

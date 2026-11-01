@@ -182,8 +182,8 @@ opens the chain. The stages are redeemed in order:
 
 abstract(run)            # one-paragraph deadpan summary
 manuscript(run)          # IMRaD draft; Methods match the winning spec
-presentation(run)        # 8-slide deck; residual plot on slide 7
-reviewer_response(run)   # opens "we thank the reviewer for their thoughtful comments"
+presentation(run)        # six-slide deck
+reviewer_response(run)   # opens "we thank the reviewers for their thorough engagement"
 graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
