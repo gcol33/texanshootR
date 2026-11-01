@@ -195,7 +195,7 @@ mid-chain forfeits the bonus and keeps the partial XP. Locked stages,
 expired windows, the wrong run and out-of-order calls signal a
 `tx_chain_error` whose `reason` field your tests can branch on. [Getting
 started with
-texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html#the-publication-chain)
+texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.html#the-publication-chain)
 walks through a chain.
 
 ## Career and unlocks
@@ -249,7 +249,7 @@ stays at Junior Researcher.
 and
 [`reset_all()`](https://gillescolling.com/texanshootR/reference/reset.md)
 start over
-([Resetting](https://gillescolling.com/texanshootR/articles/getting-started.html#resetting)).
+([Resetting](https://gillescolling.com/texanshootR/articles/texanshootR.html#resetting)).
 
 ## Further reading
 
@@ -260,7 +260,7 @@ Review 110(11): 3634-60. <https://doi.org/10.1257/aer.20190687>
 ## Documentation
 
 Start with [Getting started with
-texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html):
+texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.html):
 a first run, the publication chain, the career and how to reset it.
 
 - [Message pack
@@ -392,7 +392,7 @@ Vocabulary inspection and message-pack validation.
 
 # Articles
 
-### Get started
+### All vignettes
 
 - [Getting started with
-  texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.md):
+  texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.md):

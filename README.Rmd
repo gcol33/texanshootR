@@ -113,7 +113,7 @@ graphical_abstract(run)  # the figure your PI will retweet
 funding(run)             # the next grant, citing the just-shipped finding
 ```
 
-Finishing the chain through your unlocked stages adds a length bonus to the XP of each stage. A fresh `shoot()` mid-chain forfeits the bonus and keeps the partial XP. Locked stages, expired windows, the wrong run and out-of-order calls signal a `tx_chain_error` whose `reason` field your tests can branch on. [Getting started with texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html#the-publication-chain) walks through a chain.
+Finishing the chain through your unlocked stages adds a length bonus to the XP of each stage. A fresh `shoot()` mid-chain forfeits the bonus and keeps the partial XP. Locked stages, expired windows, the wrong run and out-of-order calls signal a `tx_chain_error` whose `reason` field your tests can branch on. [Getting started with texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.html#the-publication-chain) walks through a chain.
 
 ## Career and unlocks
 
@@ -142,7 +142,7 @@ The terminal commentary comes from a YAML message registry under `inst/messages/
 
 ## Persistent state
 
-Your researcher profile is stored as flat YAML under `tools::R_user_dir("texanshootR", "data")`, readable and version-controllable. The first interactive save asks before writing anything to disk. With `options(texanshootR.save_enabled = FALSE)` the package runs without state: every call is independent, and progression stays at Junior Researcher. `reset_career()`, `reset_achievements()`, `reset_wardrobe()` and `reset_all()` start over ([Resetting](https://gillescolling.com/texanshootR/articles/getting-started.html#resetting)).
+Your researcher profile is stored as flat YAML under `tools::R_user_dir("texanshootR", "data")`, readable and version-controllable. The first interactive save asks before writing anything to disk. With `options(texanshootR.save_enabled = FALSE)` the package runs without state: every call is independent, and progression stays at Junior Researcher. `reset_career()`, `reset_achievements()`, `reset_wardrobe()` and `reset_all()` start over ([Resetting](https://gillescolling.com/texanshootR/articles/texanshootR.html#resetting)).
 
 ## Further reading
 
@@ -150,7 +150,7 @@ Brodeur, A., Cook, N. and Heyes, A. (2020). *Methods Matter: P-Hacking and Publi
 
 ## Documentation
 
-Start with [Getting started with texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html): a first run, the publication chain, the career and how to reset it.
+Start with [Getting started with texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.html): a first run, the publication chain, the career and how to reset it.
 
 - [Message pack schema](https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md): the fields of a message and the tag vocabulary.
 - [Full reference](https://gillescolling.com/texanshootR/reference/): every function.

@@ -48,7 +48,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
-<li class="nav-item"><a class="nav-link" href="articles/getting-started.html">Get started</a></li>
+<li class="nav-item"><a class="nav-link" href="articles/texanshootR.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
 <li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
@@ -433,7 +433,7 @@
 <span><span class="fu"><a href="reference/reviewer_response.html">reviewer_response</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span>   <span class="co"># opens "we thank the reviewers for their thorough engagement"</span></span>
 <span><span class="fu"><a href="reference/graphical_abstract.html">graphical_abstract</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span>  <span class="co"># the figure your PI will retweet</span></span>
 <span><span class="fu"><a href="reference/funding.html">funding</a></span><span class="op">(</span><span class="va">run</span><span class="op">)</span>             <span class="co"># the next grant, citing the just-shipped finding</span></span></code></pre></div>
-<p>Finishing the chain through your unlocked stages adds a length bonus to the XP of each stage. A fresh <code><a href="reference/shoot.html">shoot()</a></code> mid-chain forfeits the bonus and keeps the partial XP. Locked stages, expired windows, the wrong run and out-of-order calls signal a <code>tx_chain_error</code> whose <code>reason</code> field your tests can branch on. <a href="https://gillescolling.com/texanshootR/articles/getting-started.html#the-publication-chain">Getting started with texanshootR</a> walks through a chain.</p>
+<p>Finishing the chain through your unlocked stages adds a length bonus to the XP of each stage. A fresh <code><a href="reference/shoot.html">shoot()</a></code> mid-chain forfeits the bonus and keeps the partial XP. Locked stages, expired windows, the wrong run and out-of-order calls signal a <code>tx_chain_error</code> whose <code>reason</code> field your tests can branch on. <a href="https://gillescolling.com/texanshootR/articles/texanshootR.html#the-publication-chain">Getting started with texanshootR</a> walks through a chain.</p>
 </div>
 <div class="section level2">
 <h2 id="career-and-unlocks">Career and unlocks<a class="anchor" aria-label="anchor" href="#career-and-unlocks"></a>
@@ -513,7 +513,7 @@
 <div class="section level2">
 <h2 id="persistent-state">Persistent state<a class="anchor" aria-label="anchor" href="#persistent-state"></a>
 </h2>
-<p>Your researcher profile is stored as flat YAML under <code>tools::R_user_dir("texanshootR", "data")</code>, readable and version-controllable. The first interactive save asks before writing anything to disk. With <code>options(texanshootR.save_enabled = FALSE)</code> the package runs without state: every call is independent, and progression stays at Junior Researcher. <code><a href="reference/reset.html">reset_career()</a></code>, <code><a href="reference/reset.html">reset_achievements()</a></code>, <code><a href="reference/reset.html">reset_wardrobe()</a></code> and <code><a href="reference/reset.html">reset_all()</a></code> start over (<a href="https://gillescolling.com/texanshootR/articles/getting-started.html#resetting">Resetting</a>).</p>
+<p>Your researcher profile is stored as flat YAML under <code>tools::R_user_dir("texanshootR", "data")</code>, readable and version-controllable. The first interactive save asks before writing anything to disk. With <code>options(texanshootR.save_enabled = FALSE)</code> the package runs without state: every call is independent, and progression stays at Junior Researcher. <code><a href="reference/reset.html">reset_career()</a></code>, <code><a href="reference/reset.html">reset_achievements()</a></code>, <code><a href="reference/reset.html">reset_wardrobe()</a></code> and <code><a href="reference/reset.html">reset_all()</a></code> start over (<a href="https://gillescolling.com/texanshootR/articles/texanshootR.html#resetting">Resetting</a>).</p>
 </div>
 <div class="section level2">
 <h2 id="further-reading">Further reading<a class="anchor" aria-label="anchor" href="#further-reading"></a>
@@ -523,7 +523,7 @@
 <div class="section level2">
 <h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h2>
-<p>Start with <a href="https://gillescolling.com/texanshootR/articles/getting-started.html">Getting started with texanshootR</a>: a first run, the publication chain, the career and how to reset it.</p>
+<p>Start with <a href="https://gillescolling.com/texanshootR/articles/texanshootR.html">Getting started with texanshootR</a>: a first run, the publication chain, the career and how to reset it.</p>
 <ul>
 <li>
 <a href="https://github.com/gcol33/texanshootR/blob/main/MESSAGE_SCHEMA.md" class="external-link">Message pack schema</a>: the fields of a message and the tag vocabulary.</li>

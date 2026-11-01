@@ -199,7 +199,7 @@ the XP of each stage. A fresh `shoot()` mid-chain forfeits the bonus and
 keeps the partial XP. Locked stages, expired windows, the wrong run and
 out-of-order calls signal a `tx_chain_error` whose `reason` field your
 tests can branch on. [Getting started with
-texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html#the-publication-chain)
+texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.html#the-publication-chain)
 walks through a chain.
 
 ## Career and unlocks
@@ -246,7 +246,7 @@ anything to disk. With `options(texanshootR.save_enabled = FALSE)` the
 package runs without state: every call is independent, and progression
 stays at Junior Researcher. `reset_career()`, `reset_achievements()`,
 `reset_wardrobe()` and `reset_all()` start over
-([Resetting](https://gillescolling.com/texanshootR/articles/getting-started.html#resetting)).
+([Resetting](https://gillescolling.com/texanshootR/articles/texanshootR.html#resetting)).
 
 ## Further reading
 
@@ -257,7 +257,7 @@ Review 110(11): 3634-60. <https://doi.org/10.1257/aer.20190687>
 ## Documentation
 
 Start with [Getting started with
-texanshootR](https://gillescolling.com/texanshootR/articles/getting-started.html):
+texanshootR](https://gillescolling.com/texanshootR/articles/texanshootR.html):
 a first run, the publication chain, the career and how to reset it.
 
 - [Message pack

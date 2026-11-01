@@ -39,10 +39,6 @@ navbar:
     - search
     - github
     - lightswitch
-  components:
-    intro:
-      text: Get started
-      href: articles/getting-started.html
 reference:
 - title: Run a search
   desc: Fit a battery of candidate specifications and inspect the result.
@@ -81,10 +77,6 @@ reference:
   - vocab_mascot_states
   - vocab_phases
   - vocab_tags
-articles:
-- title: Get started
-  contents:
-  - getting-started
 figures:
   dev: svglite
   fig.ext: svg
@@ -92,3 +84,5 @@ figures:
   fig.width: 7.2916667
   fig.height: 4.5
   dpi: 100
+redirects:
+- ["articles/getting-started.html", "articles/texanshootR.html"]
